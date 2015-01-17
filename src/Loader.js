@@ -170,6 +170,10 @@ Loader.prototype.load = function (parallel, cb) {
         cb = parallel;
     }
 
+    if (typeof cb === 'function') {
+        this.once('complete', cb);
+    }
+
     this._progressChunk = 100 / this.queue.length;
 
     this.emit('start');
