@@ -8,7 +8,8 @@
  * @param url {string} The url for this resource.
  * @param [crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
  * @param [loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
- * @param [xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data be interpreted when using XHR?
+ * @param [xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
+ *      loaded be interpreted when using XHR?
  */
 function Resource(url, crossOrigin, loadType, xhrType) {
     EventEmitter2.call(this);
@@ -206,7 +207,7 @@ Resource.prototype._loadXhr = function () {
     xhr.responseType = this.xhrType;
 
     // handle a load error
-    xhr.addEventListener('error', function (event) {
+    xhr.addEventListener('error', function () {
         self.error = new Error('XHR request failed. Status: ' + xhr.status + ', text: "' + xhr.statusText + '"');
         self.complete();
     }, false);
@@ -264,7 +265,7 @@ Resource.prototype._onProgress =  function (event) {
  */
 Resource.prototype._determineCrossOrigin = function () {
     // data: and javascript: urls are considered same-origin
-    if (this.url.indexOf('data:') === 0 || this.url.indexOf('javascript:') === 0) {
+    if (this.url.indexOf('data:') === 0) {
         return '';
     }
 
@@ -311,6 +312,7 @@ Resource.prototype._determineXhrType = function () {
         // text
         case 'text':
         case 'txt':
+            /* falls through */
         default:
             return Resource.XHR_RESPONSE_TYPE.TEXT;
     }
@@ -320,25 +322,21 @@ Resource.prototype._getMimeFromXhrType = function (type) {
     switch(type) {
         case Resource.XHR_RESPONSE_TYPE.BUFFER:
             return 'application/octet-binary';
-            break;
 
         case Resource.XHR_RESPONSE_TYPE.BLOB:
             return 'application/blob';
-            break;
 
         case Resource.XHR_RESPONSE_TYPE.DOCUMENT:
             return 'application/xml';
-            break;
 
         case Resource.XHR_RESPONSE_TYPE.JSON:
             return 'application/json';
-            break;
 
         case Resource.XHR_RESPONSE_TYPE.DEFAULT:
         case Resource.XHR_RESPONSE_TYPE.TEXT:
+            /* falls through */
         default:
             return 'text/plain';
-            break;
 
     }
 };

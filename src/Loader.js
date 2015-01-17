@@ -1,4 +1,5 @@
 var async = require('async'),
+    Resource = require('./Resource'),
     EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 /**
@@ -233,7 +234,7 @@ Loader.prototype._onLoad = function (resource, next) {
         this.emit('error', resource);
     }
     else {
-        this.emit('load', resource)
+        this.emit('load', resource);
     }
 
     this._runMiddleware(resource, this._afterMiddleware, next);
