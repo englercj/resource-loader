@@ -158,11 +158,6 @@ Resource.prototype.load = function () {
             this._loadObject();
             break;
 
-        case Resource.LOAD_TYPE.VIDEO:
-            this.data = new Video();
-            this._loadObject();
-            break;
-
         case Resource.LOAD_TYPE.XHR:
             /* falls through */
         default:
