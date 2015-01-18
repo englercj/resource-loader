@@ -204,7 +204,7 @@ Loader.prototype._loadResource = function (resource, next) {
 
     this._runMiddleware(resource, this._beforeMiddleware, function () {
         resource.on('progress', self.emit.bind(self, 'progress'));
-        resource.on('load', self._onLoad.bind(self, resource, next));
+        resource.on('complete', self._onLoad.bind(self, resource, next));
 
         resource.load();
     });
