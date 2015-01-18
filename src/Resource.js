@@ -5,13 +5,14 @@
  * a single URL.
  *
  * @class
- * @param url {string} The url for this resource.
- * @param [crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
- * @param [loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
- * @param [xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
+ * @param url {string|string[]} The url for this resource, for audio/video loads you can pass an array of sources.
+ * @param [options] {object} The options for the load.
+ * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
+ * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
+ * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
  */
-function Resource(url, crossOrigin, loadType, xhrType) {
+function Resource(url, options) {
     EventEmitter2.call(this);
 
     /**
@@ -34,21 +35,21 @@ function Resource(url, crossOrigin, loadType, xhrType) {
      *
      * @member {string}
      */
-    this.crossOrigin = crossOrigin;
+    this.crossOrigin = options.crossOrigin;
 
     /**
      * The method of loading to use for this resource.
      *
      * @member {Resource.LOAD_TYPE}
      */
-    this.loadType = loadType || Resource.XHR_LOAD_TYPE.XHR;
+    this.loadType = options.loadType || Resource.XHR_LOAD_TYPE.XHR;
 
     /**
      * The type used to load the resource via XHR. If unset, determined automatically.
      *
      * @member {string}
      */
-    this.xhrType = xhrType || Resource.XHR_RESPONSE_TYPE.DEFAULT;
+    this.xhrType = options.xhrType || Resource.XHR_RESPONSE_TYPE.DEFAULT;
 
     /**
      * The error that occurred while loading (if any).
@@ -149,13 +150,15 @@ Resource.prototype.load = function () {
 
     switch(this.loadType) {
         case Resource.LOAD_TYPE.IMAGE:
-            this.data = new Image();
-            this._loadObject();
+            this._loadImage();
             break;
 
         case Resource.LOAD_TYPE.AUDIO:
-            this.data = new Audio();
-            this._loadObject();
+            this._loadElement('audio');
+            break;
+
+        case Resource.LOAD_TYPE.VIDEO:
+            this._loadElement('video');
             break;
 
         case Resource.LOAD_TYPE.XHR:
@@ -167,11 +170,13 @@ Resource.prototype.load = function () {
 };
 
 /**
- * Loads this resources using a pre-set Html Object (Image, Audio, Video, etc).
+ * Loads this resources using an Image object.
  *
  * @private
  */
-Resource.prototype._loadObject = function () {
+Resource.prototype._loadImage = function () {
+    this.data = new Image();
+
     if (this.crossOrigin) {
         this.data.crossOrigin = '';
     }
@@ -182,6 +187,28 @@ Resource.prototype._loadObject = function () {
     this.data.addEventListener('load', this._boundComplete, false);
     this.data.addEventListener('progress', this._boundOnProgress, false);
     this.data.addEventListener('canplaythrough', this._boundComplete, false);
+};
+
+/**
+ * Loads this resources using an HTMLAudioElement or HTMLVideoElement.
+ *
+ * @private
+ */
+Resource.prototype._loadElement = function (type) {
+    this.data = document.createElement(type);
+
+    if (Array.isArray(this.url)) {
+        for (var i = 0; i < this.url.length; ++i) {
+            this.data.appendChild(this._createSource(type, this.url[i]));
+        }
+    }
+
+    this.data.addEventListener('error', this._boundOnError, false);
+    this.data.addEventListener('load', this._boundComplete, false);
+    this.data.addEventListener('progress', this._boundOnProgress, false);
+    this.data.addEventListener('canplaythrough', this._boundComplete, false);
+
+    this.data.load();
 };
 
 /**
@@ -224,6 +251,27 @@ Resource.prototype._loadXhr = function () {
 
     xhr.open('GET', this.url, true);
     xhr.send();
+};
+
+/**
+ * Creates a source used in loading via an element.
+ *
+ * @param type {string} The element type (video or audio).
+ * @param url {string} The source URL to load from.
+ * @param [mime] {string} The mime type of the video
+ * @private
+ */
+Resource.prototype._createSource = function (type, url, mime) {
+    if (!mime) {
+        mime = type + '/' + url.substr(url.lastIndexOf('.') + 1);
+    }
+
+    var source = document.createElement('source');
+
+    source.src = url;
+    source.type = mime;
+
+    return source;
 };
 
 /**
