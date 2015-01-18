@@ -8,12 +8,14 @@
  * @param url {string|string[]} The url for this resource, for audio/video loads you can pass an array of sources.
  * @param [options] {object} The options for the load.
  * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
- * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
+ * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.LOAD_TYPE} How should this resource be loaded?
  * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
  */
 function Resource(url, options) {
     EventEmitter2.call(this);
+
+    options = options || {};
 
     /**
      * The url used to load this resource.
@@ -42,7 +44,7 @@ function Resource(url, options) {
      *
      * @member {Resource.LOAD_TYPE}
      */
-    this.loadType = options.loadType || Resource.XHR_LOAD_TYPE.XHR;
+    this.loadType = options.loadType || Resource.LOAD_TYPE.XHR;
 
     /**
      * The type used to load the resource via XHR. If unset, determined automatically.
@@ -61,7 +63,7 @@ function Resource(url, options) {
 
     /**
      * The XHR object that was used to load this resource. This is only set
-     * when `loadType` is `Resource.XHR_LOAD_TYPE.XHR`.
+     * when `loadType` is `Resource.LOAD_TYPE.XHR`.
      *
      * @member {XMLHttpRequest}
      */

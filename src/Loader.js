@@ -127,11 +127,11 @@ Loader.prototype.add = Loader.prototype.enqueue = function (url, options) {
  * Sets up a middleware function that will run *before* the
  * resource is loaded.
  *
- * @alias before
+ * @alias pre
  * @param middleware {function} The middleware function to register.
  * @return {Loader}
  */
-Loader.prototype.pre = Loader.prototype.before = function (fn) {
+Loader.prototype.before = Loader.prototype.pre = function (fn) {
     this._beforeMiddleware.push(fn);
 
     return this;
@@ -141,11 +141,11 @@ Loader.prototype.pre = Loader.prototype.before = function (fn) {
  * Sets up a middleware function that will run *after* the
  * resource is loaded.
  *
- * @alias after
+ * @alias use
  * @param middleware {function} The middleware function to register.
  * @return {Loader}
  */
-Loader.prototype.use = Loader.prototype.after = function (fn) {
+Loader.prototype.after = Loader.prototype.use = function (fn) {
     this._afterMiddleware.push(fn);
 
     return this;
