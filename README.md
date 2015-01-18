@@ -9,7 +9,7 @@ A generic asset loader, made with web games in mind.
 var loader = new Loader();
 
 // chainable `add` to enqueue a resource
-loader.add(url, crossOrigin, loadType, xhrType);
+loader.add(url, options);
 
 // chainable `before` to add a middleware that runs for each resource, *before* loading a resource.
 // this is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).

@@ -109,12 +109,15 @@ module.exports = Loader;
  *
  * @alias enqueue
  * @param url {string} The url for this resource, relative to the baseUrl of this loader.
- * @param [crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
- * @param [loadType=Resource.LOAD_TYPE.XHR] {Resource.LOAD_TYPE} How should this resource be loaded?
+ * @param [options] {object} The options for the load.
+ * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
+ * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
+ * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
+ *      loaded be interpreted when using XHR?
  * @return {Loader}
  */
-Loader.prototype.add = Loader.prototype.enqueue = function (url, crossOrigin, loadType) {
-    this.queue.push(new Resource(this.baseUrl + url, crossOrigin, loadType));
+Loader.prototype.add = Loader.prototype.enqueue = function (url, options) {
+    this.queue.push(new Resource(this.baseUrl + url, options));
 
     return this;
 };
