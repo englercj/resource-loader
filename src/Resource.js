@@ -134,6 +134,8 @@ Resource.prototype.complete = function () {
         this.data.removeEventListener('canplaythrough', this._boundComplete);
     }
 
+    //TODO: Remove leaking XHR callback funcs
+
     this.emit('complete', this);
 };
 
@@ -247,7 +249,7 @@ Resource.prototype._loadXhr = function () {
 
     // handle a successful load
     xhr.addEventListener('load', function () {
-        self.data = xhr.response;
+        self.data = self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT ? xhr.responseText : (xhr.response || xhr.responseText);
         self.complete();
     }, false);
 
@@ -438,7 +440,7 @@ Resource.XHR_READY_STATE = {
  * @property {string} XHR_RESPONSE_TYPE.TEXT - String
  */
 Resource.XHR_RESPONSE_TYPE = {
-    DEFAULT:    '',
+    DEFAULT:    'text',
     BUFFER:     'arraybuffer',
     BLOB:       'blob',
     DOCUMENT:   'document',

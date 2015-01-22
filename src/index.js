@@ -1,10 +1,12 @@
 module.exports = require('./Loader');
 
+module.exports.Resource = require('./Resource');
+
 module.exports.middleware = {
     caching: {
-        memory: require('./caching/memory')
+        memory: require('./middlewares/caching/memory')
     },
     parsing: {
-        json: require('./parsing/json')
+        json: require('./middlewares/parsing/json')
     }
 };

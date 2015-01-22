@@ -54,12 +54,12 @@ function Loader(baseUrl) {
     this._afterMiddleware = [];
 
     /**
-     * The `_loadResource` function bound with this object context.
+     * The `loadResource` function bound with this object context.
      *
      * @private
      * @member {function}
      */
-    this._boundLoadResource = this._loadResource.bind(this);
+    this._boundLoadResource = this.loadResource.bind(this);
 
     /**
      * The `_onComplete` function bound with this object context.
@@ -183,7 +183,7 @@ Loader.prototype.load = function (parallel, cb) {
     this.emit('start');
 
     // only disable parallel if they explicitly pass `false`
-    if (parallel === false) {
+    if (parallel !== false) {
         async.each(this.queue, this._boundLoadResource, this._onComplete);
     }
     else {
@@ -197,9 +197,8 @@ Loader.prototype.load = function (parallel, cb) {
  * Loads a single resource.
  *
  * @fires progress
- * @private
  */
-Loader.prototype._loadResource = function (resource, next) {
+Loader.prototype.loadResource = function (resource, next) {
     var self = this;
 
     this._runMiddleware(resource, this._beforeMiddleware, function () {
@@ -253,7 +252,7 @@ Loader.prototype._runMiddleware = function (resource, fns, cb) {
 
     async.eachSeries(fns, function (fn, next) {
         fn.call(self, resource, next);
-    }, cb);
+    }, cb.bind(this, resource));
 };
 
 Loader.LOAD_TYPE = Resource.LOAD_TYPE;
