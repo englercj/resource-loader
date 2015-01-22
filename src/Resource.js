@@ -1,4 +1,4 @@
- var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 /**
  * Manages the state and loading of a single resource represented by
