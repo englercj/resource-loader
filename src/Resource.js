@@ -249,7 +249,16 @@ Resource.prototype._loadXhr = function () {
 
     // handle a successful load
     xhr.addEventListener('load', function () {
-        self.data = self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT ? xhr.responseText : (xhr.response || xhr.responseText);
+        if (self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
+            self.data = xhr.responseText;
+        }
+        else if (self.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
+            self.data = xhr.responseXML || xhr.response;
+        }
+        else {
+            self.data = xhr.response;
+        }
+
         self.complete();
     }, false);
 
