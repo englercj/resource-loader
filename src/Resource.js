@@ -134,7 +134,12 @@ Resource.prototype.complete = function () {
         this.data.removeEventListener('canplaythrough', this._boundComplete);
     }
 
-    //TODO: Remove leaking XHR callback funcs
+    if (this.xhr) {
+        this.xhr.removeEventListener('error', this._xhrOnError);
+        this.xhr.removeEventListener('abort', this._xhrOnAbort);
+        this.xhr.removeEventListener('progress', this._boundOnProgress);
+        this.xhr.removeEventListener('load', this._xhrOnLoad);
+    }
 
     this.emit('complete', this);
 };
@@ -233,13 +238,13 @@ Resource.prototype._loadXhr = function () {
     xhr.responseType = this.xhrType;
 
     // handle a load error
-    xhr.addEventListener('error', function () {
+    xhr.addEventListener('error', this._xhrOnError = function () {
         self.error = new Error('XHR request failed. Status: ' + xhr.status + ', text: "' + xhr.statusText + '"');
         self.complete();
     }, false);
 
     // handle an aborted request
-    xhr.addEventListener('abort', function () {
+    xhr.addEventListener('abort', this._xhrOnAbort = function () {
         self.error = new Error('XHR request was aborted by the user.');
         self.complete();
     }, false);
@@ -248,7 +253,7 @@ Resource.prototype._loadXhr = function () {
     xhr.addEventListener('progress', this._boundOnProgress, false);
 
     // handle a successful load
-    xhr.addEventListener('load', function () {
+    xhr.addEventListener('load', this._xhrOnLoad = function () {
         if (self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
             self.data = xhr.responseText;
         }
@@ -350,6 +355,7 @@ Resource.prototype._determineXhrType = function () {
         case 'xml':
         case 'tmx':
         case 'tsx':
+        case 'svg':
             return Resource.XHR_RESPONSE_TYPE.DOCUMENT;
 
         // images
@@ -359,6 +365,7 @@ Resource.prototype._determineXhrType = function () {
         case 'jpeg':
         case 'tif':
         case 'tiff':
+        case 'webp':
             return Resource.XHR_RESPONSE_TYPE.BLOB;
 
         // json
