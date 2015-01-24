@@ -93,6 +93,11 @@ function Resource(url, options) {
      */
     this._boundOnProgress = this._onProgress.bind(this);
 
+    // xhr callbacks
+    this._xhrOnError = null;
+    this._xhrOnAbort = null;
+    this._xhrOnLoad = null;
+
     /**
      * Emitted when the resource beings to load.
      *
@@ -195,7 +200,6 @@ Resource.prototype._loadImage = function () {
     this.data.addEventListener('error', this._boundOnError, false);
     this.data.addEventListener('load', this._boundComplete, false);
     this.data.addEventListener('progress', this._boundOnProgress, false);
-    this.data.addEventListener('canplaythrough', this._boundComplete, false);
 };
 
 /**
