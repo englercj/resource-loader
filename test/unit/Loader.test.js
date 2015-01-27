@@ -1,4 +1,5 @@
-var loader = null;
+var url = 'http://localhost/file',
+    loader = null;
 
 describe('Loader', function () {
     beforeEach(function () {
@@ -29,7 +30,11 @@ describe('Loader', function () {
     });
 
     describe('#before', function () {
-        it('should add a middleware that runs before loading a resource');
+        it('should add a middleware that runs before loading a resource', function () {
+            loader.before(function () {});
+
+            expect(loader._beforeMiddleware).to.have.length(1);
+        });
     });
 
     describe('#after', function () {
