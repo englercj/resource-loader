@@ -132,7 +132,7 @@ module.exports = Resource;
  * @fires complete
  */
 Resource.prototype.complete = function () {
-    if (this.data.removeEventListener) {
+    if (this.data && this.data.removeEventListener) {
         this.data.removeEventListener('error', this._boundOnError);
         this.data.removeEventListener('load', this._boundComplete);
         this.data.removeEventListener('progress', this._boundOnProgress);

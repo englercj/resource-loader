@@ -1,6 +1,7 @@
 var gulp    = require('gulp'),
     path    = require('path'),
-    gutil   = require('gulp-util');
+    gutil   = require('gulp-util'),
+    bundle  = require('../util/bundle');
 
 
 gulp.task('watch', function () {

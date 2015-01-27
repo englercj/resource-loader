@@ -1,4 +1,6 @@
-var URL = window.URL || window.webkitURL;
+var Resource = require('../../Resource');
+
+window.URL = window.URL || window.webkitURL;
 
 // a middleware for transforming XHR loaded Blobs into more useful objects
 
@@ -9,7 +11,7 @@ module.exports = function () {
             // if content type says this is an image, then we need to transform the blob into an Image object
             if (resource.data.type.indexOf('image') === 0) {
                 resource.data = new Image();
-                resource.data.src = URL.createObjectURL(request.data);
+                resource.data.src = URL.createObjectURL(resource.data);
 
                 // cleanup the no longer used blob after the image loads
                 resource.data.onload = function () {

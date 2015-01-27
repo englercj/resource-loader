@@ -1,8 +1,4 @@
-var expect = require('chai').expect,
-    sinon  = require('sinon'),
-    Loader = require('../../src/Loader'),
-    Resource = require('../../src/Resource'),
-    loader = null;
+var loader = null;
 
 describe('Loader', function () {
     beforeEach(function () {
@@ -51,7 +47,7 @@ describe('Loader', function () {
         it('should properly load the resource');
     });
 
-    describe('#_loadResource', function () {
+    describe('#loadResource', function () {
         it('should run the before middleware before loading the resource');
         it('should load a resource passed into it');
     });
