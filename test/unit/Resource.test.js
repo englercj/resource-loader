@@ -1,13 +1,13 @@
-var url = 'https://www.google.com/images/srpr/logo11w.png',
-    requests = [],
+var request,
     res,
-    xhr;
+    xhr,
+    url = 'http://localhost/file',
+    headers = { 'Content-Type': 'application/json' },
+    json = '[{ "id": 12, "comment": "Hey there" }]';
 
 before(function () {
-    requests.length = 0;
-
     xhr = sinon.useFakeXMLHttpRequest();
-    xhr.onCreate = function (req) { requests.push(req); };
+    xhr.onCreate = function (req) { request = req; };
 });
 
 after(function () {
@@ -17,6 +17,7 @@ after(function () {
 describe('Resource', function () {
     beforeEach(function () {
         res = new Resource(url);
+        request = null;
     });
 
     it('should construct properly with only a URL passed', function () {
@@ -101,12 +102,72 @@ describe('Resource', function () {
 
             res.load();
 
+            expect(request).to.exist;
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should kick off loading using XHR');
-        it('should kick off loading using Image');
-        it('should kick off loading using Audio');
-        it('should kick off loading using Video');
+        it('should emit the complete event', function () {
+            var spy = sinon.spy();
+
+            res.on('complete', spy);
+
+            res.load();
+
+            request.respond(200, headers, json);
+
+            expect(request).to.exist;
+            expect(spy).to.have.been.calledWith(res);
+        });
+
+        it('should load using XHR', function (done) {
+            res.on('complete', function () {
+                expect(res).to.have.property('data', json);
+                done();
+            });
+
+            res.load();
+
+            expect(request).to.exist;
+
+            request.respond(200, headers, json);
+        });
+
+        it('should load using Image', function () {
+            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.IMAGE });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(Image)
+                .and.is.an.instanceOf(HTMLImageElement)
+                .and.has.property('src', url);
+        });
+
+        it('should load using Audio', function () {
+            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.AUDIO });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(HTMLAudioElement);
+
+            expect(res.data.children).to.have.length(1);
+            expect(res.data.children[0]).to.have.property('src', url);
+        });
+
+        it('should load using Video', function () {
+            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.VIDEO });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(HTMLVideoElement);
+
+            expect(res.data.children).to.have.length(1);
+            expect(res.data.children[0]).to.have.property('src', url);
+        });
     });
 });

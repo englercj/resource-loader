@@ -215,6 +215,9 @@ Resource.prototype._loadElement = function (type) {
             this.data.appendChild(this._createSource(type, this.url[i]));
         }
     }
+    else {
+        this.data.appendChild(this._createSource(type, this.url));
+    }
 
     this.data.addEventListener('error', this._boundOnError, false);
     this.data.addEventListener('load', this._boundComplete, false);
