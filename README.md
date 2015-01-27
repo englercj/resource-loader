@@ -1,4 +1,4 @@
-# Asset Loader
+# Asset Loader [![Build Status](https://travis-ci.org/englercj/asset-loader.svg?branch=master)](https://travis-ci.org/englercj/asset-loader)
 
 A generic asset loader, made with web games in mind.
 
