@@ -5,6 +5,7 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2;
  * a single URL.
  *
  * @class
+ * @param name {string} The name of the resource to load.
  * @param url {string|string[]} The url for this resource, for audio/video loads you can pass an array of sources.
  * @param [options] {object} The options for the load.
  * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
@@ -12,10 +13,22 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2;
  * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
  */
-function Resource(url, options) {
+function Resource(name, url, options) {
     EventEmitter2.call(this);
 
     options = options || {};
+
+    if (typeof name !== 'string' || typeof url !== 'string') {
+        throw new Error('Both name and url are required for constructing a resource.');
+    }
+
+    /**
+     * The name of this resource.
+     *
+     * @member {string}
+     * @readonly
+     */
+    this.name = name;
 
     /**
      * The url used to load this resource.
@@ -261,14 +274,19 @@ Resource.prototype._loadXhr = function () {
 
     // handle a successful load
     xhr.addEventListener('load', this._xhrOnLoad = function () {
-        if (self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
-            self.data = xhr.responseText;
-        }
-        else if (self.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
-            self.data = xhr.responseXML || xhr.response;
+        if (xhr.status === 200) {
+            if (self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
+                self.data = xhr.responseText;
+            }
+            else if (self.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
+                self.data = xhr.responseXML || xhr.response;
+            }
+            else {
+                self.data = xhr.response;
+            }
         }
         else {
-            self.data = xhr.response;
+            self.error = new Error(xhr.responseText);
         }
 
         self.complete();
@@ -305,8 +323,8 @@ Resource.prototype._createSource = function (type, url, mime) {
  * @param error {Error} The error that happened.
  * @private
  */
-Resource.prototype._onError = function (err) {
-    this.error = err;
+Resource.prototype._onError = function (event) {
+    this.error = new Error('Failed to load element using ' + event.target.nodeName);
     this.complete();
 };
 

@@ -33,6 +33,13 @@ function Loader(baseUrl) {
     this.progress = 0;
 
     /**
+     * Loading state of the loader, true if it is currently loading resources.
+     *
+     * @member {boolean}
+     */
+    this.loading = false;
+
+    /**
      * The percentage of total progress that a single resource represents.
      *
      * @member {number}
@@ -108,6 +115,7 @@ module.exports = Loader;
  * Adds a resource (or multiple resources) to the loader queue.
  *
  * @alias enqueue
+ * @param name {string} The name of the resource to load.
  * @param url {string} The url for this resource, relative to the baseUrl of this loader.
  * @param [options] {object} The options for the load.
  * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
@@ -116,8 +124,14 @@ module.exports = Loader;
  *      loaded be interpreted when using XHR?
  * @return {Loader}
  */
-Loader.prototype.add = Loader.prototype.enqueue = function (url, options) {
-    this.queue.push(new Resource(this.baseUrl + url, options));
+Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options) {
+    var resource = new Resource(name, this.baseUrl + url, options);
+
+    this.queue.push(resource);
+
+    if (this.loading) {
+        this.loadResource(resource);
+    }
 
     return this;
 };
@@ -159,6 +173,7 @@ Loader.prototype.after = Loader.prototype.use = function (fn) {
 Loader.prototype.reset = function () {
     this.queue.length = 0;
     this.progress = 0;
+    this.loading = false;
 };
 
 /**
@@ -184,10 +199,10 @@ Loader.prototype.load = function (parallel, cb) {
 
     // only disable parallel if they explicitly pass `false`
     if (parallel !== false) {
-        async.each(this.queue, this._boundLoadResource, this._onComplete);
+        async.each(this.queue, this._boundLoadResource, this._boundOnComplete);
     }
     else {
-        async.eachSeries(this.queue, this._boundLoadResource, this._onComplete);
+        async.eachSeries(this.queue, this._boundLoadResource, this._boundOnComplete);
     }
 
     return this;
@@ -216,8 +231,12 @@ Loader.prototype.loadResource = function (resource, next) {
  * @private
  */
 Loader.prototype._onComplete = function () {
-    this.emit('complete');
+    this.emit('complete', this.queue.reduce(_mapQueue, {}));
 };
+
+function _mapQueue(obj, res) {
+    obj[res.name] = res;
+}
 
 /**
  * Called each time a resources is loaded.
@@ -233,7 +252,7 @@ Loader.prototype._onLoad = function (resource, next) {
     this.emit('progress', resource);
 
     if (resource.error) {
-        this.emit('error', resource);
+        this.emit('error', resource.error, resource);
     }
     else {
         this.emit('load', resource);
