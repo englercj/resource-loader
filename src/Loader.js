@@ -236,6 +236,8 @@ Loader.prototype._onComplete = function () {
 
 function _mapQueue(obj, res) {
     obj[res.name] = res;
+
+    return obj;
 }
 
 /**
