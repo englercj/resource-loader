@@ -8,7 +8,7 @@ describe('Loader', function () {
 
     it('should have correct properties', function () {
         expect(loader).to.have.property('baseUrl', '');
-        expect(loader).to.have.property('queue').instanceOf(Array);
+        expect(loader).to.have.property('queue');
         expect(loader).to.have.property('progress', 0);
     });
 
@@ -24,8 +24,9 @@ describe('Loader', function () {
         it('should add a resource to the queue', function () {
             loader.add('test-resource', 'http://google.com');
 
-            expect(loader.queue).to.have.length(1);
-            expect(loader.queue[0]).to.be.an.instanceOf(Resource);
+            expect(loader.queue.length()).to.equal(0);
+            expect(loader._buffer).to.have.length(1);
+            expect(loader._buffer[0]).to.be.an.instanceOf(Resource);
         });
     });
 

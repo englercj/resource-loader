@@ -7,9 +7,12 @@ var async = require('async'),
  *
  * @class
  * @param baseUrl {string} The base url for all resources loaded by this loader.
+ * @param [concurrency=10] {number} The number of resources to load concurrently.
  */
-function Loader(baseUrl) {
+function Loader(baseUrl, concurrency) {
     EventEmitter2.call(this);
+
+    concurrency = concurrency || 10;
 
     /**
      * The base url for all resources loaded by this loader.
@@ -17,13 +20,6 @@ function Loader(baseUrl) {
      * @member {string}
      */
     this.baseUrl = baseUrl || '';
-
-    /**
-     * The resources waiting to be loaded.
-     *
-     * @member {Resource[]}
-     */
-    this.queue = [];
 
     /**
      * The progress percent of the loader going through the queue.
@@ -77,6 +73,36 @@ function Loader(baseUrl) {
     this._boundOnComplete = this._onComplete.bind(this);
 
     /**
+     * The `_onLoad` function bound with this object context.
+     *
+     * @private
+     * @member {function}
+     */
+    this._boundOnLoad = this._onLoad.bind(this);
+
+    /**
+     * The resource buffer that fills until `load` is called to start loading resources.
+     *
+     * @private
+     * @member {Resource[]}
+     */
+    this._buffer = [];
+
+    /**
+     * The resources waiting to be loaded.
+     *
+     * @member {Resource[]}
+     */
+    this.queue = async.queue(this._boundLoadResource, concurrency);
+
+    /**
+     * All the resources for this loader keyed by name.
+     *
+     * @member {object<string, Resource>}
+     */
+    this.resources = {};
+
+    /**
      * Emitted once per loaded or errored resource.
      *
      * @event progress
@@ -122,15 +148,35 @@ module.exports = Loader;
  * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
  * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
+ * @param [callback] {function} Function to call when this specific resource completes loading.
  * @return {Loader}
  */
-Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options) {
-    var resource = new Resource(name, this.baseUrl + url, options);
+Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, cb) {
+    if (typeof options === 'function') {
+        cb = options;
+        options = null;
+    }
 
-    this.queue.push(resource);
+    if (this.resources[name]) {
+        throw new Error('Resource with name "' + name + '" already exists.');
+    }
 
-    if (this.loading) {
-        this.loadResource(resource);
+    // create the store the resource
+    this.resources[name] = new Resource(name, this.baseUrl + url, options, cb);
+
+    if (typeof cb === 'function') {
+        this.resources[name].once('complete', cb);
+    }
+
+    // if already loading add it to the worker queue
+    if (this.queue.started) {
+        this.queue.push(this.resources[name], this._boundOnLoad);
+        this._progressChunk = (100 - this.progress) / (this.queue.length() + this.queue.running());
+    }
+    // otherwise buffer it to be added to the queue later
+    else {
+        this._buffer.push(this.resources[name]);
+        this._progressChunk = 100 / this._buffer.length;
     }
 
     return this;
@@ -171,8 +217,13 @@ Loader.prototype.after = Loader.prototype.use = function (fn) {
  * @return {Loader}
  */
 Loader.prototype.reset = function () {
-    this.queue.length = 0;
+    this._buffer.length = 0;
+
+    this.queue.kill();
+    this.queue.started = false;
+
     this.progress = 0;
+    this._progressChunk = 0;
     this.loading = false;
 };
 
@@ -180,30 +231,33 @@ Loader.prototype.reset = function () {
  * Starts loading the queued resources.
  *
  * @fires start
- * @param [parallel=true] {boolean} Should the queue be downloaded in parallel?
  * @param [callback] {function} Optional callback that will be bound to the `complete` event.
  * @return {Loader}
  */
-Loader.prototype.load = function (parallel, cb) {
-    if (typeof parallel === 'function') {
-        cb = parallel;
-    }
-
+Loader.prototype.load = function (cb) {
+    // register complete callback if they pass one
     if (typeof cb === 'function') {
         this.once('complete', cb);
     }
 
-    this._progressChunk = 100 / this.queue.length;
-
-    this.emit('start');
-
-    // only disable parallel if they explicitly pass `false`
-    if (parallel !== false) {
-        async.each(this.queue, this._boundLoadResource, this._boundOnComplete);
+    // if the queue has already started we are done here
+    if (this.queue.started) {
+        return this;
     }
-    else {
-        async.eachSeries(this.queue, this._boundLoadResource, this._boundOnComplete);
+
+    // set drain event callback
+    this.queue.drain = this._boundOnComplete;
+
+    // notify of start
+    this.emit('start', this);
+
+    // start the internal queue
+    for (var i = 0; i < this._buffer.length; ++i) {
+        this.queue.push(this._buffer[i], this._boundOnLoad);
     }
+
+    // empty the buffer
+    this._buffer.length = 0;
 
     return this;
 };
@@ -213,12 +267,12 @@ Loader.prototype.load = function (parallel, cb) {
  *
  * @fires progress
  */
-Loader.prototype.loadResource = function (resource, next) {
+Loader.prototype.loadResource = function (resource, cb) {
     var self = this;
 
     this._runMiddleware(resource, this._beforeMiddleware, function () {
-        resource.on('progress', self.emit.bind(self, 'progress'));
-        resource.on('complete', self._onLoad.bind(self, resource, next));
+        // resource.on('progress', self.emit.bind(self, 'progress'));
+        resource.once('complete', self._onLoad.bind(self, resource, cb));
 
         resource.load();
     });
@@ -231,7 +285,7 @@ Loader.prototype.loadResource = function (resource, next) {
  * @private
  */
 Loader.prototype._onComplete = function () {
-    this.emit('complete', this.queue.reduce(_mapQueue, {}));
+    this.emit('complete', this);
 };
 
 function _mapQueue(obj, res) {
@@ -251,13 +305,13 @@ function _mapQueue(obj, res) {
 Loader.prototype._onLoad = function (resource, next) {
     this.progress += this._progressChunk;
 
-    this.emit('progress', resource);
+    this.emit('progress', this, resource);
 
     if (resource.error) {
-        this.emit('error', resource.error, resource);
+        this.emit('error', resource.error, this, resource);
     }
     else {
-        this.emit('load', resource);
+        this.emit('load', this, resource);
     }
 
     this._runMiddleware(resource, this._afterMiddleware, next);

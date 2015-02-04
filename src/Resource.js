@@ -337,7 +337,7 @@ Resource.prototype._onError = function (event) {
  */
 Resource.prototype._onProgress =  function (event) {
     if (event.lengthComputable) {
-        this.emit('progress', event.loaded / event.total);
+        this.emit('progress', this, event.loaded / event.total);
     }
 };
 
