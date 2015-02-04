@@ -22,7 +22,7 @@ describe('Loader', function () {
 
     describe('#add', function () {
         it('should add a resource to the queue', function () {
-            loader.add('http://google.com');
+            loader.add('test-resource', 'http://google.com');
 
             expect(loader.queue).to.have.length(1);
             expect(loader.queue[0]).to.be.an.instanceOf(Resource);

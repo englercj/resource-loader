@@ -1,6 +1,7 @@
 var request,
     res,
     xhr,
+    name = 'test-resource',
     url = 'http://localhost/file',
     headers = { 'Content-Type': 'application/json' },
     json = '[{ "id": 12, "comment": "Hey there" }]';
@@ -16,11 +17,12 @@ after(function () {
 
 describe('Resource', function () {
     beforeEach(function () {
-        res = new Resource(url);
+        res = new Resource(name, url);
         request = null;
     });
 
     it('should construct properly with only a URL passed', function () {
+        expect(res).to.have.property('name', name);
         expect(res).to.have.property('url', url);
         expect(res).to.have.property('data', null);
         expect(res).to.not.have.property('crossOrigin'); //technically has the prop, but it is undefined
@@ -31,12 +33,13 @@ describe('Resource', function () {
     });
 
     it('should construct properly with options passed', function () {
-        var res = new Resource(url, {
+        var res = new Resource(name, url, {
             crossOrigin: true,
             loadType: Resource.LOAD_TYPE.IMAGE,
             xhrType: Resource.XHR_RESPONSE_TYPE.BLOB
         });
 
+        expect(res).to.have.property('name', name);
         expect(res).to.have.property('url', url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', true);
@@ -133,7 +136,7 @@ describe('Resource', function () {
         });
 
         it('should load using Image', function () {
-            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.IMAGE });
+            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.IMAGE });
 
             res.load();
 
@@ -145,7 +148,7 @@ describe('Resource', function () {
         });
 
         it('should load using Audio', function () {
-            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.AUDIO });
+            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.AUDIO });
 
             res.load();
 
@@ -158,7 +161,7 @@ describe('Resource', function () {
         });
 
         it('should load using Video', function () {
-            var res = new Resource(url, { loadType: Resource.LOAD_TYPE.VIDEO });
+            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.VIDEO });
 
             res.load();
 
