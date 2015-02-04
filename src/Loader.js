@@ -73,14 +73,6 @@ function Loader(baseUrl, concurrency) {
     this._boundOnComplete = this._onComplete.bind(this);
 
     /**
-     * The `_onLoad` function bound with this object context.
-     *
-     * @private
-     * @member {function}
-     */
-    this._boundOnLoad = this._onLoad.bind(this);
-
-    /**
      * The resource buffer that fills until `load` is called to start loading resources.
      *
      * @private
@@ -170,7 +162,7 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
 
     // if already loading add it to the worker queue
     if (this.queue.started) {
-        this.queue.push(this.resources[name], this._boundOnLoad);
+        this.queue.push(this.resources[name]);
         this._progressChunk = (100 - this.progress) / (this.queue.length() + this.queue.running());
     }
     // otherwise buffer it to be added to the queue later
@@ -253,7 +245,7 @@ Loader.prototype.load = function (cb) {
 
     // start the internal queue
     for (var i = 0; i < this._buffer.length; ++i) {
-        this.queue.push(this._buffer[i], this._boundOnLoad);
+        this.queue.push(this._buffer[i]);
     }
 
     // empty the buffer
@@ -285,7 +277,7 @@ Loader.prototype.loadResource = function (resource, cb) {
  * @private
  */
 Loader.prototype._onComplete = function () {
-    this.emit('complete', this);
+    this.emit('complete', this, this.resources);
 };
 
 function _mapQueue(obj, res) {
@@ -302,7 +294,7 @@ function _mapQueue(obj, res) {
  * @fires load
  * @private
  */
-Loader.prototype._onLoad = function (resource, next) {
+Loader.prototype._onLoad = function (resource, cb) {
     this.progress += this._progressChunk;
 
     this.emit('progress', this, resource);
@@ -317,7 +309,7 @@ Loader.prototype._onLoad = function (resource, next) {
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
 
-        next();
+        cb && cb();
     });
 };
 
