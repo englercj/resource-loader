@@ -162,10 +162,10 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     }
 
     // create the store the resource
-    this.resources[name] = new Resource(name, this.baseUrl + url, options, cb);
+    this.resources[name] = new Resource(name, this.baseUrl + url, options);
 
     if (typeof cb === 'function') {
-        this.resources[name].once('complete', cb);
+        this.resources[name].once('afterMiddleware', cb);
     }
 
     // if already loading add it to the worker queue
@@ -314,7 +314,11 @@ Loader.prototype._onLoad = function (resource, next) {
         this.emit('load', this, resource);
     }
 
-    this._runMiddleware(resource, this._afterMiddleware, next);
+    this._runMiddleware(resource, this._afterMiddleware, function () {
+        resource.emit('afterMiddleware', resource);
+
+        next();
+    });
 };
 
 /**
