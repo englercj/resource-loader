@@ -280,12 +280,6 @@ Loader.prototype._onComplete = function () {
     this.emit('complete', this, this.resources);
 };
 
-function _mapQueue(obj, res) {
-    obj[res.name] = res;
-
-    return obj;
-}
-
 /**
  * Called each time a resources is loaded.
  *
@@ -309,7 +303,9 @@ Loader.prototype._onLoad = function (resource, cb) {
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
 
-        cb && cb();
+        if (cb) {
+            cb();
+        }
     });
 };
 
