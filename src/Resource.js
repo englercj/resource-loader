@@ -107,9 +107,10 @@ function Resource(name, url, options) {
     this._boundOnProgress = this._onProgress.bind(this);
 
     // xhr callbacks
-    this._xhrOnError = null;
-    this._xhrOnAbort = null;
-    this._xhrOnLoad = null;
+    this._boundXhrOnError = this._xhrOnError.bind(this);
+    this._boundXhrOnAbort = this._xhrOnAbort.bind(this);
+    this._boundXhrOnLoad = this._xhrOnLoad.bind(this);
+    this._boundXdrOnTimeout = this._xdrOnTimeout.bind(this);
 
     /**
      * Emitted when the resource beings to load.
@@ -145,6 +146,7 @@ module.exports = Resource;
  * @fires complete
  */
 Resource.prototype.complete = function () {
+    // TODO: Clean this up in a wrapper or something...gross....
     if (this.data && this.data.removeEventListener) {
         this.data.removeEventListener('error', this._boundOnError);
         this.data.removeEventListener('load', this._boundComplete);
@@ -153,10 +155,18 @@ Resource.prototype.complete = function () {
     }
 
     if (this.xhr) {
-        this.xhr.removeEventListener('error', this._xhrOnError);
-        this.xhr.removeEventListener('abort', this._xhrOnAbort);
-        this.xhr.removeEventListener('progress', this._boundOnProgress);
-        this.xhr.removeEventListener('load', this._xhrOnLoad);
+        if (this.xhr.removeEventListener) {
+            this.xhr.removeEventListener('error', this._boundXhrOnError);
+            this.xhr.removeEventListener('abort', this._boundXhrOnAbort);
+            this.xhr.removeEventListener('progress', this._boundOnProgress);
+            this.xhr.removeEventListener('load', this._boundXhrOnLoad);
+        }
+        else {
+            this.xhr.onerror = null;
+            this.xhr.ontimeout = null;
+            this.xhr.onprogress = null;
+            this.xhr.onload = null;
+        }
     }
 
     this.emit('complete', this);
@@ -257,43 +267,32 @@ Resource.prototype._loadXhr = function () {
     // set the responseType
     xhr.responseType = this.xhrType;
 
-    // handle a load error
-    xhr.addEventListener('error', this._xhrOnError = function () {
-        self.error = new Error('XHR request failed. Status: ' + xhr.status + ', text: "' + xhr.statusText + '"');
-        self.complete();
-    }, false);
-
-    // handle an aborted request
-    xhr.addEventListener('abort', this._xhrOnAbort = function () {
-        self.error = new Error('XHR request was aborted by the user.');
-        self.complete();
-    }, false);
-
-    // handle progress events
+    xhr.addEventListener('error', this._boundXhrOnError, false);
+    xhr.addEventListener('abort', this._boundXhrOnAbort, false);
     xhr.addEventListener('progress', this._boundOnProgress, false);
-
-    // handle a successful load
-    xhr.addEventListener('load', this._xhrOnLoad = function () {
-        if (xhr.status === 200) {
-            if (self.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
-                self.data = xhr.responseText;
-            }
-            else if (self.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
-                self.data = xhr.responseXML || xhr.response;
-            }
-            else {
-                self.data = xhr.response;
-            }
-        }
-        else {
-            self.error = new Error(xhr.responseText);
-        }
-
-        self.complete();
-    }, false);
+    xhr.addEventListener('load', this._boundXhrOnLoad, false);
 
     xhr.open('GET', this.url, true);
     xhr.send();
+};
+
+/**
+ * Loads this resources using an XDomainRequest. This is here because we need to support IE9 (gross).
+ *
+ * @private
+ */
+Resource.prototype._loadXdr = function () {
+    var xdr = this.xhr = new XDomainRequest();
+
+    // XDomainRequest has a few quirks. Occasionally it will abort requests
+    // A way to avoid this is to make sure ALL callbacks are set even if not used
+    // More info here: http://stackoverflow.com/questions/15786966/xdomainrequest-aborts-post-on-ie-9
+    xdr.timeout = 5000;
+
+    xdr.onerror = this._boundXhrOnError;
+    xdr.ontimeout = this._boundXdrOnTimeout;
+    xdr.onprogress = this._boundOnProgress;
+    xdr.onload = this._boundXhrOnLoad;
 };
 
 /**
@@ -329,10 +328,10 @@ Resource.prototype._onError = function (event) {
 };
 
 /**
- * Called if a load progress event fires.
+ * Called if a load progress event fires for xhr/xdr.
  *
  * @fires progress
- * @param event {XMLHttpRequestProgressEvent}
+ * @param event {XMLHttpRequestProgressEvent|Event}
  * @private
  */
 Resource.prototype._onProgress =  function (event) {
@@ -340,6 +339,74 @@ Resource.prototype._onProgress =  function (event) {
         this.emit('progress', this, event.loaded / event.total);
     }
 };
+
+/**
+ * Called if an error event fires for xhr/xdr.
+ *
+ * @param event {XMLHttpRequestErrorEvent|Event}
+ * @private
+ */
+Resource.prototype._xhrOnError = function (event) {
+    this.error = new Error(
+        reqType(event.target) + ' Request failed. ' +
+        'Status: ' + event.target.status + ', text: "' + event.target.statusText + '"'
+    );
+
+    this.complete();
+};
+
+/**
+ * Called if an abort event fires for xhr.
+ *
+ * @param event {XMLHttpRequestAbortEvent}
+ * @private
+ */
+Resource.prototype._xhrOnAbort = function (event) {
+    this.error = new Error(reqType(event.target) + ' Request was aborted by the user.');
+    this.complete();
+};
+
+/**
+ * Called if a timeout event fires for xdr.
+ *
+ * @param event {Event}
+ * @private
+ */
+Resource.prototype._xdrOnTimeout = function (event) {
+    this.error = new Error(reqType(event.target) + ' Request timed out.');
+    this.complete();
+};
+
+/**
+ * Called when data successfully loads from an xhr/xdr request.
+ *
+ * @param event {XMLHttpRequestLoadEvent|Event}
+ * @private
+ */
+Resource.prototype._xhrOnLoad = function (event) {
+    var xhr = event.target;
+
+    if (xhr.status === 200) {
+        if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
+            this.data = xhr.responseText;
+        }
+        else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
+            this.data = xhr.responseXML || xhr.response;
+        }
+        else {
+            this.data = xhr.response;
+        }
+    }
+    else {
+        this.error = new Error(xhr.responseText);
+    }
+
+    this.complete();
+};
+
+function reqType(xhr) {
+    return xhr.toString().replace('object ', '');
+}
 
 /**
  * Sets the `crossOrigin` property for this resource based on if the url
@@ -369,6 +436,13 @@ Resource.prototype._determineCrossOrigin = function () {
     return '';
 };
 
+/**
+ * Determines the responseType of an XHR request based on the extension of the
+ * resource being loaded.
+ *
+ * @private
+ * @return {Resource.XHR_RESPONSE_TYPE} The responseType to use.
+ */
 Resource.prototype._determineXhrType = function () {
     var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
 
@@ -406,6 +480,13 @@ Resource.prototype._determineXhrType = function () {
     }
 };
 
+/**
+ * Determines the mime type of an XHR request based on the responseType of
+ * resource being loaded.
+ *
+ * @private
+ * @return {string} The mime type to use.
+ */
 Resource.prototype._getMimeFromXhrType = function (type) {
     switch(type) {
         case Resource.XHR_RESPONSE_TYPE.BUFFER:
