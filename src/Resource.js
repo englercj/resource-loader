@@ -1,4 +1,6 @@
-var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var EventEmitter2 = require('eventemitter2').EventEmitter2,
+    // tests is CORS is supported in XHR, if not we need to use XDR
+    useXdr = !!(window.XDomainRequest && !("withCredentials" in (new XMLHttpRequest())));
 
 /**
  * Manages the state and loading of a single resource represented by
@@ -201,7 +203,12 @@ Resource.prototype.load = function () {
         case Resource.LOAD_TYPE.XHR:
             /* falls through */
         default:
-            this._loadXhr();
+            if (useXdr) {
+                this._loadXdr();
+            }
+            else {
+                this._loadXhr();
+            }
             break;
     }
 };
