@@ -45,7 +45,7 @@ should check against it before submitting. This should happen automatically when
 
 - **Never commit new builds.** When making a code change you should always run `gulp` which will rebuild the project
 so you can test, *however* please do not commit the new builds placed in `dist/` or your PR will be closed. By default
-the build process will output to an ignored folder (`build/`) you should be fine.
+the `dist/` folder is ignored so this shouldn't happen by accident.
 
 - **Only commit relevant changes.** Don't include changes that are not directly relevant to the fix you are making.
 The more focused a PR is, the faster it will get attention and be merged. Extra files changing only whitespace or
