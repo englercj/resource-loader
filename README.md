@@ -63,5 +63,3 @@ That will output the built distributables to `./dist`.
 ## To Do:
 
 - IE 9 support
-- Video load support
-- Multi-source elements (audio/video)
