@@ -66,7 +66,7 @@ function Resource(name, url, options) {
      *
      * @member {string}
      */
-    this.xhrType = options.xhrType || Resource.XHR_RESPONSE_TYPE.DEFAULT;
+    this.xhrType = options.xhrType;
 
     /**
      * The error that occurred while loading (if any).

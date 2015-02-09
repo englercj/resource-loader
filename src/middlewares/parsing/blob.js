@@ -10,17 +10,22 @@ module.exports = function () {
         if (resource.xhr && resource.xhrType === Resource.XHR_RESPONSE_TYPE.BLOB) {
             // if content type says this is an image, then we need to transform the blob into an Image object
             if (resource.data.type.indexOf('image') === 0) {
+                var src = URL.createObjectURL(resource.data);
+
                 resource.data = new Image();
-                resource.data.src = URL.createObjectURL(resource.data);
+                resource.data.src = src;
 
                 // cleanup the no longer used blob after the image loads
                 resource.data.onload = function () {
-                    URL.revokeObjectURL(resource.data.src);
+                    URL.revokeObjectURL(src);
                     resource.data.onload = null;
+
+                    next();
                 };
             }
         }
-
-        next();
+        else {
+            next();
+        }
     };
 };
