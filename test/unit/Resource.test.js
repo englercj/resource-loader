@@ -25,11 +25,16 @@ describe('Resource', function () {
         expect(res).to.have.property('name', name);
         expect(res).to.have.property('url', url);
         expect(res).to.have.property('data', null);
-        expect(res).to.not.have.property('crossOrigin'); //technically has the prop, but it is undefined
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.XHR);
-        expect(res).to.have.property('xhrType', Resource.XHR_RESPONSE_TYPE.DEFAULT);
         expect(res).to.have.property('error', null);
         expect(res).to.have.property('xhr', null);
+
+        // technically they exist, but they should be undefined
+        expect('crossOrigin' in res).to.be.ok;
+        expect(res.crossOrigin).to.equal(undefined);
+
+        expect('xhrType' in res).to.be.ok;
+        expect(res.xhrType).to.equal(undefined);
     });
 
     it('should construct properly with options passed', function () {
