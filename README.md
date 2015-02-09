@@ -10,7 +10,7 @@ var loader = new Loader();
 
 loader
     // chainable `add` to enqueue a resource
-    .add(url, options)
+    .add(name, url, options)
 
     // chainable `before` to add a middleware that runs for each resource, *before* loading a resource.
     // this is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
@@ -23,8 +23,9 @@ loader
 
     // `load` method loads the queue of resources, and calls the passed in callback called once all
     // resources have loaded.
-    .load(function (resources) {
-        // resources is an array of resource objects that have a couple properties:
+    .load(function (loader, resources) {
+        // resources is an object where the key is the name of the resource loaded and the value is the resource object.
+        // They have a couple default properties:
         // - `url`: The URL that the resource was loaded from
         // - `error`: The error that happened when trying to load (if any)
         // - `data`: The raw data that was loaded
