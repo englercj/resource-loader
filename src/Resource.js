@@ -270,6 +270,9 @@ Resource.prototype._loadXhr = function () {
 
     var xhr = this.xhr = new XMLHttpRequest();
 
+    // set the request type and url
+    xhr.open('GET', this.url, true);
+
     // set the responseType
     xhr.responseType = this.xhrType;
 
@@ -278,7 +281,6 @@ Resource.prototype._loadXhr = function () {
     xhr.addEventListener('progress', this._boundOnProgress, false);
     xhr.addEventListener('load', this._boundXhrOnLoad, false);
 
-    xhr.open('GET', this.url, true);
     xhr.send();
 };
 
