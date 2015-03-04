@@ -132,6 +132,43 @@ module.exports = Loader;
 /**
  * Adds a resource (or multiple resources) to the loader queue.
  *
+ * This function can take a wide variety of different parameters. The only thing that is always
+ * required the url to load. All the following will work:
+ *
+ * ```js
+ * loader
+ *     // normal param syntax
+ *     .add('key', 'http://...', function () {})
+ *     .add('http://...', function () {})
+ *     .add('http://...')
+ *
+ *     // object syntax
+ *     .add({
+ *         name: 'key2',
+ *         url: 'http://...'
+ *     }, function () {})
+ *     .add({
+ *         url: 'http://...'
+ *     }, function () {})
+ *     .add({
+ *         name: 'key3',
+ *         url: 'http://...'
+ *         onComplete: function () {}
+ *     })
+ *     .add({
+ *         url: 'https://...',
+ *         onComplete: function () {},
+ *         crossOrigin: true
+ *     })
+ *
+ *     // you can also pass an array of objects or urls or both
+ *     .add([
+ *         { name: 'key4', url: 'http://...', onComplete: function () {} },
+ *         { url: 'http://...', onComplete: function () {} },
+ *         'http://...'
+ *     ]);
+ * ```
+ *
  * @alias enqueue
  * @param [name] {string} The name of the resource to load, if not passed the url is used.
  * @param url {string} The url for this resource, relative to the baseUrl of this loader.
