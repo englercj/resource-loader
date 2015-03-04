@@ -133,7 +133,7 @@ module.exports = Loader;
  * Adds a resource (or multiple resources) to the loader queue.
  *
  * @alias enqueue
- * @param name {string} The name of the resource to load.
+ * @param [name] {string} The name of the resource to load, if not passed the url is used.
  * @param url {string} The url for this resource, relative to the baseUrl of this loader.
  * @param [options] {object} The options for the load.
  * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
@@ -144,11 +144,25 @@ module.exports = Loader;
  * @return {Loader}
  */
 Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, cb) {
+    // case where no name is passed shift all args over by one.
+    if (typeof url !== 'string') {
+        cb = options;
+        options = url;
+        url = name;
+    }
+
+    // now that we shifted make sure we have a proper url.
+    if (typeof url !== 'string') {
+        throw new Error('No url passed to add resource to loader.');
+    }
+
+    // options are optional so people might pass a function and no options
     if (typeof options === 'function') {
         cb = options;
         options = null;
     }
 
+    // check if resource already exists.
     if (this.resources[name]) {
         throw new Error('Resource with name "' + name + '" already exists.');
     }
