@@ -144,6 +144,23 @@ module.exports = Loader;
  * @return {Loader}
  */
 Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, cb) {
+    // special case of an array of objects or urls
+    if (Array.isArray(name)) {
+        for (var i = 0; i < name.length; ++i) {
+            this.add(name[i]);
+        }
+
+        return this;
+    }
+
+    // if an object is passed instead of params
+    if (typeof name === 'object') {
+        cb = url || name.callback || name.onComplete;
+        options = name;
+        url = name.url;
+        name = name.name || name.key || name.url;
+    }
+
     // case where no name is passed shift all args over by one.
     if (typeof url !== 'string') {
         cb = options;
