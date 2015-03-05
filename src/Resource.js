@@ -301,6 +301,15 @@ Resource.prototype._loadXdr = function () {
     xdr.ontimeout = this._boundXdrOnTimeout;
     xdr.onprogress = this._boundOnProgress;
     xdr.onload = this._boundXhrOnLoad;
+
+    xdr.open('GET', this.url, true);
+
+    //  Note: The xdr.send() call is wrapped in a timeout to prevent an issue with the interface where some requests are lost
+    //  if multiple XDomainRequests are being sent at the same time.
+    // Some info here: https://github.com/photonstorm/phaser/issues/1248
+    setTimeout(function () {
+        xdr.send();
+    }, 0);
 };
 
 /**
