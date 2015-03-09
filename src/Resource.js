@@ -415,7 +415,7 @@ Resource.prototype._xhrOnLoad = function (event) {
         }
     }
     else {
-        this.error = new Error(xhr.responseText);
+        this.error = new Error('[' + xhr.status + ']' + xhr.statusText + ':' + xhr.responseURL);
     }
 
     this.complete();
