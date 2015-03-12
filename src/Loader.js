@@ -1,6 +1,6 @@
 var async = require('async'),
     Resource = require('./Resource'),
-    EventEmitter2 = require('eventemitter2').EventEmitter2;
+    EventEmitter = require('eventemitter3').EventEmitter;
 
 /**
  * Manages the state and loading of multiple resources to load.
@@ -10,7 +10,7 @@ var async = require('async'),
  * @param [concurrency=10] {number} The number of resources to load concurrently.
  */
 function Loader(baseUrl, concurrency) {
-    EventEmitter2.call(this);
+    EventEmitter.call(this);
 
     concurrency = concurrency || 10;
 
@@ -125,7 +125,7 @@ function Loader(baseUrl, concurrency) {
      */
 }
 
-Loader.prototype = Object.create(EventEmitter2.prototype);
+Loader.prototype = Object.create(EventEmitter.prototype);
 Loader.prototype.constructor = Loader;
 module.exports = Loader;
 

@@ -1,4 +1,4 @@
-var EventEmitter2 = require('eventemitter2').EventEmitter2,
+var EventEmitter = require('eventemitter3').EventEmitter,
     // tests is CORS is supported in XHR, if not we need to use XDR
     useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
 
@@ -16,7 +16,7 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2,
  *      loaded be interpreted when using XHR?
  */
 function Resource(name, url, options) {
-    EventEmitter2.call(this);
+    EventEmitter.call(this);
 
     options = options || {};
 
@@ -138,7 +138,7 @@ function Resource(name, url, options) {
      */
 }
 
-Resource.prototype = Object.create(EventEmitter2.prototype);
+Resource.prototype = Object.create(EventEmitter.prototype);
 Resource.prototype.constructor = Resource;
 module.exports = Resource;
 
