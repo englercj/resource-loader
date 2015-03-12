@@ -45,7 +45,6 @@ describe('Loader', function () {
             expect(res).to.have.property('xhrType', options.xhrType);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
         });
 
         it('creates a resource with just name, url, and options', function () {
@@ -77,7 +76,7 @@ describe('Loader', function () {
             expect(res).to.have.property('url', url);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('creates a resource with just name and url', function () {
@@ -109,7 +108,7 @@ describe('Loader', function () {
             expect(res).to.have.property('xhrType', options.xhrType);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('creates a resource with just url and options', function () {
@@ -141,7 +140,7 @@ describe('Loader', function () {
             expect(res).to.have.property('url', url);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('creates a resource with just url', function () {
@@ -170,7 +169,7 @@ describe('Loader', function () {
             expect(res).to.have.property('url', url);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('creates a resource with just an object (name/url/callback keys)', function () {
@@ -186,7 +185,7 @@ describe('Loader', function () {
             expect(res).to.have.property('url', url);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('creates a resource with just an object (url/callback keys)', function () {
@@ -202,7 +201,7 @@ describe('Loader', function () {
             expect(res).to.have.property('url', url);
             expect(res).to.have.property('_events')
                 .that.has.property('afterMiddleware')
-                .that.is.a('function');
+                .that.has.property('fn', callback);
         });
 
         it('throws an error if url isn\'t passed', function () {
