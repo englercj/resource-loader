@@ -221,8 +221,13 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
         throw new Error('Resource with name "' + name + '" already exists.');
     }
 
+    // add base url if this isn't a data url
+    if (url.indexof('data:') !== 0) {
+        url = this.baseUrl + url;
+    }
+
     // create the store the resource
-    this.resources[name] = new Resource(name, this.baseUrl + url, options);
+    this.resources[name] = new Resource(name, url, options);
 
     if (typeof cb === 'function') {
         this.resources[name].once('afterMiddleware', cb);
