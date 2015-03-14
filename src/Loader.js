@@ -222,7 +222,7 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     }
 
     // add base url if this isn't a data url
-    if (url.indexof('data:') !== 0) {
+    if (url.indexOf('data:') !== 0) {
         url = this.baseUrl + url;
     }
 
