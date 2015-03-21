@@ -7,7 +7,6 @@ module.exports.middleware = {
         memory: require('./middlewares/caching/memory')
     },
     parsing: {
-        json: require('./middlewares/parsing/json'),
         blob: require('./middlewares/parsing/blob')
     }
 };
