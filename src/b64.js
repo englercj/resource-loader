@@ -8,16 +8,22 @@ module.exports = {
         var bytebuffer;
         var encodedCharIndexes = new Array(4);
         var inx = 0;
+        var jnx = 0;
         var paddingBytes = 0;
 
         while (inx < input.length) {
             // Fill byte buffer array
             bytebuffer = new Array(3);
-            for (jnx = 0; jnx < bytebuffer.length; jnx++)
-                if (inx < input.length)
-                    bytebuffer[jnx] = input.charCodeAt(inx++) & 0xff; // throw away high-order byte, as documented at: https://developer.mozilla.org/En/Using_XMLHttpRequest#Handling_binary_data
-                else
+            for (jnx = 0; jnx < bytebuffer.length; jnx++) {
+                if (inx < input.length) {
+                    // throw away high-order byte, as documented at:
+                    // https://developer.mozilla.org/En/Using_XMLHttpRequest#Handling_binary_data
+                    bytebuffer[jnx] = input.charCodeAt(inx++) & 0xff;
+                }
+                else {
                     bytebuffer[jnx] = 0;
+                }
+            }
 
             // Get each encoded character, 6 bits at a time
             // index 1: first 6 bits
@@ -37,18 +43,22 @@ module.exports = {
                     encodedCharIndexes[3] = 64;
                     encodedCharIndexes[2] = 64;
                     break;
+
                 case 1:
                     // Set last character to padding char
                     encodedCharIndexes[3] = 64;
                     break;
+
                 default:
                     break; // No padding - proceed
             }
+
             // Now we will grab each appropriate character out of our keystring
             // based on our index array and append it to the output string
-            for (jnx = 0; jnx < encodedCharIndexes.length; jnx++)
+            for (jnx = 0; jnx < encodedCharIndexes.length; jnx++) {
                 output += this._keyStr.charAt(encodedCharIndexes[jnx]);
+            }
         }
         return output;
     }
-}
+};
