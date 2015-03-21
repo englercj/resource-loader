@@ -7,6 +7,10 @@ window.URL = window.URL || window.webkitURL;
 
 module.exports = function () {
     return function (resource, next) {
+        if (!resource.data) {
+            return next();
+        }
+
         // if this was an XHR load of a blob
         if (resource.xhr && resource.xhrType === Resource.XHR_RESPONSE_TYPE.BLOB) {
             // if there is no blob support we probably got a binary string back

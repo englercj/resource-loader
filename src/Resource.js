@@ -85,6 +85,15 @@ function Resource(name, url, options) {
     this.xhr = null;
 
     /**
+     * The `dequeue` method that will be used a storage place for the async queue dequeue method
+     * used privately by the loader.
+     *
+     * @member {function}
+     * @private
+     */
+    this._dequeue = null;
+
+    /**
      * The `complete` function bound to this resource's context.
      *
      * @member {function}
@@ -178,9 +187,15 @@ Resource.prototype.complete = function () {
  * Kicks off loading of this resource.
  *
  * @fires start
+ * @param [callback] {function} Optional callback to call once the resource is loaded.
  */
-Resource.prototype.load = function () {
+Resource.prototype.load = function (cb) {
     this.emit('start', this);
+
+    // if a callback is set, listen for complete event
+    if (cb) {
+        this.once('complete', cb);
+    }
 
     // if unset, determine the value
     if (typeof this.crossOrigin !== 'string') {

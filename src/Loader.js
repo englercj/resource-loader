@@ -6,7 +6,7 @@ var async = require('async'),
  * Manages the state and loading of multiple resources to load.
  *
  * @class
- * @param baseUrl {string} The base url for all resources loaded by this loader.
+ * @param [baseUrl=''] {string} The base url for all resources loaded by this loader.
  * @param [concurrency=10] {number} The number of resources to load concurrently.
  */
 function Loader(baseUrl, concurrency) {
@@ -57,12 +57,12 @@ function Loader(baseUrl, concurrency) {
     this._afterMiddleware = [];
 
     /**
-     * The `loadResource` function bound with this object context.
+     * The `_loadResource` function bound with this object context.
      *
      * @private
      * @member {function}
      */
-    this._boundLoadResource = this.loadResource.bind(this);
+    this._boundLoadResource = this._loadResource.bind(this);
 
     /**
      * The `_onComplete` function bound with this object context.
@@ -71,6 +71,14 @@ function Loader(baseUrl, concurrency) {
      * @member {function}
      */
     this._boundOnComplete = this._onComplete.bind(this);
+
+    /**
+     * The `_onLoad` function bound with this object context.
+     *
+     * @private
+     * @member {function}
+     */
+    this._boundOnLoad = this._onLoad.bind(this);
 
     /**
      * The resource buffer that fills until `load` is called to start loading resources.
@@ -331,15 +339,17 @@ Loader.prototype.load = function (cb) {
  * Loads a single resource.
  *
  * @fires progress
+ * @private
  */
-Loader.prototype.loadResource = function (resource, cb) {
+Loader.prototype._loadResource = function (resource, dequeue) {
     var self = this;
+
+    resource._dequeue = dequeue;
 
     this._runMiddleware(resource, this._beforeMiddleware, function () {
         // resource.on('progress', self.emit.bind(self, 'progress'));
-        resource.once('complete', self._onLoad.bind(self, resource, cb));
 
-        resource.load();
+        resource.load(self._boundOnLoad);
     });
 };
 
@@ -361,7 +371,7 @@ Loader.prototype._onComplete = function () {
  * @fires load
  * @private
  */
-Loader.prototype._onLoad = function (resource, cb) {
+Loader.prototype._onLoad = function (resource) {
     this.progress += this._progressChunk;
 
     this.emit('progress', this, resource);
@@ -373,13 +383,13 @@ Loader.prototype._onLoad = function (resource, cb) {
         this.emit('load', this, resource);
     }
 
+    // run middleware, this *must* happen before dequeue so sub-assets get added properly
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
-
-        if (cb) {
-            cb();
-        }
     });
+
+    // remove this resource from the async queue
+    resource._dequeue();
 };
 
 /**
