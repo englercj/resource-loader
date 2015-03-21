@@ -273,8 +273,14 @@ Resource.prototype._loadXhr = function () {
     // set the request type and url
     xhr.open('GET', this.url, true);
 
-    // set the responseType
-    xhr.responseType = this.xhrType;
+    // load json as text and parse it ourselves. We do this because some browsers
+    // *cough* safari *cough* can't deal with it.
+    if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
+        xhr.responseType = Resource.XHR_RESPONSE_TYPE.TEXT;
+    }
+    else {
+        xhr.responseType = this.xhrType;
+    }
 
     xhr.addEventListener('error', this._boundXhrOnError, false);
     xhr.addEventListener('abort', this._boundXhrOnAbort, false);
@@ -406,6 +412,13 @@ Resource.prototype._xhrOnLoad = function (event) {
     if (xhr.status === 200) {
         if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
             this.data = xhr.responseText;
+        }
+        else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
+            try {
+                this.data = JSON.parse(xhr.responseText);
+            } catch(e) {
+                this.error = new Error('Error trying to parse json:', e);
+            }
         }
         else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
             this.data = xhr.responseXML || xhr.response;
