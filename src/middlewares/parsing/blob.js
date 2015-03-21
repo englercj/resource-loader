@@ -1,4 +1,5 @@
-var Resource = require('../../Resource');
+var Resource = require('../../Resource'),
+    b64 = require('../../b64');
 
 window.URL = window.URL || window.webkitURL;
 
@@ -6,10 +7,22 @@ window.URL = window.URL || window.webkitURL;
 
 module.exports = function () {
     return function (resource, next) {
-        // if this was an XHR load
+        // if this was an XHR load of a blob
         if (resource.xhr && resource.xhrType === Resource.XHR_RESPONSE_TYPE.BLOB) {
+            // if there is no blob support we probably got a binary string back
+            if (!window.Blob || typeof resource.data === 'string') {
+                var type = resource.xhr.getResponseHeader('content-type');
+
+                // this is an image, convert the binary string into a data url
+                if (type && type.indexOf('image') === 0) {
+                    resource.data = new Image();
+                    resource.data.src = 'data:' + type + ';base64,' + b64.encodeBinary(resource.xhr.responseText);
+
+                    next();
+                }
+            }
             // if content type says this is an image, then we should transform the blob into an Image object
-            if (resource.data.type.indexOf('image') === 0) {
+            else if (resource.data.type.indexOf('image') === 0) {
                 var src = URL.createObjectURL(resource.data);
 
                 resource.blob = resource.data;
