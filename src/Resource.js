@@ -275,7 +275,7 @@ Resource.prototype._loadXhr = function () {
 
     // load json as text and parse it ourselves. We do this because some browsers
     // *cough* safari *cough* can't deal with it.
-    if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
+    if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON || this.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
         xhr.responseType = Resource.XHR_RESPONSE_TYPE.TEXT;
     }
     else {
@@ -410,19 +410,35 @@ Resource.prototype._xhrOnLoad = function (event) {
     var xhr = event.target;
 
     if (xhr.status === 200) {
+        // if text, just return it
         if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
             this.data = xhr.responseText;
         }
+        // if json, parse into json object
         else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
             try {
                 this.data = JSON.parse(xhr.responseText);
             } catch(e) {
-                this.error = new Error('Error trying to parse json:', e);
+                this.error = new Error('Error trying to parse loaded json:', e);
             }
         }
+        // if xml, parse into an xml document or div element
         else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.DOCUMENT) {
-            this.data = xhr.responseXML || xhr.response;
+            try {
+                if (window.DOMParser) {
+                    var domparser = new DOMParser();
+                    this.data = domparser.parseFromString(xhr.responseText, 'text/xml');
+                }
+                else {
+                    var div = document.createElement('div');
+                    div.innerHTML = xhr.responseText;
+                    this.data = div;
+                }
+            } catch (e) {
+                this.error = new Error('Error trying to parse loaded xml:', e);
+            }
         }
+        // other types just return the response
         else {
             this.data = xhr.response;
         }
