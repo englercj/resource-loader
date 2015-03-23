@@ -7,7 +7,6 @@ describe('Loader', function () {
 
     it('should have correct properties', function () {
         expect(loader).to.have.property('baseUrl', '');
-        expect(loader).to.have.property('queue');
         expect(loader).to.have.property('progress', 0);
     });
 
@@ -32,7 +31,7 @@ describe('Loader', function () {
         it('creates a resource using all arguments', function () {
             loader.add(name, url, options, callback);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -50,7 +49,7 @@ describe('Loader', function () {
         it('creates a resource with just name, url, and options', function () {
             loader.add(name, url, options);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -66,7 +65,7 @@ describe('Loader', function () {
         it('creates a resource with just name, url, and a callback', function () {
             loader.add(name, url, callback);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -82,7 +81,7 @@ describe('Loader', function () {
         it('creates a resource with just name and url', function () {
             loader.add(name, url);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -95,7 +94,7 @@ describe('Loader', function () {
         it('creates a resource with just url, options, and a callback', function () {
             loader.add(url, options, callback);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -114,7 +113,7 @@ describe('Loader', function () {
         it('creates a resource with just url and options', function () {
             loader.add(url, options);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -130,7 +129,7 @@ describe('Loader', function () {
         it('creates a resource with just url and a callback', function () {
             loader.add(url, callback);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -146,7 +145,7 @@ describe('Loader', function () {
         it('creates a resource with just url', function () {
             loader.add(url);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -159,7 +158,7 @@ describe('Loader', function () {
         it('creates a resource with just an object (name/url keys) and callback param', function () {
             loader.add({ name: name, url: url }, callback);
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -175,7 +174,7 @@ describe('Loader', function () {
         it('creates a resource with just an object (name/url/callback keys)', function () {
             loader.add({ name: name, url: url, onComplete: callback });
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
@@ -191,7 +190,7 @@ describe('Loader', function () {
         it('creates a resource with just an object (url/callback keys)', function () {
             loader.add({ url: url, onComplete: callback });
 
-            expect(loader.queue.length()).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
             expect(loader._buffer).to.have.length(1);
 
             var res = loader._buffer[0];
