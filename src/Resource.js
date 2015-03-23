@@ -59,7 +59,7 @@ function Resource(name, url, options) {
      *
      * @member {Resource.LOAD_TYPE}
      */
-    this.loadType = options.loadType || Resource.LOAD_TYPE.XHR;
+    this.loadType = options.loadType || this._determineLoadType();
 
     /**
      * The type used to load the resource via XHR. If unset, determined automatically.
@@ -524,6 +524,7 @@ Resource.prototype._determineXhrType = function () {
         // images
         case 'gif':
         case 'png':
+        case 'bmp':
         case 'jpg':
         case 'jpeg':
         case 'tif':
@@ -541,6 +542,26 @@ Resource.prototype._determineXhrType = function () {
             /* falls through */
         default:
             return Resource.XHR_RESPONSE_TYPE.TEXT;
+    }
+};
+
+Resource.prototype._determineLoadType = function () {
+    var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
+
+    switch(ext) {
+        // images
+        case 'gif':
+        case 'png':
+        case 'bmp':
+        case 'jpg':
+        case 'jpeg':
+        case 'tif':
+        case 'tiff':
+        case 'webp':
+            return Resource.LOAD_TYPE.IMAGE;
+
+        default:
+            return Resource.LOAD_TYPE.XHR;
     }
 };
 
