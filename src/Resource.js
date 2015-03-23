@@ -127,6 +127,7 @@ function Resource(name, url, options) {
      * Emitted when the resource beings to load.
      *
      * @event start
+     * @memberof Resource#
      */
 
     /**
@@ -137,6 +138,7 @@ function Resource(name, url, options) {
      * properly sets Content-Length headers, then this will be available.
      *
      * @event progress
+     * @memberof Resource#
      */
 
     /**
@@ -144,6 +146,7 @@ function Resource(name, url, options) {
      * be in the `error` property.
      *
      * @event complete
+     * @memberof Resource#
      */
 }
 

@@ -65,14 +65,6 @@ function Loader(baseUrl, concurrency) {
     this._boundLoadResource = this._loadResource.bind(this);
 
     /**
-     * The `_onComplete` function bound with this object context.
-     *
-     * @private
-     * @member {function}
-     */
-    this._boundOnComplete = this._onComplete.bind(this);
-
-    /**
      * The `_onLoad` function bound with this object context.
      *
      * @private
@@ -89,11 +81,20 @@ function Loader(baseUrl, concurrency) {
     this._buffer = [];
 
     /**
+     * Used to track load completion.
+     *
+     * @private
+     * @member {number}
+     */
+    this._numToLoad = 0;
+
+    /**
      * The resources waiting to be loaded.
      *
+     * @private
      * @member {Resource[]}
      */
-    this.queue = async.queue(this._boundLoadResource, concurrency);
+    this._queue = async.queue(this._boundLoadResource, concurrency);
 
     /**
      * All the resources for this loader keyed by name.
@@ -106,30 +107,35 @@ function Loader(baseUrl, concurrency) {
      * Emitted once per loaded or errored resource.
      *
      * @event progress
+     * @memberof Loader#
      */
 
     /**
      * Emitted once per errored resource.
      *
      * @event error
+     * @memberof Loader#
      */
 
     /**
      * Emitted once per loaded resource.
      *
      * @event load
+     * @memberof Loader#
      */
 
     /**
      * Emitted when the loader begins to process the queue.
      *
      * @event start
+     * @memberof Loader#
      */
 
     /**
      * Emitted when the queued resources all load.
      *
      * @event complete
+     * @memberof Loader#
      */
 }
 
@@ -241,10 +247,12 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
         this.resources[name].once('afterMiddleware', cb);
     }
 
+    this._numToLoad++;
+
     // if already loading add it to the worker queue
-    if (this.queue.started) {
-        this.queue.push(this.resources[name]);
-        this._progressChunk = (100 - this.progress) / (this.queue.length() + this.queue.running());
+    if (this._queue.started) {
+        this._queue.push(this.resources[name]);
+        this._progressChunk = (100 - this.progress) / (this._queue.length() + this._queue.running());
     }
     // otherwise buffer it to be added to the queue later
     else {
@@ -292,8 +300,8 @@ Loader.prototype.after = Loader.prototype.use = function (fn) {
 Loader.prototype.reset = function () {
     this._buffer.length = 0;
 
-    this.queue.kill();
-    this.queue.started = false;
+    this._queue.kill();
+    this._queue.started = false;
 
     this.progress = 0;
     this._progressChunk = 0;
@@ -314,19 +322,16 @@ Loader.prototype.load = function (cb) {
     }
 
     // if the queue has already started we are done here
-    if (this.queue.started) {
+    if (this._queue.started) {
         return this;
     }
-
-    // set drain event callback
-    this.queue.drain = this._boundOnComplete;
 
     // notify of start
     this.emit('start', this);
 
     // start the internal queue
     for (var i = 0; i < this._buffer.length; ++i) {
-        this.queue.push(this._buffer[i]);
+        this._queue.push(this._buffer[i]);
     }
 
     // empty the buffer
@@ -386,6 +391,13 @@ Loader.prototype._onLoad = function (resource) {
     // run middleware, this *must* happen before dequeue so sub-assets get added properly
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
+
+        this._numToLoad--;
+
+        // do completion check
+        if (this._numToLoad === 0) {
+            this._onComplete();
+        }
     });
 
     // remove this resource from the async queue
