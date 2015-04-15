@@ -314,6 +314,11 @@ Resource.prototype._loadXhr = function () {
  * @private
  */
 Resource.prototype._loadXdr = function () {
+    // if unset, determine the value
+    if (typeof this.xhrType !== 'string') {
+        this.xhrType = this._determineXhrType();
+    }
+
     var xdr = this.xhr = new XDomainRequest();
 
     // XDomainRequest has a few quirks. Occasionally it will abort requests
@@ -389,8 +394,8 @@ Resource.prototype._onProgress =  function (event) {
  */
 Resource.prototype._xhrOnError = function (event) {
     this.error = new Error(
-        reqType(event.target) + ' Request failed. ' +
-        'Status: ' + event.target.status + ', text: "' + event.target.statusText + '"'
+        reqType(this.xhr) + ' Request failed. ' +
+        'Status: ' + this.xhr.status + ', text: "' + this.xhr.statusText + '"'
     );
 
     this.complete();
@@ -403,7 +408,7 @@ Resource.prototype._xhrOnError = function (event) {
  * @private
  */
 Resource.prototype._xhrOnAbort = function (event) {
-    this.error = new Error(reqType(event.target) + ' Request was aborted by the user.');
+    this.error = new Error(reqType(this.xhr) + ' Request was aborted by the user.');
     this.complete();
 };
 
@@ -414,7 +419,7 @@ Resource.prototype._xhrOnAbort = function (event) {
  * @private
  */
 Resource.prototype._xdrOnTimeout = function (event) {
-    this.error = new Error(reqType(event.target) + ' Request timed out.');
+    this.error = new Error(reqType(this.xhr) + ' Request timed out.');
     this.complete();
 };
 
@@ -425,7 +430,7 @@ Resource.prototype._xdrOnTimeout = function (event) {
  * @private
  */
 Resource.prototype._xhrOnLoad = function (event) {
-    var xhr = event.target;
+    var xhr = this.xhr;
 
     if (xhr.status === 200) {
         // if text, just return it
@@ -458,7 +463,7 @@ Resource.prototype._xhrOnLoad = function (event) {
         }
         // other types just return the response
         else {
-            this.data = xhr.response;
+            this.data = xhr.response || xhr.responseText;
         }
     }
     else {
