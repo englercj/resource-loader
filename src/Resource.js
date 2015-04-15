@@ -365,7 +365,7 @@ Resource.prototype._createSource = function (type, url, mime) {
 /**
  * Called if a load errors out.
  *
- * @param error {Error} The error that happened.
+ * @param event {Event} The error event from the element that emits it.
  * @private
  */
 Resource.prototype._onError = function (event) {
@@ -392,7 +392,7 @@ Resource.prototype._onProgress =  function (event) {
  * @param event {XMLHttpRequestErrorEvent|Event}
  * @private
  */
-Resource.prototype._xhrOnError = function (event) {
+Resource.prototype._xhrOnError = function () {
     this.error = new Error(
         reqType(this.xhr) + ' Request failed. ' +
         'Status: ' + this.xhr.status + ', text: "' + this.xhr.statusText + '"'
@@ -407,7 +407,7 @@ Resource.prototype._xhrOnError = function (event) {
  * @param event {XMLHttpRequestAbortEvent}
  * @private
  */
-Resource.prototype._xhrOnAbort = function (event) {
+Resource.prototype._xhrOnAbort = function () {
     this.error = new Error(reqType(this.xhr) + ' Request was aborted by the user.');
     this.complete();
 };
@@ -418,7 +418,7 @@ Resource.prototype._xhrOnAbort = function (event) {
  * @param event {Event}
  * @private
  */
-Resource.prototype._xdrOnTimeout = function (event) {
+Resource.prototype._xdrOnTimeout = function () {
     this.error = new Error(reqType(this.xhr) + ' Request timed out.');
     this.complete();
 };
@@ -429,7 +429,7 @@ Resource.prototype._xdrOnTimeout = function (event) {
  * @param event {XMLHttpRequestLoadEvent|Event}
  * @private
  */
-Resource.prototype._xhrOnLoad = function (event) {
+Resource.prototype._xhrOnLoad = function () {
     var xhr = this.xhr;
 
     if (xhr.status === 200) {
