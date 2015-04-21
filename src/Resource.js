@@ -85,6 +85,46 @@ function Resource(name, url, options) {
     this.xhr = null;
 
     /**
+     * Describes if this resource was loaded as json. Only valid after the resource
+     * has completely loaded.
+     *
+     * @member {boolean}
+     */
+    this.isJson = false;
+
+    /**
+     * Describes if this resource was loaded as xml. Only valid after the resource
+     * has completely loaded.
+     *
+     * @member {boolean}
+     */
+    this.isXml = false;
+
+    /**
+     * Describes if this resource was loaded as an image tag. Only valid after the resource
+     * has completely loaded.
+     *
+     * @member {boolean}
+     */
+    this.isImage = false;
+
+    /**
+     * Describes if this resource was loaded as an audio tag. Only valid after the resource
+     * has completely loaded.
+     *
+     * @member {boolean}
+     */
+    this.isAudio = false;
+
+    /**
+     * Describes if this resource was loaded as a video tag. Only valid after the resource
+     * has completely loaded.
+     *
+     * @member {boolean}
+     */
+    this.isVideo = false;
+
+    /**
      * The `dequeue` method that will be used a storage place for the async queue dequeue method
      * used privately by the loader.
      *
@@ -245,6 +285,8 @@ Resource.prototype._loadImage = function () {
 
     this.data.src = this.url;
 
+    this.isImage = true;
+
     this.data.addEventListener('error', this._boundOnError, false);
     this.data.addEventListener('load', this._boundComplete, false);
     this.data.addEventListener('progress', this._boundOnProgress, false);
@@ -266,6 +308,8 @@ Resource.prototype._loadElement = function (type) {
     else {
         this.data.appendChild(this._createSource(type, this.url));
     }
+
+    this['is' + type[0].toUpperCase() + type.substring(1)] = true;
 
     this.data.addEventListener('error', this._boundOnError, false);
     this.data.addEventListener('load', this._boundComplete, false);
@@ -441,6 +485,7 @@ Resource.prototype._xhrOnLoad = function () {
         else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
             try {
                 this.data = JSON.parse(xhr.responseText);
+                this.isJson = true;
             } catch(e) {
                 this.error = new Error('Error trying to parse loaded json:', e);
             }
@@ -457,6 +502,7 @@ Resource.prototype._xhrOnLoad = function () {
                     div.innerHTML = xhr.responseText;
                     this.data = div;
                 }
+                this.isXml = true;
             } catch (e) {
                 this.error = new Error('Error trying to parse loaded xml:', e);
             }

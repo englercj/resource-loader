@@ -22,6 +22,8 @@ module.exports = function () {
                     resource.data = new Image();
                     resource.data.src = 'data:' + type + ';base64,' + b64.encodeBinary(resource.xhr.responseText);
 
+                    resource.isImage = true;
+
                     // wait until the image loads and then callback
                     resource.data.onload = function () {
                         resource.data.onload = null;
@@ -37,6 +39,8 @@ module.exports = function () {
                 resource.blob = resource.data;
                 resource.data = new Image();
                 resource.data.src = src;
+
+                resource.isImage = true;
 
                 // cleanup the no longer used blob after the image loads
                 resource.data.onload = function () {
