@@ -19,4 +19,4 @@ before_script:
     - sh -e /etc/init.d/xvfb start
 
 script:
-    - "gulp && ./node_modules/.bin/testem ci -f testem.json"
+    - npm test

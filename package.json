@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "scripts": {
-    "test": "gulp && testem",
+    "test": "gulp && testem ci",
     "build": "gulp build",
     "docs": "jsdoc -c ./gulp/util/jsdoc.conf.json"
   },
