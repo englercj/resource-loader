@@ -1,4 +1,4 @@
-var EventEmitter = require('eventemitter3').EventEmitter,
+var EventEmitter = require('eventemitter3'),
     // tests is CORS is supported in XHR, if not we need to use XDR
     useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
 

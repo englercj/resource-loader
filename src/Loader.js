@@ -1,6 +1,6 @@
 var async = require('async'),
     Resource = require('./Resource'),
-    EventEmitter = require('eventemitter3').EventEmitter;
+    EventEmitter = require('eventemitter3');
 
 /**
  * Manages the state and loading of multiple resources to load.
