@@ -298,14 +298,25 @@ Loader.prototype.after = Loader.prototype.use = function (fn) {
  * @return {Loader}
  */
 Loader.prototype.reset = function () {
+    // this.baseUrl = baseUrl || '';
+
+    this.progress = 0;
+
+    this.loading = false;
+
+    this._progressChunk = 0;
+
+    // this._beforeMiddleware.length = 0;
+    // this._afterMiddleware.length = 0;
+
     this._buffer.length = 0;
+
+    this._numToLoad = 0;
 
     this._queue.kill();
     this._queue.started = false;
 
-    this.progress = 0;
-    this._progressChunk = 0;
-    this.loading = false;
+    this.resources = {};
 };
 
 /**
