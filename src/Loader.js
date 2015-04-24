@@ -1,5 +1,6 @@
-var async = require('async'),
-    Resource = require('./Resource'),
+var async       = require('async'),
+    urlParser   = require('url'),
+    Resource    = require('./Resource'),
     EventEmitter = require('eventemitter3');
 
 /**
@@ -235,10 +236,8 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
         throw new Error('Resource with name "' + name + '" already exists.');
     }
 
-    // add base url if this isn't a data url
-    if (url.indexOf('data:') !== 0) {
-        url = this.baseUrl + url;
-    }
+    // add base url if this isn't an absolute url
+    url = this._handleBaseUrl(url);
 
     // create the store the resource
     this.resources[name] = new Resource(name, url, options);
@@ -261,6 +260,17 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     }
 
     return this;
+};
+
+Loader.prototype._handleBaseUrl = function (url) {
+    var parsedUrl = urlParser.parse(url);
+
+    // absolute url, just use it as is.
+    if (parsedUrl.protocol || parsedUrl.pathname.indexOf('//') === 0) {
+        return url;
+    }
+
+    return this.baseUrl + url;
 };
 
 
