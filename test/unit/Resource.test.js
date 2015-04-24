@@ -6,16 +6,16 @@ var request,
     headers = { 'Content-Type': 'application/json' },
     json = '[{ "id": 12, "comment": "Hey there" }]';
 
-before(function () {
-    xhr = sinon.useFakeXMLHttpRequest();
-    xhr.onCreate = function (req) { request = req; };
-});
-
-after(function () {
-    xhr.restore();
-});
-
 describe('Resource', function () {
+    before(function () {
+        xhr = sinon.useFakeXMLHttpRequest();
+        xhr.onCreate = function (req) { request = req; };
+    });
+
+    after(function () {
+        xhr.restore();
+    });
+
     beforeEach(function () {
         res = new Resource(name, url);
         request = null;
@@ -149,7 +149,7 @@ describe('Resource', function () {
 
             expect(res).to.have.property('data').instanceOf(Image)
                 .and.is.an.instanceOf(HTMLImageElement)
-                .and.has.property('src', url);
+                .and.have.property('src', url);
         });
 
         it('should load using Audio', function () {

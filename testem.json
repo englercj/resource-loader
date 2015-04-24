@@ -1,14 +1,23 @@
 {
-  "framework" : "mocha",
-  "launch_in_dev" : ["Chrome"],
-  "launch_in_ci" : ["Firefox"],
-  "src_files" : [
-    "node_modules/chai/chai.js",
-    "node_modules/sinon/pkg/sinon.js",
-    "node_modules/sinon-chai/lib/sinon-chai.js",
+    "framework": "mocha+chai",
+    "launch_in_dev": ["Chrome"],
+    "launch_in_ci": ["Firefox"],
+    "src_files": [
+        "dist/resource-loader.js",
+        "test/unit/**/*.test.js"
+    ],
+    "serve_files": [
+        "node_modules/sinon/pkg/sinon.js",
+        "node_modules/sinon-chai/lib/sinon-chai.js",
 
-    "dist/asset-loader.js",
-    "test/setup.js",
-    "test/unit/**/*.test.js"
-  ]
+        "dist/resource-loader.js",
+
+        "test/setup.js",
+        "test/fixtures/spritesheetMiddleware.js",
+
+        "test/unit/**/*.test.js"
+    ],
+    "routes": {
+        "/fixtures": "test/fixtures"
+    }
 }

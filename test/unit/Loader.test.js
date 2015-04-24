@@ -1,12 +1,13 @@
-var loader = null;
+var loader = null,
+    baseUrl = '/fixtures';
 
 describe('Loader', function () {
     beforeEach(function () {
-        loader = new Loader();
+        loader = new Loader(baseUrl);
     });
 
     it('should have correct properties', function () {
-        expect(loader).to.have.property('baseUrl', '');
+        expect(loader).to.have.property('baseUrl', baseUrl);
         expect(loader).to.have.property('progress', 0);
     });
 
@@ -231,8 +232,10 @@ describe('Loader', function () {
     });
 
     describe('#reset', function () {
+        it('should reset the loading state of the loader');
         it('should reset the progress of the loader');
-        it('should reset the queue of the loader');
+        it('should reset the queue/buffer of the loader');
+        it('should reset the resources of the loader');
     });
 
     describe('#load', function () {
@@ -241,13 +244,22 @@ describe('Loader', function () {
         it('should properly load the resource');
     });
 
-    describe('#loadResource', function () {
+    describe('#_loadResource', function () {
         it('should run the before middleware before loading the resource');
         it('should load a resource passed into it');
     });
 
     describe('#_onComplete', function () {
-        it('should emit the `complete` event');
+        it('should emit the `complete` event', function (done) {
+            loader.on('complete', function (_l, resources) {
+                expect(_l).to.equal(loader);
+                expect(resources).to.equal(loader.resources);
+
+                done();
+            });
+
+            loader._onComplete();
+        });
     });
 
     describe('#_onLoad', function () {
@@ -260,4 +272,67 @@ describe('Loader', function () {
     describe('#_runMiddleware', function () {
         it('should run each middleware function');
     });
+
+    describe('events', function () {
+        it('should call progress for each loaded asset', function (done) {
+            loader.add([
+                { name: 'hud', url: 'hud.png' },
+                { name: 'hud2', url: 'hud2.png' }
+            ]);
+
+            var spy = sinon.spy();
+
+            loader.on('progress', spy);
+
+            loader.load(function () {
+                expect(spy).to.have.been.calledTwice;
+                done();
+            });
+
+        });
+
+        it('progress should be 100% on complete', function (done) {
+            loader.add([
+                { name: 'hud', url: 'hud.png' },
+                { name: 'hud2', url: 'hud2.png' }
+            ]);
+
+            loader.load(function () {
+                expect(loader).to.have.property('progress', 100);
+                done();
+            });
+        });
+
+        it('should call progress for each loaded asset, even when a middleware adds more resources', function (done) {
+            loader.add([
+                { name: 'hud2', url: 'hud2.png' },
+                { name: 'hud_atlas', url: 'hud.json' }
+            ]);
+
+            loader.use(spritesheetMiddleware());
+
+            var spy = sinon.spy();
+
+            loader.on('progress', spy);
+
+            loader.load(function () {
+                expect(spy).to.have.been.calledThrice;
+                done();
+            });
+        });
+
+        it('progress should be 100% on complete, even when a middleware adds more resources', function (done) {
+            loader.add([
+                { name: 'hud2', url: 'hud2.png' },
+                { name: 'hud_atlas', url: 'hud.json' }
+            ]);
+
+            loader.use(spritesheetMiddleware());
+
+            loader.load(function () {
+                expect(loader).to.have.property('progress', 100);
+                done();
+            });
+        });
+    })
 });
