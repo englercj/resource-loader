@@ -270,7 +270,17 @@ Loader.prototype._handleBaseUrl = function (url) {
         return url;
     }
 
-    return this.baseUrl + url;
+    // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
+    if (
+        this.baseUrl.length &&
+        this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1 &&
+        url.lastIndexOf('/') !== url.length - 1
+    ) {
+        return this.baseUrl + '/' + url;
+    }
+    else {
+        return this.baseUrl + url;
+    }
 };
 
 
