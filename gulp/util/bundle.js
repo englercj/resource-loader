@@ -13,7 +13,7 @@ function rebundle() {
     return this.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
-        .pipe(source('asset-loader.js'))
+        .pipe(source('resource-loader.js'))
         .pipe(gulp.dest(paths.out))
         .pipe(buffer())
         .pipe(uglify())
