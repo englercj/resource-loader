@@ -561,59 +561,13 @@ Resource.prototype._determineCrossOrigin = function () {
 Resource.prototype._determineXhrType = function () {
     var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
 
-    switch(ext) {
-        // xml
-        case 'xhtml':
-        case 'html':
-        case 'htm':
-        case 'xml':
-        case 'tmx':
-        case 'tsx':
-        case 'svg':
-            return Resource.XHR_RESPONSE_TYPE.DOCUMENT;
-
-        // images
-        case 'gif':
-        case 'png':
-        case 'bmp':
-        case 'jpg':
-        case 'jpeg':
-        case 'tif':
-        case 'tiff':
-        case 'webp':
-            return Resource.XHR_RESPONSE_TYPE.BLOB;
-
-        // json
-        case 'json':
-            return Resource.XHR_RESPONSE_TYPE.JSON;
-
-        // text
-        case 'text':
-        case 'txt':
-            /* falls through */
-        default:
-            return Resource.XHR_RESPONSE_TYPE.TEXT;
-    }
+    return Resource._xhrTypeMap[ext] || Resource.XHR_RESPONSE_TYPE.TEXT;
 };
 
 Resource.prototype._determineLoadType = function () {
     var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
 
-    switch(ext) {
-        // images
-        case 'gif':
-        case 'png':
-        case 'bmp':
-        case 'jpg':
-        case 'jpeg':
-        case 'tif':
-        case 'tiff':
-        case 'webp':
-            return Resource.LOAD_TYPE.IMAGE;
-
-        default:
-            return Resource.LOAD_TYPE.XHR;
-    }
+    return Resource._loadTypeMap[ext] || Resource.LOAD_TYPE.XHR;
 };
 
 /**
@@ -705,3 +659,69 @@ Resource.XHR_RESPONSE_TYPE = {
     JSON:       'json',
     TEXT:       'text'
 };
+
+Resource._loadTypeMap = {
+    'gif':      Resource.LOAD_TYPE.IMAGE,
+    'png':      Resource.LOAD_TYPE.IMAGE,
+    'bmp':      Resource.LOAD_TYPE.IMAGE,
+    'jpg':      Resource.LOAD_TYPE.IMAGE,
+    'jpeg':     Resource.LOAD_TYPE.IMAGE,
+    'tif':      Resource.LOAD_TYPE.IMAGE,
+    'tiff':     Resource.LOAD_TYPE.IMAGE,
+    'webp':     Resource.LOAD_TYPE.IMAGE
+};
+
+Resource._xhrTypeMap = {
+    // xml
+    'xhtml':    Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'html':     Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'htm':      Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'xml':      Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'tmx':      Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'tsx':      Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+    'svg':      Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+
+    // images
+    'gif':      Resource.XHR_RESPONSE_TYPE.BLOB,
+    'png':      Resource.XHR_RESPONSE_TYPE.BLOB,
+    'bmp':      Resource.XHR_RESPONSE_TYPE.BLOB,
+    'jpg':      Resource.XHR_RESPONSE_TYPE.BLOB,
+    'jpeg':     Resource.XHR_RESPONSE_TYPE.BLOB,
+    'tif':      Resource.XHR_RESPONSE_TYPE.BLOB,
+    'tiff':     Resource.XHR_RESPONSE_TYPE.BLOB,
+    'webp':     Resource.XHR_RESPONSE_TYPE.BLOB,
+
+    // json
+    'json':     Resource.XHR_RESPONSE_TYPE.JSON,
+
+    // text
+    'text':     Resource.XHR_RESPONSE_TYPE.TEXT,
+    'txt':      Resource.XHR_RESPONSE_TYPE.TEXT
+};
+
+/**
+ * Sets the load type to be used for a specific extension.
+ *
+ * @static
+ * @param extname {string} The extension to set the type for, e.g. ".png" or ".fnt"
+ * @param loadType {Resource.LOAD_TYPE} The load type to set it to.
+ */
+Resource.setExtensionLoadType = function (extname, loadType) {
+    setExtMap(Resource._loadTypeMap, extname, loadType);
+};
+
+Resource.setExtensionXhrType = function (extname, xhrType) {
+    setExtMap(Resource._xhrTypeMap, extname, xhrType);
+};
+
+function setExtMap(map, extname, val) {
+    if (extname && extname.indexOf('.') === 0) {
+        extname = extname.substring(1);
+    }
+
+    if (!extname) {
+        return;
+    }
+
+    map[extname] = val;
+}
