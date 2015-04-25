@@ -425,7 +425,7 @@ Resource.prototype._onError = function (event) {
  * @private
  */
 Resource.prototype._onProgress =  function (event) {
-    if (event.lengthComputable) {
+    if (event && event.lengthComputable) {
         this.emit('progress', this, event.loaded / event.total);
     }
 };
