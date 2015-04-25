@@ -703,13 +703,20 @@ Resource._xhrTypeMap = {
  * Sets the load type to be used for a specific extension.
  *
  * @static
- * @param extname {string} The extension to set the type for, e.g. ".png" or ".fnt"
+ * @param extname {string} The extension to set the type for, e.g. "png" or "fnt"
  * @param loadType {Resource.LOAD_TYPE} The load type to set it to.
  */
 Resource.setExtensionLoadType = function (extname, loadType) {
     setExtMap(Resource._loadTypeMap, extname, loadType);
 };
 
+/**
+ * Sets the load type to be used for a specific extension.
+ *
+ * @static
+ * @param extname {string} The extension to set the type for, e.g. "png" or "fnt"
+ * @param xhrType {Resource.XHR_RESPONSE_TYPE} The xhr type to set it to.
+ */
 Resource.setExtensionXhrType = function (extname, xhrType) {
     setExtMap(Resource._xhrTypeMap, extname, xhrType);
 };
