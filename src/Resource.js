@@ -474,9 +474,10 @@ Resource.prototype._xdrOnTimeout = function () {
  * @private
  */
 Resource.prototype._xhrOnLoad = function () {
-    var xhr = this.xhr;
+    var xhr = this.xhr,
+        status = xhr.status !== undefined ? xhr.status : 200; //XDR has no `.status`, assume 200.
 
-    if (xhr.status === 200) {
+    if (status === 200 || status === 204) {
         // if text, just return it
         if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
             this.data = xhr.responseText;
