@@ -28,11 +28,9 @@ describe('Resource', function () {
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.XHR);
         expect(res).to.have.property('error', null);
         expect(res).to.have.property('xhr', null);
+        expect(res).to.have.property('crossOrigin', null);
 
-        // technically they exist, but they should be undefined
-        expect('crossOrigin' in res).to.be.ok;
-        expect(res.crossOrigin).to.equal(undefined);
-
+        // technically it exists, but it should be undefined
         expect('xhrType' in res).to.be.ok;
         expect(res.xhrType).to.equal(undefined);
     });
@@ -47,7 +45,7 @@ describe('Resource', function () {
         expect(res).to.have.property('name', name);
         expect(res).to.have.property('url', url);
         expect(res).to.have.property('data', null);
-        expect(res).to.have.property('crossOrigin', true);
+        expect(res).to.have.property('crossOrigin', 'anonymous');
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.IMAGE);
         expect(res).to.have.property('xhrType', Resource.XHR_RESPONSE_TYPE.BLOB);
         expect(res).to.have.property('error', null);

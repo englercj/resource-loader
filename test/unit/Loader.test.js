@@ -40,7 +40,7 @@ describe('Loader', function () {
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
             expect(res).to.have.property('url', url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin);
+            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
 
@@ -59,7 +59,7 @@ describe('Loader', function () {
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
             expect(res).to.have.property('url', url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin);
+            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
         });
@@ -105,7 +105,7 @@ describe('Loader', function () {
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', url);
             expect(res).to.have.property('url', url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin);
+            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
 
@@ -125,7 +125,7 @@ describe('Loader', function () {
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', url);
             expect(res).to.have.property('url', url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin);
+            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
         });
