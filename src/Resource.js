@@ -1,6 +1,8 @@
 var EventEmitter = require('eventemitter3'),
+    _url = require('url'),
     // tests is CORS is supported in XHR, if not we need to use XDR
-    useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
+    useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest()))),
+    tempAnchor = null;
 
 /**
  * Manages the state and loading of a single resource represented by
@@ -52,7 +54,7 @@ function Resource(name, url, options) {
      *
      * @member {string}
      */
-    this.crossOrigin = options.crossOrigin;
+    this.crossOrigin = options.crossOrigin === true ? 'anonymous' : null;
 
     /**
      * The method of loading to use for this resource.
@@ -261,7 +263,7 @@ Resource.prototype.load = function (cb) {
         case Resource.LOAD_TYPE.XHR:
             /* falls through */
         default:
-            if (useXdr) {
+            if (useXdr && this.crossOrigin) {
                 this._loadXdr();
             }
             else {
@@ -280,7 +282,7 @@ Resource.prototype._loadImage = function () {
     this.data = new Image();
 
     if (this.crossOrigin) {
-        this.data.crossOrigin = '';
+        this.data.crossOrigin = this.crossOrigin;
     }
 
     this.data.src = this.url;
@@ -539,14 +541,19 @@ Resource.prototype._determineCrossOrigin = function () {
         return '';
     }
 
-    // check if this is a cross-origin url
-    var loc = window.location,
-        a = document.createElement('a');
+    if (!tempAnchor) {
+        tempAnchor = document.createElement('a');
+    }
 
-    a.href = this.url;
+    // let the browser determine the full href for the url of this resource and then
+    // parse with the node url lib, we can't use the properties of the anchor element
+    // because they don't work in IE9 :(
+    tempAnchor.href = this.url;
+    var url = _url.parse(tempAnchor.href),
+        loc = window.location;
 
     // if cross origin
-    if (a.hostname !== loc.hostname || a.port !== loc.port || a.protocol !== loc.protocol) {
+    if (url.hostname !== loc.hostname || url.port !== loc.port || url.protocol !== loc.protocol) {
         return 'anonymous';
     }
 
