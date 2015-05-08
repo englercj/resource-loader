@@ -670,7 +670,8 @@ Resource._loadTypeMap = {
     'jpeg':     Resource.LOAD_TYPE.IMAGE,
     'tif':      Resource.LOAD_TYPE.IMAGE,
     'tiff':     Resource.LOAD_TYPE.IMAGE,
-    'webp':     Resource.LOAD_TYPE.IMAGE
+    'webp':     Resource.LOAD_TYPE.IMAGE,
+    'tga':      Resource.LOAD_TYPE.IMAGE
 };
 
 Resource._xhrTypeMap = {
@@ -692,6 +693,7 @@ Resource._xhrTypeMap = {
     'tif':      Resource.XHR_RESPONSE_TYPE.BLOB,
     'tiff':     Resource.XHR_RESPONSE_TYPE.BLOB,
     'webp':     Resource.XHR_RESPONSE_TYPE.BLOB,
+    'tga':      Resource.XHR_RESPONSE_TYPE.BLOB,
 
     // json
     'json':     Resource.XHR_RESPONSE_TYPE.JSON,
