@@ -244,7 +244,7 @@ Resource.prototype.load = function (cb) {
 
     // if unset, determine the value
     if (typeof this.crossOrigin !== 'string') {
-        this.crossOrigin = this._determineCrossOrigin();
+        this.crossOrigin = this._determineCrossOrigin(this.url);
     }
 
     switch(this.loadType) {
@@ -533,13 +533,18 @@ function reqType(xhr) {
  * function does nothing.
  *
  * @private
+ * @param url {string} The url to test.
+ * @param [location=window.location] {object} The location object to test against.
  * @return {string} The crossOrigin value to use (or empty string for none).
  */
-Resource.prototype._determineCrossOrigin = function () {
+Resource.prototype._determineCrossOrigin = function (url, loc) {
     // data: and javascript: urls are considered same-origin
-    if (this.url.indexOf('data:') === 0) {
+    if (url.indexOf('data:') === 0) {
         return '';
     }
+
+    // default is window.location
+    loc = loc || window.location;
 
     if (!tempAnchor) {
         tempAnchor = document.createElement('a');
@@ -548,10 +553,10 @@ Resource.prototype._determineCrossOrigin = function () {
     // let the browser determine the full href for the url of this resource and then
     // parse with the node url lib, we can't use the properties of the anchor element
     // because they don't work in IE9 :(
-    tempAnchor.href = this.url;
-    var url = _url.parse(tempAnchor.href),
-        loc = window.location,
-        samePort = (!url.port && loc.port === '') || url.port === loc.port;
+    tempAnchor.href = url;
+    url = _url.parse(tempAnchor.href);
+
+    var samePort = (!url.port && loc.port === '') || (url.port === loc.port);
 
     // if cross origin
     if (url.hostname !== loc.hostname || !samePort || url.protocol !== loc.protocol) {

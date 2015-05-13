@@ -176,4 +176,55 @@ describe('Resource', function () {
             expect(res.data.children[0]).to.have.property('src', url);
         });
     });
+
+    describe('#_determineCrossOrigin', function () {
+        it('should properly detect same-origin requests (#1)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com',
+                { hostname: 'google.com', port: '', protocol: 'https:' }
+            )).to.equal('');
+        });
+
+        it('should properly detect same-origin requests (#2)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com:443',
+                { hostname: 'google.com', port: '', protocol: 'https:' }
+            )).to.equal('');
+        });
+
+        it('should properly detect same-origin requests (#3)', function () {
+            expect(res._determineCrossOrigin(
+                'http://www.google.com:5678',
+                { hostname: 'www.google.com', port: '5678', protocol: 'http:' }
+            )).to.equal('');
+        });
+
+        it('should properly detect cross-origin requests (#1)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com',
+                { hostname: 'google.com', port: '123', protocol: 'https:' }
+            )).to.equal('anonymous');
+        });
+
+        it('should properly detect cross-origin requests (#2)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com',
+                { hostname: 'google.com', port: '', protocol: 'http:' }
+            )).to.equal('anonymous');
+        });
+
+        it('should properly detect cross-origin requests (#3)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com',
+                { hostname: 'googles.com', port: '', protocol: 'https:' }
+            )).to.equal('anonymous');
+        });
+
+        it('should properly detect cross-origin requests (#4)', function () {
+            expect(res._determineCrossOrigin(
+                'https://google.com',
+                { hostname: 'www.google.com', port: '123', protocol: 'https:' }
+            )).to.equal('anonymous');
+        });
+    });
 });
