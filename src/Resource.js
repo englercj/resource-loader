@@ -550,10 +550,11 @@ Resource.prototype._determineCrossOrigin = function () {
     // because they don't work in IE9 :(
     tempAnchor.href = this.url;
     var url = _url.parse(tempAnchor.href),
-        loc = window.location;
+        loc = window.location,
+        samePort = (!url.port && loc.port === '') || url.port === loc.port;
 
     // if cross origin
-    if (url.hostname !== loc.hostname || url.port !== loc.port || url.protocol !== loc.protocol) {
+    if (url.hostname !== loc.hostname || !samePort || url.protocol !== loc.protocol) {
         return 'anonymous';
     }
 
