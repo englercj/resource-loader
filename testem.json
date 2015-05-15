@@ -1,5 +1,6 @@
 {
     "framework": "mocha",
+    "timeout": 5000,
     "launch_in_dev": ["Chrome"],
     "launch_in_ci": ["Firefox"],
     "src_files": [
