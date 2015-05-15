@@ -43,6 +43,14 @@ function Resource(name, url, options) {
     this.url = url;
 
     /**
+     * Stores whether or not this url is a data url.
+     *
+     * @member {boolean}
+     * @readonly
+     */
+    this.isDataUrl = this.url.indexOf('data:') === 0;
+
+    /**
      * The data that was loaded by the resource.
      *
      * @member {any}
@@ -574,15 +582,26 @@ Resource.prototype._determineCrossOrigin = function (url, loc) {
  * @return {Resource.XHR_RESPONSE_TYPE} The responseType to use.
  */
 Resource.prototype._determineXhrType = function () {
-    var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
-
-    return Resource._xhrTypeMap[ext] || Resource.XHR_RESPONSE_TYPE.TEXT;
+    return Resource._xhrTypeMap[this._getExtension()] || Resource.XHR_RESPONSE_TYPE.TEXT;
 };
 
 Resource.prototype._determineLoadType = function () {
-    var ext = this.url.substr(this.url.lastIndexOf('.') + 1);
+    return Resource._loadTypeMap[this._getExtension()] || Resource.LOAD_TYPE.XHR;
+};
 
-    return Resource._loadTypeMap[ext] || Resource.LOAD_TYPE.XHR;
+Resource.prototype._getExtension = function () {
+    var url = this.url,
+        ext;
+
+    if (this.isDataUrl) {
+        var slashIndex = url.indexOf('/');
+        ext = url.substring(slashIndex + 1, url.indexOf(';', slashIndex));
+    }
+    else {
+        ext = url.substring(url.lastIndexOf('.') + 1);
+    }
+
+    return ext;
 };
 
 /**
