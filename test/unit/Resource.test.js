@@ -3,6 +3,7 @@ var request,
     xhr,
     name = 'test-resource',
     url = 'http://localhost/file',
+    dataUrl = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==',
     headers = { 'Content-Type': 'application/json' },
     json = '[{ "id": 12, "comment": "Hey there" }]';
 
@@ -123,6 +124,20 @@ describe('Resource', function () {
 
             expect(request).to.exist;
             expect(spy).to.have.been.calledWith(res);
+        });
+
+        it('should load using a data url', function (done) {
+            var res = new Resource(name, dataUrl);
+
+            res.on('complete', function () {
+                expect(res).to.have.property('data').instanceOf(Image)
+                    .and.is.an.instanceOf(HTMLImageElement)
+                    .and.have.property('src', dataUrl);
+
+                done();
+            });
+
+            res.load();
         });
 
         it('should load using XHR', function (done) {

@@ -228,14 +228,56 @@ describe('Loader', function () {
     });
 
     describe('#after', function () {
-        it('should add a middleware that runs after loading a resource');
+        it('should add a middleware that runs after loading a resource', function () {
+            loader.after(function () {});
+
+            expect(loader._afterMiddleware).to.have.length(1);
+        });
     });
 
     describe('#reset', function () {
-        it('should reset the loading state of the loader');
-        it('should reset the progress of the loader');
-        it('should reset the queue/buffer of the loader');
-        it('should reset the resources of the loader');
+        it('should reset the loading state of the loader', function () {
+            loader.loading = true;
+            expect(loader.loading).to.equal(true);
+
+            loader.reset();
+            expect(loader.loading).to.equal(false);
+        });
+
+        it('should reset the progress of the loader', function () {
+            loader.progress = 100;
+            loader._progressChunk = 100;
+            expect(loader.progress).to.equal(100);
+            expect(loader._progressChunk).to.equal(100);
+
+            loader.reset();
+            expect(loader.progress).to.equal(0);
+            expect(loader._progressChunk).to.equal(0);
+        });
+
+        it('should reset the queue/buffer of the loader', function () {
+            loader._buffer.push('me');
+            loader._numToLoad = 1;
+            loader._queue.push('me');
+            expect(loader._buffer.length).to.equal(1);
+            expect(loader._numToLoad).to.equal(1);
+            expect(loader._queue.length()).to.equal(1);
+            expect(loader._queue.started).to.equal(true);
+
+            loader.reset();
+            expect(loader._buffer.length).to.equal(0);
+            expect(loader._numToLoad).to.equal(0);
+            expect(loader._queue.length()).to.equal(0);
+            expect(loader._queue.started).to.equal(false);
+        });
+
+        it('should reset the resources of the loader', function () {
+            loader.resources = { hey: 'there' };
+            expect(loader.resources).to.not.be.empty;
+
+            loader.reset();
+            expect(loader.resources).to.be.empty;
+        });
     });
 
     describe('#load', function () {
@@ -270,7 +312,23 @@ describe('Loader', function () {
     });
 
     describe('#_runMiddleware', function () {
-        it('should run each middleware function');
+        it('should run each middleware function', function () {
+            var res = {},
+                noop = function () {};
+
+            var spy = sinon.spy(function (resource, next) {
+                expect(resource).to.equal(res);
+                next();
+            });
+
+            loader.pre(spy).before(spy);
+
+            expect(loader._beforeMiddleware).to.have.length(2);
+
+            loader._runMiddleware(res, loader._beforeMiddleware, noop);
+
+            expect(spy).to.have.been.calledTwice;
+        });
     });
 
     describe('events', function () {
