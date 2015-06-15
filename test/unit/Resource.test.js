@@ -242,4 +242,30 @@ describe('Resource', function () {
             )).to.equal('anonymous');
         });
     });
+
+    describe('#_getExtension', function () {
+        it('should return the proper extension', function () {
+            res.url = 'http://www.google.com/image.png';
+            expect(res._getExtension()).to.equal('png');
+
+            res.url = 'http://domain.net/really/deep/path/that/goes/for/a/while/movie.wmv';
+            expect(res._getExtension()).to.equal('wmv');
+
+            res.url = 'http://somewhere.io/path.with.dots/and_a-bunch_of.symbols/data.txt';
+            expect(res._getExtension()).to.equal('txt');
+
+            res.url = 'http://nowhere.me/image.jpg?query=true&string=false&name=real';
+            expect(res._getExtension()).to.equal('jpg');
+
+            res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json';
+            expect(res._getExtension()).to.equal('jpeg');
+
+            res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json';
+            expect(res._getExtension()).to.equal('jpeg');
+
+            res.isDataUrl = true;
+            res.url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII=';
+            expect(res._getExtension()).to.equal('png');
+        })
+    });
 });
