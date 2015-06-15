@@ -598,6 +598,11 @@ Resource.prototype._getExtension = function () {
         ext = url.substring(slashIndex + 1, url.indexOf(';', slashIndex));
     }
     else {
+        var queryStart = url.indexOf('?');
+        if (queryStart !== -1) {
+            url = url.substring(0, queryStart);
+        }
+
         ext = url.substring(url.lastIndexOf('.') + 1);
     }
 
