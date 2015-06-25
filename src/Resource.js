@@ -308,15 +308,32 @@ Resource.prototype._loadImage = function () {
  * @private
  */
 Resource.prototype._loadElement = function (type) {
-    this.data = document.createElement(type);
-
-    if (Array.isArray(this.url)) {
-        for (var i = 0; i < this.url.length; ++i) {
-            this.data.appendChild(this._createSource(type, this.url[i]));
-        }
+    if (type === 'audio' && typeof Audio !== 'undefined') {
+        this.data = new Audio();
     }
     else {
-        this.data.appendChild(this._createSource(type, this.url));
+        this.data = document.createElement(type);
+    }
+
+    if (this.data === null) {
+        this.error = new Error('Unsupported element ' + type);
+        this.complete();
+        return;
+    }
+
+    // support for CocoonJS Canvas+ runtime, lacks document.createElement('source')
+    if (navigator.isCocoonJS) {
+        this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
+    }
+    else {
+        if (Array.isArray(this.url)) {
+            for (var i = 0; i < this.url.length; ++i) {
+                this.data.appendChild(this._createSource(type, this.url[i]));
+            }
+        }
+        else {
+            this.data.appendChild(this._createSource(type, this.url));
+        }
     }
 
     this['is' + type[0].toUpperCase() + type.substring(1)] = true;
