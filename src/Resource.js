@@ -315,6 +315,12 @@ Resource.prototype._loadElement = function (type) {
         this.data = document.createElement(type);
     }
 
+    if (this.data === null) {
+        this.error = new Error('Unsupported element ' + type);
+        this.complete();
+        return;
+    }
+
     // support for CocoonJS Canvas+ runtime, lacks document.createElement('source')
     if (navigator.isCocoonJS) {
         this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
