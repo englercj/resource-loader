@@ -316,7 +316,7 @@ Resource.prototype._loadElement = function (type) {
     }
 
     // support for CocoonJS Canvas+ runtime, lacks document.createElement('source')
-    if (window.CocoonJS) {
+    if (navigator.isCocoonJS) {
         this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
     }
     else {
