@@ -412,13 +412,6 @@ Loader.prototype._onLoad = function (resource) {
 
     this.emit('progress', this, resource);
 
-    if (resource.error) {
-        this.emit('error', resource.error, this, resource);
-    }
-    else {
-        this.emit('load', this, resource);
-    }
-
     // run middleware, this *must* happen before dequeue so sub-assets get added properly
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
@@ -429,7 +422,16 @@ Loader.prototype._onLoad = function (resource) {
         if (this._numToLoad === 0) {
             this._onComplete();
         }
+        
+        if (resource.error) {
+            this.emit('error', resource.error, this, resource);
+        }
+        else {
+            this.emit('load', this, resource);
+        }
     });
+    
+
 
     // remove this resource from the async queue
     resource._dequeue();
