@@ -420,6 +420,7 @@ Loader.prototype._onLoad = function (resource) {
 
         // do completion check
         if (this._numToLoad === 0) {
+            this.progress = 100;
             this._onComplete();
         }
         
