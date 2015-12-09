@@ -13,8 +13,8 @@ module.exports = function () {
             resource.once('complete', function () {
                cache[this.url] = this.data;
             });
-
-            next();
         }
+        
+        next();
     };
 };
