@@ -16,6 +16,7 @@ var EventEmitter = require('eventemitter3'),
  * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.LOAD_TYPE} How should this resource be loaded?
  * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
+ * @param [options.extra] {object} Extra info for middleware.
  */
 function Resource(name, url, options) {
     EventEmitter.call(this);
@@ -77,6 +78,13 @@ function Resource(name, url, options) {
      * @member {string}
      */
     this.xhrType = options.xhrType;
+
+    /**
+     * Extra info for middleware
+     *
+     * @member {object}
+     */
+    this.extra = options.extra || {};
 
     /**
      * The error that occurred while loading (if any).
