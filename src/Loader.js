@@ -274,7 +274,7 @@ Loader.prototype._handleBaseUrl = function (url) {
     if (
         this.baseUrl.length &&
         this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1 &&
-        url.lastIndexOf('/') !== url.length - 1
+        url.charAt(0) !== '/'
     ) {
         return this.baseUrl + '/' + url;
     }
