@@ -12,7 +12,7 @@ var EventEmitter = require('eventemitter3'),
  * @param name {string} The name of the resource to load.
  * @param url {string|string[]} The url for this resource, for audio/video loads you can pass an array of sources.
  * @param [options] {object} The options for the load.
- * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
+ * @param [options.crossOrigin] {string|boolean} Is this request cross-origin? Default is to determine automatically.
  * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.LOAD_TYPE} How should this resource be loaded?
  * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
  *      loaded be interpreted when using XHR?
@@ -63,7 +63,7 @@ function Resource(name, url, options) {
      *
      * @member {string}
      */
-    this.crossOrigin = options.crossOrigin === true ? 'anonymous' : null;
+    this.crossOrigin = options.crossOrigin === true ? 'anonymous' : options.crossOrigin;
 
     /**
      * The method of loading to use for this resource.
@@ -259,7 +259,7 @@ Resource.prototype.load = function (cb) {
     }
 
     // if unset, determine the value
-    if (typeof this.crossOrigin !== 'string') {
+    if (this.crossOrigin === false || typeof this.crossOrigin !== 'string') {
         this.crossOrigin = this._determineCrossOrigin(this.url);
     }
 
