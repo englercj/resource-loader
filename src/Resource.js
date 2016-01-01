@@ -295,13 +295,21 @@ Resource.prototype.load = function (cb) {
  * @private
  */
 Resource.prototype._loadImage = function () {
+    if (!this.data) {
+        this.prepareImage();
+    }
+    this.data.src = this.url;
+};
+
+/**
+ * Prepares image for loading, but does not set src yet
+ */
+Resource.prototype.prepareImage = function () {
     this.data = new Image();
 
     if (this.crossOrigin) {
         this.data.crossOrigin = this.crossOrigin;
     }
-
-    this.data.src = this.url;
 
     this.isImage = true;
 
