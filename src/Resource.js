@@ -303,7 +303,6 @@ Resource.prototype._loadImage = function () {
 
 /**
  * Prepares image for loading, but does not set src yet
- *
  */
 Resource.prototype.prepareImage = function () {
     this.data = new Image();
