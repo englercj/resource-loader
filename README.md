@@ -56,12 +56,8 @@ That will output the built distributables to `./dist`.
 
 ## Supported Browsers
 
-- IE 10+
+- IE 9+
 - FF 13+
 - Chrome 20+
 - Safari 6+
 - Opera 12.1+
-
-## To Do:
-
-- IE 9 support
