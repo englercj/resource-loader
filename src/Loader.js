@@ -251,6 +251,10 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     // if already loading add it to the worker queue
     if (this._queue.started) {
         this._queue.push(this.resources[name]);
+        if (this.progress === 100) {
+            // This happens if the last resource triggers more resources to be loaded
+            this.progress = 0;
+        }
         this._progressChunk = (100 - this.progress) / (this._queue.length() + this._queue.running());
     }
     // otherwise buffer it to be added to the queue later
@@ -423,7 +427,7 @@ Loader.prototype._onLoad = function (resource) {
             this.progress = 100;
             this._onComplete();
         }
-        
+
         if (resource.error) {
             this.emit('error', resource.error, this, resource);
         }
@@ -431,7 +435,7 @@ Loader.prototype._onLoad = function (resource) {
             this.emit('load', this, resource);
         }
     });
-    
+
 
 
     // remove this resource from the async queue
