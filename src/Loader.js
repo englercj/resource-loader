@@ -418,17 +418,17 @@ Loader.prototype._onLoad = function (resource) {
 
         this._numToLoad--;
 
-        // do completion check
-        if (this._numToLoad === 0) {
-            this.progress = 100;
-            this._onComplete();
-        }
-        
         if (resource.error) {
             this.emit('error', resource.error, this, resource);
         }
         else {
             this.emit('load', this, resource);
+        }
+
+        // do completion check
+        if (this._numToLoad === 0) {
+            this.progress = 100;
+            this._onComplete();
         }
     });
     
