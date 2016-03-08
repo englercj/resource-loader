@@ -147,8 +147,8 @@ module.exports = Loader;
 /**
  * Adds a resource (or multiple resources) to the loader queue.
  *
- * This function can take a wide variety of different parameters. The only thing that is always
- * required the url to load. All the following will work:
+ * This function has a wide variety of signatures. Of all possible
+ * parameters the url is the only one required; examples:
  *
  * ```js
  * loader
@@ -181,7 +181,14 @@ module.exports = Loader;
  *         { name: 'key4', url: 'http://...', onComplete: function () {} },
  *         { url: 'http://...', onComplete: function () {} },
  *         'http://...'
- *     ]);
+ *     ])
+ *
+ *     // add some resource...
+ *     .add('key', 'http://...'),
+ *     // then you can add it again, only this time the existing resource
+ *     // is simply reused and the callback (if any) is immediately invoked
+ *     // (so in this case 'onComplete' gets called right away)
+ *     .add('key', 'http://...', function onComplete () {});
  * ```
  *
  * @alias enqueue
@@ -231,31 +238,36 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
         options = null;
     }
 
-    // check if resource already exists.
-    if (this.resources[name]) {
-        throw new Error('Resource with name "' + name + '" already exists.');
+    // check if resource already exists
+    var object = this.resources[name];
+    if (typeof object === 'object') {
+        if (typeof cb === 'function') {
+            cb.call(object, object);
+        }
+        return this;
+        //throw new Error('Resource with name "' + name + '" already exists.');
     }
 
     // add base url if this isn't an absolute url
     url = this._handleBaseUrl(url);
 
-    // create the store the resource
-    this.resources[name] = new Resource(name, url, options);
+    // create and store the resource
+    object = this.resources[name] = new Resource(name, url, options);
 
     if (typeof cb === 'function') {
-        this.resources[name].once('afterMiddleware', cb);
+        object.once('afterMiddleware', cb);
     }
 
     this._numToLoad++;
 
     // if already loading add it to the worker queue
     if (this._queue.started) {
-        this._queue.push(this.resources[name]);
+        this._queue.push(object);
         this._progressChunk = (100 - this.progress) / (this._queue.length() + this._queue.running());
     }
     // otherwise buffer it to be added to the queue later
     else {
-        this._buffer.push(this.resources[name]);
+        this._buffer.push(object);
         this._progressChunk = 100 / this._buffer.length;
     }
 
@@ -431,7 +443,7 @@ Loader.prototype._onLoad = function (resource) {
             this._onComplete();
         }
     });
-    
+
 
 
     // remove this resource from the async queue
