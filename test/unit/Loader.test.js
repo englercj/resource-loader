@@ -217,6 +217,16 @@ describe('Loader', function () {
             expect(function () { loader.add(callback); }).to.throw(Error);
             expect(function () { loader.add(options, callback); }).to.throw(Error);
         });
+
+        it('allows the name of an already loaded resource', function () {
+            loader.add(url);
+            var res = loader._buffer[0];
+
+            loader.add(url);
+
+            expect(loader._buffer[0]).to.equal(res);
+            expect(loader._buffer.length).to.equal(1);
+        });
     });
 
     describe('#before', function () {

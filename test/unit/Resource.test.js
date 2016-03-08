@@ -29,7 +29,8 @@ describe('Resource', function () {
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.XHR);
         expect(res).to.have.property('error', null);
         expect(res).to.have.property('xhr', null);
-        expect(res).to.have.property('crossOrigin', null);
+        expect(res).to.have.property('crossOrigin');
+        expect(res.crossOrigin).to.not.exist;
 
         // technically it exists, but it should be undefined
         expect('xhrType' in res).to.be.ok;
