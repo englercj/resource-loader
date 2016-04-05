@@ -266,7 +266,7 @@ Loader.prototype._handleBaseUrl = function (url) {
     var parsedUrl = urlParser.parse(url);
 
     // absolute url, just use it as is.
-    if (parsedUrl.protocol || parsedUrl.pathname.indexOf('//') === 0) {
+    if (parsedUrl.protocol || !parsedUrl.pathname || parsedUrl.pathname.indexOf('//') === 0) {
         return url;
     }
 
