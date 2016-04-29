@@ -733,7 +733,8 @@ Resource._loadTypeMap = {
     'tif':      Resource.LOAD_TYPE.IMAGE,
     'tiff':     Resource.LOAD_TYPE.IMAGE,
     'webp':     Resource.LOAD_TYPE.IMAGE,
-    'tga':      Resource.LOAD_TYPE.IMAGE
+    'tga':      Resource.LOAD_TYPE.IMAGE,
+    'svg+xml':  Resource.LOAD_TYPE.IMAGE
 };
 
 Resource._xhrTypeMap = {
