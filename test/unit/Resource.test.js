@@ -4,6 +4,7 @@ var request,
     name = 'test-resource',
     url = 'http://localhost/file',
     dataUrl = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==',
+    dataUrlSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+',
     headers = { 'Content-Type': 'application/json' },
     json = '[{ "id": 12, "comment": "Hey there" }]';
 
@@ -133,6 +134,20 @@ describe('Resource', function () {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
                     .and.have.property('src', dataUrl);
+
+                done();
+            });
+
+            res.load();
+        });
+
+        it('should load using a svg data url', function (done) {
+            var res = new Resource(name, dataUrlSvg);
+
+            res.on('complete', function () {
+                expect(res).to.have.property('data').instanceOf(Image)
+                    .and.is.an.instanceOf(HTMLImageElement)
+                    .and.have.property('src', dataUrlSvg);
 
                 done();
             });
