@@ -408,15 +408,14 @@ Loader.prototype._onComplete = function () {
  * @private
  */
 Loader.prototype._onLoad = function (resource) {
-    this.progress += this._progressChunk;
-
-    this.emit('progress', this, resource);
-
     // run middleware, this *must* happen before dequeue so sub-assets get added properly
     this._runMiddleware(resource, this._afterMiddleware, function () {
         resource.emit('afterMiddleware', resource);
 
         this._numToLoad--;
+        
+        this.progress += this._progressChunk;
+        this.emit('progress', this, resource);
 
         if (resource.error) {
             this.emit('error', resource.error, this, resource);
