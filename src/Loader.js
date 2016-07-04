@@ -360,6 +360,9 @@ Loader.prototype.load = function (cb) {
     // notify of start
     this.emit('start', this);
 
+    // update loading state
+    this.loading = true;
+
     // start the internal queue
     for (var i = 0; i < this._buffer.length; ++i) {
         this._queue.push(this._buffer[i]);
@@ -396,6 +399,8 @@ Loader.prototype._loadResource = function (resource, dequeue) {
  * @private
  */
 Loader.prototype._onComplete = function () {
+    this.loading = false;
+
     this.emit('complete', this, this.resources);
 };
 
