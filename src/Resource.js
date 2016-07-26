@@ -44,6 +44,14 @@ function Resource(name, url, options) {
     this.url = url;
 
     /**
+     * Stores whether or not this url is a data url.
+     *
+     * @member {boolean}
+     * @readonly
+     */
+    this.isDataUrl = this.url.indexOf('data:') === 0;
+
+    /**
      * The data that was loaded by the resource.
      *
      * @member {any}
@@ -56,14 +64,6 @@ function Resource(name, url, options) {
      * @member {string}
      */
     this.crossOrigin = options.crossOrigin === true ? 'anonymous' : options.crossOrigin;
-
-    /**
-     * Stores whether or not this url is a data url.
-     *
-     * @member {boolean}
-     * @readonly
-     */
-    this.isDataUrl = this.url.indexOf('data:') === 0;
 
     /**
      * The method of loading to use for this resource.
