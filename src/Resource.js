@@ -258,6 +258,11 @@ Resource.prototype.load = function (cb) {
         this.once('complete', cb);
     }
 
+    if (this.data) {
+        this.complete();
+        return;
+    }
+
     // if unset, determine the value
     if (this.crossOrigin === false || typeof this.crossOrigin !== 'string') {
         this.crossOrigin = this._determineCrossOrigin(this.url);
