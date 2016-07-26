@@ -5,6 +5,7 @@
     "launch_in_ci": ["Firefox"],
     "src_files": [
         "dist/resource-loader.js",
+        "test/fixtures/data.js",
         "test/unit/**/*.test.js"
     ],
     "serve_files": [
@@ -17,6 +18,7 @@
         "test/setup.js",
         "test/fixtures/spritesheetMiddleware.js",
 
+        "test/fixtures/data.js",
         "test/unit/**/*.test.js"
     ],
     "routes": {

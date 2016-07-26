@@ -385,11 +385,22 @@ Loader.prototype._loadResource = function (resource, dequeue) {
 
     resource._dequeue = dequeue;
 
-    this._runMiddleware(resource, this._beforeMiddleware, function () {
-        // resource.on('progress', self.emit.bind(self, 'progress'));
+    // run before middleware
+    async.eachSeries(
+        this._beforeMiddleware,
+        function (fn, next) {
+            fn.call(self, resource, function () {
+                // if the before middleware marks the resource as complete,
+                // break and don't process any more before middleware
+                next(resource.isComplete ? {} : null);
+            });
+        },
+        function () {
+            // resource.on('progress', self.emit.bind(self, 'progress'));
 
-        resource.load(self._boundOnLoad);
-    });
+            resource.load(self._boundOnLoad);
+        }
+    );
 };
 
 /**
@@ -413,46 +424,39 @@ Loader.prototype._onComplete = function () {
  * @private
  */
 Loader.prototype._onLoad = function (resource) {
+    var self = this;
+
     // run middleware, this *must* happen before dequeue so sub-assets get added properly
-    this._runMiddleware(resource, this._afterMiddleware, function () {
-        resource.emit('afterMiddleware', resource);
+    async.eachSeries(
+        this._afterMiddleware,
+        function (fn, next) {
+            fn.call(self, resource, next);
+        },
+        function () {
+            resource.emit('afterMiddleware', resource);
 
-        this._numToLoad--;
-        
-        this.progress += this._progressChunk;
-        this.emit('progress', this, resource);
+            self._numToLoad--;
 
-        if (resource.error) {
-            this.emit('error', resource.error, this, resource);
+            self.progress += self._progressChunk;
+            self.emit('progress', self, resource);
+
+            if (resource.error) {
+                self.emit('error', resource.error, self, resource);
+            }
+            else {
+                self.emit('load', self, resource);
+            }
+
+            // do completion check
+            if (self._numToLoad === 0) {
+                self.progress = 100;
+                self._onComplete();
+            }
         }
-        else {
-            this.emit('load', this, resource);
-        }
-
-        // do completion check
-        if (this._numToLoad === 0) {
-            this.progress = 100;
-            this._onComplete();
-        }
-    });
-    
-
+    );
 
     // remove this resource from the async queue
     resource._dequeue();
-};
-
-/**
- * Run middleware functions on a resource.
- *
- * @private
- */
-Loader.prototype._runMiddleware = function (resource, fns, cb) {
-    var self = this;
-
-    async.eachSeries(fns, function (fn, next) {
-        fn.call(self, resource, next);
-    }, cb.bind(this, resource));
 };
 
 Loader.LOAD_TYPE = Resource.LOAD_TYPE;

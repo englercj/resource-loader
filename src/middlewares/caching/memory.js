@@ -6,15 +6,15 @@ module.exports = function () {
         // if cached, then set data and complete the resource
         if (cache[resource.url]) {
             resource.data = cache[resource.url];
-            resource.complete();
+            resource.complete(); // marks resource load complete and stops processing before middlewares
         }
         // if not cached, wait for complete and store it in the cache.
         else {
             resource.once('complete', function () {
-               cache[this.url] = this.data;
+                cache[this.url] = this.data;
             });
         }
-        
+
         next();
     };
 };

@@ -44,14 +44,6 @@ function Resource(name, url, options) {
     this.url = url;
 
     /**
-     * Stores whether or not this url is a data url.
-     *
-     * @member {boolean}
-     * @readonly
-     */
-    this.isDataUrl = this.url.indexOf('data:') === 0;
-
-    /**
      * The data that was loaded by the resource.
      *
      * @member {any}
@@ -64,6 +56,14 @@ function Resource(name, url, options) {
      * @member {string}
      */
     this.crossOrigin = options.crossOrigin === true ? 'anonymous' : options.crossOrigin;
+
+    /**
+     * Stores whether or not this url is a data url.
+     *
+     * @member {boolean}
+     * @readonly
+     */
+    this.isDataUrl = this.url.indexOf('data:') === 0;
 
     /**
      * The method of loading to use for this resource.
@@ -141,6 +141,14 @@ function Resource(name, url, options) {
      * @member {boolean}
      */
     this.isVideo = false;
+
+    /**
+     * Describes if this resource has finished loading. is true when the resource has completely
+     * loaded.
+     *
+     * @member {boolean}
+     */
+    this.isComplete = false;
 
     /**
      * The `dequeue` method that will be used a storage place for the async queue dequeue method
@@ -241,11 +249,16 @@ Resource.prototype.complete = function () {
         }
     }
 
+    if (this.isComplete) {
+        throw new Error('Complete called again for an already completed resource.');
+    }
+
+    this.isComplete = true;
     this.emit('complete', this);
 };
 
 /**
- * Kicks off loading of this resource.
+ * Kicks off loading of this resource. This method is asynchronous.
  *
  * @fires start
  * @param [callback] {function} Optional callback to call once the resource is loaded.
@@ -253,8 +266,18 @@ Resource.prototype.complete = function () {
 Resource.prototype.load = function (cb) {
     this.emit('start', this);
 
-    // if a callback is set, listen for complete event
-    if (cb) {
+    if (this.isComplete) {
+        if (cb) {
+            var self = this;
+
+            setTimeout(function () {
+                cb(self);
+            }, 1);
+        }
+
+        return;
+    }
+    else if (cb) {
         this.once('complete', cb);
     }
 
