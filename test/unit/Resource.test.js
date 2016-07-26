@@ -1,10 +1,7 @@
 var request,
     res,
     xhr,
-    name = 'test-resource',
-    url = 'http://localhost/file',
-    headers = { 'Content-Type': 'application/json' },
-    json = '[{ "id": 12, "comment": "Hey there" }]';
+    name = 'test-resource';
 
 describe('Resource', function () {
     before(function () {
@@ -17,13 +14,13 @@ describe('Resource', function () {
     });
 
     beforeEach(function () {
-        res = new Resource(name, url);
+        res = new Resource(name, fixtureData.url);
         request = null;
     });
 
     it('should construct properly with only a URL passed', function () {
         expect(res).to.have.property('name', name);
-        expect(res).to.have.property('url', url);
+        expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', undefined);
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.XHR);
@@ -43,7 +40,7 @@ describe('Resource', function () {
 
     it('should construct properly with options passed', function () {
         var meta = { some: 'thing' };
-        var res = new Resource(name, url, {
+        var res = new Resource(name, fixtureData.url, {
             crossOrigin: true,
             loadType: Resource.LOAD_TYPE.IMAGE,
             xhrType: Resource.XHR_RESPONSE_TYPE.BLOB,
@@ -51,7 +48,7 @@ describe('Resource', function () {
         });
 
         expect(res).to.have.property('name', name);
-        expect(res).to.have.property('url', url);
+        expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', 'anonymous');
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.IMAGE);
@@ -136,7 +133,7 @@ describe('Resource', function () {
 
             res.load();
 
-            request.respond(200, headers, json);
+            request.respond(200, fixtureData.dataJsonHeaders, fixtureData.dataJson);
 
             expect(request).to.exist;
             expect(spy).to.have.been.calledWith(res);
@@ -191,7 +188,7 @@ describe('Resource', function () {
 
         it('should load using XHR', function (done) {
             res.on('complete', function () {
-                expect(res).to.have.property('data', json);
+                expect(res).to.have.property('data', fixtureData.dataJson);
                 done();
             });
 
@@ -199,11 +196,11 @@ describe('Resource', function () {
 
             expect(request).to.exist;
 
-            request.respond(200, headers, json);
+            request.respond(200, fixtureData.dataJsonHeaders, fixtureData.dataJson);
         });
 
         it('should load using Image', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.IMAGE });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.IMAGE });
 
             res.load();
 
@@ -211,11 +208,11 @@ describe('Resource', function () {
 
             expect(res).to.have.property('data').instanceOf(Image)
                 .and.is.an.instanceOf(HTMLImageElement)
-                .and.have.property('src', url);
+                .and.have.property('src', fixtureData.url);
         });
 
         it('should load using Audio', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.AUDIO });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.AUDIO });
 
             res.load();
 
@@ -224,11 +221,11 @@ describe('Resource', function () {
             expect(res).to.have.property('data').instanceOf(HTMLAudioElement);
 
             expect(res.data.children).to.have.length(1);
-            expect(res.data.children[0]).to.have.property('src', url);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
 
         it('should load using Video', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.VIDEO });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.VIDEO });
 
             res.load();
 
@@ -237,7 +234,7 @@ describe('Resource', function () {
             expect(res).to.have.property('data').instanceOf(HTMLVideoElement);
 
             expect(res.data.children).to.have.length(1);
-            expect(res.data.children[0]).to.have.property('src', url);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
     });
 
