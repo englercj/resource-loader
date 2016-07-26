@@ -1,0 +1,7 @@
+{
+    "extends": "./node_modules/@englercj/code-style/.eslintrc.json",
+    "env": {
+        "commonjs": true,
+        "browser": true
+    }
+}

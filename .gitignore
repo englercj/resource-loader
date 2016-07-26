@@ -1,19 +1,27 @@
-# Sublime Text files
+# sublime text files
 *.sublime*
 *.*~*.TMP
 
-# OS temp files
+# temp files
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-# Tool temp files
 npm-debug.log
+
+# project files
+.project
+.idea
+
+# vim swap files
 *.sw*
+
+# emacs temp files
 *~
 \#*#
 
 # project ignores
 !.gitkeep
-node_modules
-dist
+*__temp
+*.sqlite
+node_modules/
+dist/
