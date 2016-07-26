@@ -127,6 +127,19 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
+        it('should not load and emit a complete event if data is assigned before load', function () {
+            var spy = sinon.spy();
+
+            res.on('complete', spy);
+
+            res.data = {};
+
+            res.load();
+
+            expect(request).not.to.exist;
+            expect(spy).to.have.been.calledWith(res);
+        });
+
         it('should load using a data url', function (done) {
             var res = new Resource(name, dataUrl);
 
