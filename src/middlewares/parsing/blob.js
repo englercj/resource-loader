@@ -1,5 +1,7 @@
-var Resource = require('../../Resource'),
-    b64 = require('../../b64');
+'use strict';
+
+var Resource = require('../../Resource');
+var b64 = require('../../b64');
 
 var Url = window.URL || window.webkitURL;
 
@@ -8,7 +10,9 @@ var Url = window.URL || window.webkitURL;
 module.exports = function () {
     return function (resource, next) {
         if (!resource.data) {
-            return next();
+            next();
+
+            return;
         }
 
         // if this was an XHR load of a blob

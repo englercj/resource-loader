@@ -21,11 +21,12 @@
   "scripts": {
     "test": "npm run build && testem ci",
     "start": "npm run build",
+    "travis": "npm run lint && npm test",
     "clean": "rm -rf ./dist && mkdir dist",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
     "build": "npm run clean && browserify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js && npm run minify",
     "dev": "npm run clean && watchify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
-    "lint": "eslint src/",
+    "lint": "eslint src/ && eslint test/",
     "docs": "jsdoc -c ./gulp/util/jsdoc.conf.json"
   },
   "dependencies": {

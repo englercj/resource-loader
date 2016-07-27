@@ -1,3 +1,5 @@
+'use strict';
+
 // a simple in-memory cache for resources
 var cache = {};
 

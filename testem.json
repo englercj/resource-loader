@@ -2,10 +2,9 @@
     "framework": "mocha",
     "timeout": 5000,
     "launch_in_dev": ["Chrome"],
-    "launch_in_ci": ["Firefox"],
+    "launch_in_ci": ["Chrome"],
     "src_files": [
         "dist/resource-loader.js",
-        "test/fixtures/data.js",
         "test/unit/**/*.test.js"
     ],
     "serve_files": [
@@ -17,8 +16,8 @@
 
         "test/setup.js",
         "test/fixtures/spritesheetMiddleware.js",
-
         "test/fixtures/data.js",
+
         "test/unit/**/*.test.js"
     ],
     "routes": {

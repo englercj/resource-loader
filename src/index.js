@@ -1,7 +1,8 @@
+/* eslint global-require: 0 */
+'use strict';
+
 module.exports = require('./Loader');
-
 module.exports.Resource = require('./Resource');
-
 module.exports.middleware = {
     caching: {
         memory: require('./middlewares/caching/memory')
@@ -10,3 +11,4 @@ module.exports.middleware = {
         blob: require('./middlewares/parsing/blob')
     }
 };
+

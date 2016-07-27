@@ -1,5 +1,5 @@
 // expose chai expect
-expect = chai.expect;
+window.expect = chai.expect;
 
 // expose Loader classes
-Resource = Loader.Resource;
+window.Resource = Loader.Resource;

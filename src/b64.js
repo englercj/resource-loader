@@ -1,10 +1,12 @@
-module.exports = {
+/* eslint no-magic-numbers: 0 */
+'use strict';
 
+module.exports = {
     // private property
-    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+    _keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
     encodeBinary: function (input) {
-        var output = "";
+        var output = '';
         var bytebuffer;
         var encodedCharIndexes = new Array(4);
         var inx = 0;
@@ -14,6 +16,7 @@ module.exports = {
         while (inx < input.length) {
             // Fill byte buffer array
             bytebuffer = new Array(3);
+
             for (jnx = 0; jnx < bytebuffer.length; jnx++) {
                 if (inx < input.length) {
                     // throw away high-order byte, as documented at:
@@ -59,6 +62,7 @@ module.exports = {
                 output += this._keyStr.charAt(encodedCharIndexes[jnx]);
             }
         }
+
         return output;
     }
 };

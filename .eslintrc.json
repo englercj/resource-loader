@@ -3,5 +3,20 @@
     "env": {
         "commonjs": true,
         "browser": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 5
+    },
+    "rules": {
+        "comma-dangle": [2, "never"],
+        "curly": [2, "all"],
+        "wrap-iife": [2, "inside"],
+        "no-magic-numbers": [2, { "ignore": [0, 1, -1], "ignoreArrayIndexes": true, "enforceConst": false, "detectObjects": false }],
+        "func-names": 0,
+        // disable some ES6 stuff
+        "prefer-const": 0,
+        "no-var": 0,
+        "prefer-template": 0,
+        "object-shorthand": 0
     }
 }

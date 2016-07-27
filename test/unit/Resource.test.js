@@ -1,12 +1,14 @@
-var request,
-    res,
-    xhr,
-    name = 'test-resource';
-
 describe('Resource', function () {
+    var request;
+    var res;
+    var xhr;
+    var name = 'test-resource';
+
     before(function () {
         xhr = sinon.useFakeXMLHttpRequest();
-        xhr.onCreate = function (req) { request = req; };
+        xhr.onCreate = function (req) {
+            request = req;
+        };
     });
 
     after(function () {
@@ -79,10 +81,10 @@ describe('Resource', function () {
 
         it('should remove events from the data element', function () {
             var data = {
-                    addEventListener: function () {},
-                    removeEventListener: function () {}
-                },
-                mock = sinon.mock(data);
+                addEventListener: function () {},
+                removeEventListener: function () {}
+            };
+            var mock = sinon.mock(data);
 
             mock.expects('removeEventListener').once().withArgs('error');
             mock.expects('removeEventListener').once().withArgs('load');
@@ -97,10 +99,10 @@ describe('Resource', function () {
 
         it('should remove events from the xhr element', function () {
             var data = {
-                    addEventListener: function () {},
-                    removeEventListener: function () {}
-                },
-                mock = sinon.mock(data);
+                addEventListener: function () {},
+                removeEventListener: function () {}
+            };
+            var mock = sinon.mock(data);
 
             mock.expects('removeEventListener').once().withArgs('error');
             mock.expects('removeEventListener').once().withArgs('abort');
@@ -152,7 +154,9 @@ describe('Resource', function () {
         });
 
         it('should throw an error if complete is called twice', function () {
-            var fn = function () { res.complete(); };
+            function fn() {
+                res.complete();
+            }
 
             expect(fn).to.not.throw(Error);
             expect(fn).to.throw(Error);
@@ -310,8 +314,8 @@ describe('Resource', function () {
             expect(res._getExtension()).to.equal('jpeg');
 
             res.isDataUrl = true;
-            res.url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII=';
+            res.url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII='; // eslint-disable-line max-len
             expect(res._getExtension()).to.equal('png');
-        })
+        });
     });
 });

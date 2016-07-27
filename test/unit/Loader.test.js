@@ -1,6 +1,6 @@
-var loader = null;
-
 describe('Loader', function () {
+    var loader = null;
+
     beforeEach(function () {
         loader = new Loader(fixtureData.baseUrl);
     });
@@ -19,13 +19,14 @@ describe('Loader', function () {
     });
 
     describe('#add', function () {
-        var name = 'test-resource',
-            options = {
-                crossOrigin: true,
-                loadType: Resource.LOAD_TYPE.IMAGE,
-                xhrType: Resource.XHR_RESPONSE_TYPE.DOCUMENT
-            },
-            callback = function () {};
+        var name = 'test-resource';
+        var options = {
+            crossOrigin: true,
+            loadType: Resource.LOAD_TYPE.IMAGE,
+            xhrType: Resource.XHR_RESPONSE_TYPE.DOCUMENT
+        };
+
+        function callback() {}
 
         it('creates a resource using all arguments', function () {
             loader.add(name, fixtureData.url, options, callback);
@@ -296,7 +297,10 @@ describe('Loader', function () {
         });
 
         it('should stop running the `before` middleware when one calls complete()', function (done) {
-            var spy = sinon.spy(function (res, next) { res.complete(); next(); });
+            var spy = sinon.spy(function (res, next) {
+                res.complete();
+                next();
+            });
             var spy2 = sinon.spy(function (res, next) { next(); });
 
             loader.pre(spy);
@@ -387,7 +391,6 @@ describe('Loader', function () {
                 expect(spy).to.have.been.calledTwice;
                 done();
             });
-
         });
 
         it('progress should be 100% on complete', function (done) {
@@ -433,5 +436,5 @@ describe('Loader', function () {
                 done();
             });
         });
-    })
+    });
 });

@@ -1,19 +1,25 @@
-var async       = require('async'),
-    urlParser   = require('url'),
-    Resource    = require('./Resource'),
-    EventEmitter = require('eventemitter3');
+'use strict';
+
+var async       = require('async');
+var urlParser   = require('url');
+var Resource    = require('./Resource');
+var EventEmitter = require('eventemitter3');
+
+// some constants
+var DEFAULT_CONCURRENCY = 10;
+var MAX_PROGRESS = 100;
 
 /**
  * Manages the state and loading of multiple resources to load.
  *
  * @class
- * @param [baseUrl=''] {string} The base url for all resources loaded by this loader.
- * @param [concurrency=10] {number} The number of resources to load concurrently.
+ * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
+ * @param {number} [concurrency=10] - The number of resources to load concurrently.
  */
 function Loader(baseUrl, concurrency) {
     EventEmitter.call(this);
 
-    concurrency = concurrency || 10;
+    concurrency = concurrency || DEFAULT_CONCURRENCY;
 
     /**
      * The base url for all resources loaded by this loader.
@@ -181,19 +187,23 @@ module.exports = Loader;
  *         { name: 'key4', url: 'http://...', onComplete: function () {} },
  *         { url: 'http://...', onComplete: function () {} },
  *         'http://...'
- *     ]);
+ *     ])
+ *
+ *     // and you can use both params and options
+ *     .add('key', 'http://...', { crossOrigin: true }, function () {})
+ *     .add('http://...', { crossOrigin: true }, function () {});
  * ```
  *
  * @alias enqueue
- * @param [name] {string} The name of the resource to load, if not passed the url is used.
- * @param url {string} The url for this resource, relative to the baseUrl of this loader.
- * @param [options] {object} The options for the load.
- * @param [options.crossOrigin] {boolean} Is this request cross-origin? Default is to determine automatically.
- * @param [options.loadType=Resource.LOAD_TYPE.XHR] {Resource.XHR_LOAD_TYPE} How should this resource be loaded?
- * @param [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] {Resource.XHR_RESPONSE_TYPE} How should the data being
+ * @param {string} [name] - The name of the resource to load, if not passed the url is used.
+ * @param {string} [url] - The url for this resource, relative to the baseUrl of this loader.
+ * @param {object} [options] - The options for the load.
+ * @param {boolean} [options.crossOrigin] - Is this request cross-origin? Default is to determine automatically.
+ * @param {Resource.XHR_LOAD_TYPE} [options.loadType=Resource.LOAD_TYPE.XHR] - How should this resource be loaded?
+ * @param {Resource.XHR_RESPONSE_TYPE} [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] - How should the data being
  *      loaded be interpreted when using XHR?
- * @param [callback] {function} Function to call when this specific resource completes loading.
- * @return {Loader}
+ * @param {function} [cb] - Function to call when this specific resource completes loading.
+ * @return {Loader} Returns itself.
  */
 Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, cb) {
     // special case of an array of objects or urls
@@ -237,7 +247,7 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     }
 
     // add base url if this isn't an absolute url
-    url = this._handleBaseUrl(url);
+    url = this._prepareUrl(url);
 
     // create the store the resource
     this.resources[name] = new Resource(name, url, options);
@@ -251,46 +261,25 @@ Loader.prototype.add = Loader.prototype.enqueue = function (name, url, options, 
     // if already loading add it to the worker queue
     if (this._queue.started) {
         this._queue.push(this.resources[name]);
-        this._progressChunk = (100 - this.progress) / (this._queue.length() + this._queue.running());
+        this._progressChunk = (MAX_PROGRESS - this.progress) / (this._queue.length() + this._queue.running());
     }
     // otherwise buffer it to be added to the queue later
     else {
         this._buffer.push(this.resources[name]);
-        this._progressChunk = 100 / this._buffer.length;
+        this._progressChunk = MAX_PROGRESS / this._buffer.length;
     }
 
     return this;
 };
-
-Loader.prototype._handleBaseUrl = function (url) {
-    var parsedUrl = urlParser.parse(url);
-
-    // absolute url, just use it as is.
-    if (parsedUrl.protocol || !parsedUrl.pathname || parsedUrl.pathname.indexOf('//') === 0) {
-        return url;
-    }
-
-    // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
-    if (
-        this.baseUrl.length &&
-        this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1 &&
-        url.charAt(0) !== '/'
-    ) {
-        return this.baseUrl + '/' + url;
-    }
-    else {
-        return this.baseUrl + url;
-    }
-};
-
 
 /**
  * Sets up a middleware function that will run *before* the
  * resource is loaded.
  *
  * @alias pre
- * @param middleware {function} The middleware function to register.
- * @return {Loader}
+ * @method before
+ * @param {function} fn - The middleware function to register.
+ * @return {Loader} Returns itself.
  */
 Loader.prototype.before = Loader.prototype.pre = function (fn) {
     this._beforeMiddleware.push(fn);
@@ -303,8 +292,9 @@ Loader.prototype.before = Loader.prototype.pre = function (fn) {
  * resource is loaded.
  *
  * @alias use
- * @param middleware {function} The middleware function to register.
- * @return {Loader}
+ * @method after
+ * @param {function} fn - The middleware function to register.
+ * @return {Loader} Returns itself.
  */
 Loader.prototype.after = Loader.prototype.use = function (fn) {
     this._afterMiddleware.push(fn);
@@ -315,7 +305,7 @@ Loader.prototype.after = Loader.prototype.use = function (fn) {
 /**
  * Resets the queue of the loader to prepare for a new load.
  *
- * @return {Loader}
+ * @return {Loader} Returns itself.
  */
 Loader.prototype.reset = function () {
     // this.baseUrl = baseUrl || '';
@@ -337,14 +327,16 @@ Loader.prototype.reset = function () {
     this._queue.started = false;
 
     this.resources = {};
+
+    return this;
 };
 
 /**
  * Starts loading the queued resources.
  *
  * @fires start
- * @param [callback] {function} Optional callback that will be bound to the `complete` event.
- * @return {Loader}
+ * @param {function} [cb] - Optional callback that will be bound to the `complete` event.
+ * @return {Loader} Returns itself.
  */
 Loader.prototype.load = function (cb) {
     // register complete callback if they pass one
@@ -375,10 +367,37 @@ Loader.prototype.load = function (cb) {
 };
 
 /**
+ * Prepares a url for usage based on the configuration of this object
+ *
+ * @private
+ * @param {string} url - The url to prepare.
+ * @return {string} The prepared url.
+ */
+Loader.prototype._prepareUrl = function (url) {
+    var parsedUrl = urlParser.parse(url);
+
+    // absolute url, just use it as is.
+    if (parsedUrl.protocol || !parsedUrl.pathname || parsedUrl.pathname.indexOf('//') === 0) {
+        return url;
+    }
+
+    // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
+    if (this.baseUrl.length
+        && this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1
+        && url.charAt(0) !== '/'
+    ) {
+        return this.baseUrl + '/' + url;
+    }
+
+    return this.baseUrl + url;
+};
+
+/**
  * Loads a single resource.
  *
- * @fires progress
  * @private
+ * @param {Resource} resource - The resource to load.
+ * @param {function} dequeue - The function to call when we need to dequeue this item.
  */
 Loader.prototype._loadResource = function (resource, dequeue) {
     var self = this;
@@ -422,6 +441,7 @@ Loader.prototype._onComplete = function () {
  * @fires error
  * @fires load
  * @private
+ * @param {Resource} resource - The resource that was loaded
  */
 Loader.prototype._onLoad = function (resource) {
     var self = this;
@@ -460,5 +480,4 @@ Loader.prototype._onLoad = function (resource) {
 };
 
 Loader.LOAD_TYPE = Resource.LOAD_TYPE;
-Loader.XHR_READY_STATE = Resource.XHR_READY_STATE;
 Loader.XHR_RESPONSE_TYPE = Resource.XHR_RESPONSE_TYPE;
