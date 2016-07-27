@@ -15,8 +15,8 @@
   },
   "keywords": [],
   "files": [
-    "./dist",
-    "./src"
+    "dist",
+    "src"
   ],
   "scripts": {
     "test": "npm run build && testem ci",
