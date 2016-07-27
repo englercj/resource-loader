@@ -1,12 +1,7 @@
 var request,
     res,
     xhr,
-    name = 'test-resource',
-    url = 'http://localhost/file',
-    dataUrl = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==',
-    dataUrlSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+',
-    headers = { 'Content-Type': 'application/json' },
-    json = '[{ "id": 12, "comment": "Hey there" }]';
+    name = 'test-resource';
 
 describe('Resource', function () {
     before(function () {
@@ -19,39 +14,56 @@ describe('Resource', function () {
     });
 
     beforeEach(function () {
-        res = new Resource(name, url);
+        res = new Resource(name, fixtureData.url);
         request = null;
     });
 
     it('should construct properly with only a URL passed', function () {
         expect(res).to.have.property('name', name);
-        expect(res).to.have.property('url', url);
+        expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
+        expect(res).to.have.property('crossOrigin', undefined);
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.XHR);
+        expect(res).to.have.property('xhrType', undefined);
+        expect(res).to.have.property('metadata').that.is.eql({});
         expect(res).to.have.property('error', null);
         expect(res).to.have.property('xhr', null);
-        expect(res).to.have.property('crossOrigin', undefined);
 
-        // technically it exists, but it should be undefined
-        expect('xhrType' in res).to.be.ok;
-        expect(res.xhrType).to.equal(undefined);
+        expect(res).to.have.property('isDataUrl', false);
+        expect(res).to.have.property('isJson', false);
+        expect(res).to.have.property('isXml', false);
+        expect(res).to.have.property('isImage', false);
+        expect(res).to.have.property('isAudio', false);
+        expect(res).to.have.property('isVideo', false);
+        expect(res).to.have.property('isComplete', false);
     });
 
     it('should construct properly with options passed', function () {
-        var res = new Resource(name, url, {
+        var meta = { some: 'thing' };
+        var res = new Resource(name, fixtureData.url, {
             crossOrigin: true,
             loadType: Resource.LOAD_TYPE.IMAGE,
-            xhrType: Resource.XHR_RESPONSE_TYPE.BLOB
+            xhrType: Resource.XHR_RESPONSE_TYPE.BLOB,
+            metadata: meta
         });
 
         expect(res).to.have.property('name', name);
-        expect(res).to.have.property('url', url);
+        expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', 'anonymous');
         expect(res).to.have.property('loadType', Resource.LOAD_TYPE.IMAGE);
         expect(res).to.have.property('xhrType', Resource.XHR_RESPONSE_TYPE.BLOB);
+        expect(res).to.have.property('metadata', meta);
         expect(res).to.have.property('error', null);
         expect(res).to.have.property('xhr', null);
+
+        expect(res).to.have.property('isDataUrl', false);
+        expect(res).to.have.property('isJson', false);
+        expect(res).to.have.property('isXml', false);
+        expect(res).to.have.property('isImage', false);
+        expect(res).to.have.property('isAudio', false);
+        expect(res).to.have.property('isVideo', false);
+        expect(res).to.have.property('isComplete', false);
     });
 
     describe('#complete', function () {
@@ -121,19 +133,38 @@ describe('Resource', function () {
 
             res.load();
 
-            request.respond(200, headers, json);
+            request.respond(200, fixtureData.dataJsonHeaders, fixtureData.dataJson);
 
             expect(request).to.exist;
             expect(spy).to.have.been.calledWith(res);
         });
 
+        it('should not load and emit a complete event if data is assigned before load', function () {
+            var spy = sinon.spy();
+
+            res.on('complete', spy);
+
+            res.complete();
+            res.load();
+
+            expect(request).not.to.exist;
+            expect(spy).to.have.been.calledWith(res);
+        });
+
+        it('should throw an error if complete is called twice', function () {
+            var fn = function () { res.complete(); };
+
+            expect(fn).to.not.throw(Error);
+            expect(fn).to.throw(Error);
+        });
+
         it('should load using a data url', function (done) {
-            var res = new Resource(name, dataUrl);
+            var res = new Resource(name, fixtureData.dataUrlGif);
 
             res.on('complete', function () {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
-                    .and.have.property('src', dataUrl);
+                    .and.have.property('src', fixtureData.dataUrlGif);
 
                 done();
             });
@@ -142,12 +173,12 @@ describe('Resource', function () {
         });
 
         it('should load using a svg data url', function (done) {
-            var res = new Resource(name, dataUrlSvg);
+            var res = new Resource(name, fixtureData.dataUrlSvg);
 
             res.on('complete', function () {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
-                    .and.have.property('src', dataUrlSvg);
+                    .and.have.property('src', fixtureData.dataUrlSvg);
 
                 done();
             });
@@ -157,7 +188,7 @@ describe('Resource', function () {
 
         it('should load using XHR', function (done) {
             res.on('complete', function () {
-                expect(res).to.have.property('data', json);
+                expect(res).to.have.property('data', fixtureData.dataJson);
                 done();
             });
 
@@ -165,11 +196,11 @@ describe('Resource', function () {
 
             expect(request).to.exist;
 
-            request.respond(200, headers, json);
+            request.respond(200, fixtureData.dataJsonHeaders, fixtureData.dataJson);
         });
 
         it('should load using Image', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.IMAGE });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.IMAGE });
 
             res.load();
 
@@ -177,11 +208,11 @@ describe('Resource', function () {
 
             expect(res).to.have.property('data').instanceOf(Image)
                 .and.is.an.instanceOf(HTMLImageElement)
-                .and.have.property('src', url);
+                .and.have.property('src', fixtureData.url);
         });
 
         it('should load using Audio', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.AUDIO });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.AUDIO });
 
             res.load();
 
@@ -190,11 +221,11 @@ describe('Resource', function () {
             expect(res).to.have.property('data').instanceOf(HTMLAudioElement);
 
             expect(res.data.children).to.have.length(1);
-            expect(res.data.children[0]).to.have.property('src', url);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
 
         it('should load using Video', function () {
-            var res = new Resource(name, url, { loadType: Resource.LOAD_TYPE.VIDEO });
+            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.VIDEO });
 
             res.load();
 
@@ -203,7 +234,7 @@ describe('Resource', function () {
             expect(res).to.have.property('data').instanceOf(HTMLVideoElement);
 
             expect(res.data.children).to.have.length(1);
-            expect(res.data.children[0]).to.have.property('src', url);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
     });
 
