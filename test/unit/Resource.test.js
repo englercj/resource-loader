@@ -116,6 +116,14 @@ describe('Resource', function () {
         });
     });
 
+    describe('#abort', function () {
+        it('should abort in-flight XHR requests');
+        it('should abort in-flight XDR requests');
+        it('should abort in-flight Image requests');
+        it('should abort in-flight Video requests');
+        it('should abort in-flight Audio requests');
+    });
+
     describe('#load', function () {
         it('should emit the start event', function () {
             var spy = sinon.spy();

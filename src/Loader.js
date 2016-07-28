@@ -326,6 +326,13 @@ Loader.prototype.reset = function () {
     this._queue.kill();
     this._queue.started = false;
 
+    // abort all resource loads
+    for (var k in this.resources) {
+        if (this.resources[k].isLoading) {
+            this.resources[k].abort();
+        }
+    }
+
     this.resources = {};
 
     return this;

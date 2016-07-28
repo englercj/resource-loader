@@ -88,7 +88,10 @@ function Resource(name, url, options) {
     this.xhrType = options.xhrType;
 
     /**
-     * Extra info for middleware, and controlling specifics about how the resource loads
+     * Extra info for middleware, and controlling specifics about how the resource loads.
+     *
+     * Note that if you pass in a `loadElement`, the Resource class takes ownership of it.
+     * Meaning it will modify it as it sees fit.
      *
      * @member {object}
      * @property {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [loadElement=null] - The
@@ -156,12 +159,20 @@ function Resource(name, url, options) {
     this.isVideo = false;
 
     /**
-     * Describes if this resource has finished loading. is true when the resource has completely
+     * Describes if this resource has finished loading. Is true when the resource has completely
      * loaded.
      *
      * @member {boolean}
      */
     this.isComplete = false;
+
+    /**
+     * Describes if this resource is currently loading. Is true when the resource starts loading,
+     * and is false again when complete.
+     *
+     * @member {boolean}
+     */
+    this.isLoading = false;
 
     /**
      * The `dequeue` method that will be used a storage place for the async queue dequeue method
@@ -267,6 +278,8 @@ Resource.prototype.complete = function () {
     }
 
     this.isComplete = true;
+    this.isLoading = true;
+
     this.emit('complete', this);
 };
 
@@ -276,7 +289,33 @@ Resource.prototype.complete = function () {
  * @param {string} message - The message to use for the error
  */
 Resource.prototype.abort = function (message) {
+    // abort can be called multiple times, ignore subsequent calls.
+    if (this.error) return;
+
+    // store error
     this.error = new Error(message);
+
+    // abort the actual loading
+    if (this.xhr) {
+        this.xhr.abort();
+    }
+    else if (this.xdr) {
+        this.xdr.abort();
+    }
+    else if (this.data) {
+        // single source
+        if (typeof this.data.src !== undefined) {
+            this.data.src = '';
+        }
+        // multi-source
+        else {
+            while (this.data.firstChild) {
+                this.data.removeChild(this.data.firstChild)
+            }
+        }
+    }
+
+    // done now.
     this.complete();
 };
 
@@ -287,6 +326,11 @@ Resource.prototype.abort = function (message) {
  * @param {function} [cb] - Optional callback to call once the resource is loaded.
  */
 Resource.prototype.load = function (cb) {
+    if (this.isLoading) return;
+
+    this.isComplete = false;
+    this.isLoading = true;
+
     this.emit('start', this);
 
     if (this.isComplete) {
