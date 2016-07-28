@@ -34,6 +34,9 @@ module.exports = function () {
 
                         next();
                     };
+
+                    // next will be called on load
+                    return;
                 }
             }
             // if content type says this is an image, then we should transform the blob into an Image object
@@ -53,10 +56,12 @@ module.exports = function () {
 
                     next();
                 };
+
+                // next will be called on load.
+                return;
             }
         }
-        else {
-            next();
-        }
+
+        next();
     };
 };
