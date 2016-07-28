@@ -72,14 +72,6 @@ function Loader(baseUrl, concurrency) {
     this._boundLoadResource = this._loadResource.bind(this);
 
     /**
-     * The `_onLoad` function bound with this object context.
-     *
-     * @private
-     * @member {function}
-     */
-    this._boundOnLoad = this._onLoad.bind(this);
-
-    /**
      * The resource buffer that fills until `load` is called to start loading resources.
      *
      * @private
@@ -328,8 +320,12 @@ Loader.prototype.reset = function () {
 
     // abort all resource loads
     for (var k in this.resources) {
-        if (this.resources[k].isLoading) {
-            this.resources[k].abort();
+        var res = this.resources[k];
+
+        res.off('complete', this._onLoad, this);
+
+        if (res.isLoading) {
+            res.abort();
         }
     }
 
@@ -424,7 +420,13 @@ Loader.prototype._loadResource = function (resource, dequeue) {
         function () {
             // resource.on('progress', self.emit.bind(self, 'progress'));
 
-            resource.load(self._boundOnLoad);
+            if (resource.isComplete) {
+                self._onLoad(resource);
+            }
+            else {
+                resource.once('complete', self._onLoad, self);
+                resource.load();
+            }
         }
     );
 };

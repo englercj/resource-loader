@@ -271,7 +271,7 @@ describe('Loader', function () {
         });
 
         it('should reset the resources of the loader', function () {
-            loader.resources = { hey: 'there' };
+            loader.add(fixtureData.url);
             expect(loader.resources).to.not.be.empty;
 
             loader.reset();

@@ -149,7 +149,7 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should not load and emit a complete event if data is assigned before load', function () {
+        it('should not load and emit a complete event if complete is called before load', function () {
             var spy = sinon.spy();
 
             res.on('complete', spy);

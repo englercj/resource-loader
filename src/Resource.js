@@ -278,7 +278,7 @@ Resource.prototype.complete = function () {
     }
 
     this.isComplete = true;
-    this.isLoading = true;
+    this.isLoading = false;
 
     this.emit('complete', this);
 };
@@ -332,11 +332,6 @@ Resource.prototype.load = function (cb) {
         return;
     }
 
-    this.isComplete = false;
-    this.isLoading = true;
-
-    this.emit('start', this);
-
     if (this.isComplete) {
         if (cb) {
             var self = this;
@@ -351,6 +346,10 @@ Resource.prototype.load = function (cb) {
     else if (cb) {
         this.once('complete', cb);
     }
+
+    this.isLoading = true;
+
+    this.emit('start', this);
 
     // if unset, determine the value
     if (this.crossOrigin === false || typeof this.crossOrigin !== 'string') {
