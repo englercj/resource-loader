@@ -271,6 +271,16 @@ Resource.prototype.complete = function () {
 };
 
 /**
+ * Aborts the loading of this resource, with an optional message.
+ *
+ * @param {string} message - The message to use for the error
+ */
+Resource.prototype.abort = function (message) {
+    this.error = new Error(message);
+    this.complete();
+};
+
+/**
  * Kicks off loading of this resource. This method is asynchronous.
  *
  * @fires start
@@ -381,8 +391,7 @@ Resource.prototype._loadSourceElement = function (type) {
     }
 
     if (this.data === null) {
-        this.error = new Error('Unsupported element ' + type);
-        this.complete();
+        this.abort('Unsupported element ' + type);
 
         return;
     }
@@ -508,8 +517,7 @@ Resource.prototype._createSource = function (type, url, mime) {
  * @private
  */
 Resource.prototype._onError = function (event) {
-    this.error = new Error('Failed to load element using ' + event.target.nodeName);
-    this.complete();
+    this.abort('Failed to load element using ' + event.target.nodeName);
 };
 
 /**
@@ -532,12 +540,9 @@ Resource.prototype._onProgress = function (event) {
  * @param {XMLHttpRequestErrorEvent|Event} event - Error event.
  */
 Resource.prototype._xhrOnError = function () {
-    this.error = new Error(
-        reqType(this.xhr) + ' Request failed. '
-        + 'Status: ' + this.xhr.status + ', text: "' + this.xhr.statusText + '"'
-    );
+    var xhr = this.xhr;
 
-    this.complete();
+    this.abort(reqType(xhr) + ' Request failed. Status: ' + xhr.status + ', text: "' + xhr.statusText + '"');
 };
 
 /**
@@ -547,8 +552,7 @@ Resource.prototype._xhrOnError = function () {
  * @param {XMLHttpRequestAbortEvent} event - Abort Event
  */
 Resource.prototype._xhrOnAbort = function () {
-    this.error = new Error(reqType(this.xhr) + ' Request was aborted by the user.');
-    this.complete();
+    this.abort(reqType(this.xhr) + ' Request was aborted by the user.');
 };
 
 /**
@@ -558,8 +562,7 @@ Resource.prototype._xhrOnAbort = function () {
  * @param {Event} event - Timeout event.
  */
 Resource.prototype._xdrOnTimeout = function () {
-    this.error = new Error(reqType(this.xhr) + ' Request timed out.');
-    this.complete();
+    this.abort(reqType(this.xhr) + ' Request timed out.');
 };
 
 /**
@@ -585,7 +588,9 @@ Resource.prototype._xhrOnLoad = function () {
                 this.isJson = true;
             }
             catch (e) {
-                this.error = new Error('Error trying to parse loaded json:', e);
+                this.abort('Error trying to parse loaded json:', e);
+
+                return;
             }
         }
         // if xml, parse into an xml document or div element
@@ -605,7 +610,9 @@ Resource.prototype._xhrOnLoad = function () {
                 this.isXml = true;
             }
             catch (e) {
-                this.error = new Error('Error trying to parse loaded xml:', e);
+                this.abort('Error trying to parse loaded xml:', e);
+
+                return;
             }
         }
         // other types just return the response
@@ -614,7 +621,9 @@ Resource.prototype._xhrOnLoad = function () {
         }
     }
     else {
-        this.error = new Error('[' + xhr.status + ']' + xhr.statusText + ':' + xhr.responseURL);
+        this.abort('[' + xhr.status + ']' + xhr.statusText + ':' + xhr.responseURL);
+
+        return;
     }
 
     this.complete();
