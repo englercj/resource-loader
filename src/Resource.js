@@ -88,9 +88,14 @@ function Resource(name, url, options) {
     this.xhrType = options.xhrType;
 
     /**
-     * Extra info for middleware
+     * Extra info for middleware, and controlling specifics about how the resource loads
      *
      * @member {object}
+     * @property {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [loadElement=null] - The
+     *  element to use for loading, instead of creating one.
+     * @property {boolean} [skipSource=false] - Skips adding source(s) to the load element. This
+     *  is useful if you want to pass in a `loadElement` that you already added load sources
+     *  to.
      */
     this.metadata = options.metadata || {};
 
@@ -328,7 +333,10 @@ Resource.prototype.load = function (cb) {
  * @param {string} type - The type of element to use.
  */
 Resource.prototype._loadElement = function (type) {
-    if (type === 'image' && typeof window.Image !== 'undefined') {
+    if (this.metadata.loadElement) {
+        this.data = this.metadata.loadElement;
+    }
+    else if (type === 'image' && typeof window.Image !== 'undefined') {
         this.data = new Image();
     }
     else {
@@ -339,7 +347,9 @@ Resource.prototype._loadElement = function (type) {
         this.data.crossOrigin = this.crossOrigin;
     }
 
-    this.data.src = this.url;
+    if (!this.metadata.skipSource) {
+        this.data.src = this.url;
+    }
 
     var typeName = 'is' + type[0].toUpperCase() + type.substring(1);
 
@@ -360,7 +370,10 @@ Resource.prototype._loadElement = function (type) {
  * @param {string} type - The type of element to use.
  */
 Resource.prototype._loadSourceElement = function (type) {
-    if (type === 'audio' && typeof window.Audio !== 'undefined') {
+    if (this.metadata.loadElement) {
+        this.data = this.metadata.loadElement;
+    }
+    else if (type === 'audio' && typeof window.Audio !== 'undefined') {
         this.data = new Audio();
     }
     else {
@@ -374,17 +387,19 @@ Resource.prototype._loadSourceElement = function (type) {
         return;
     }
 
-    // support for CocoonJS Canvas+ runtime, lacks document.createElement('source')
-    if (navigator.isCocoonJS) {
-        this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
-    }
-    else if (Array.isArray(this.url)) {
-        for (var i = 0; i < this.url.length; ++i) {
-            this.data.appendChild(this._createSource(type, this.url[i]));
+    if (!this.metadata.skipSource) {
+        // support for CocoonJS Canvas+ runtime, lacks document.createElement('source')
+        if (navigator.isCocoonJS) {
+            this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
         }
-    }
-    else {
-        this.data.appendChild(this._createSource(type, this.url));
+        else if (Array.isArray(this.url)) {
+            for (var i = 0; i < this.url.length; ++i) {
+                this.data.appendChild(this._createSource(type, this.url[i]));
+            }
+        }
+        else {
+            this.data.appendChild(this._createSource(type, this.url));
+        }
     }
 
     this['is' + type[0].toUpperCase() + type.substring(1)] = true;

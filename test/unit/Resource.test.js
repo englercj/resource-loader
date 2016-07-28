@@ -240,6 +240,38 @@ describe('Resource', function () {
             expect(res.data.children).to.have.length(1);
             expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
+
+        it('should used the passed element for loading', function () {
+            var img = new Image();
+            var spy = sinon.spy(img, 'addEventListener');
+            var res = new Resource(name, fixtureData.url, {
+                loadType: Resource.LOAD_TYPE.IMAGE,
+                metadata: { loadElement: img }
+            });
+
+            res.load();
+
+            expect(spy).to.have.been.calledThrice;
+            expect(img).to.have.property('src', fixtureData.url);
+
+            spy.restore();
+        });
+
+        it('should used the passed element for loading, and skip assigning src', function () {
+            var img = new Image();
+            var spy = sinon.spy(img, 'addEventListener');
+            var res = new Resource(name, fixtureData.url, {
+                loadType: Resource.LOAD_TYPE.IMAGE,
+                metadata: { loadElement: img, skipSource: true }
+            });
+
+            res.load();
+
+            expect(spy).to.have.been.calledThrice;
+            expect(img).to.have.property('src', '');
+
+            spy.restore();
+        });
     });
 
     describe('#_determineCrossOrigin', function () {
