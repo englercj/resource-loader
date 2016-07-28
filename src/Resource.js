@@ -290,7 +290,9 @@ Resource.prototype.complete = function () {
  */
 Resource.prototype.abort = function (message) {
     // abort can be called multiple times, ignore subsequent calls.
-    if (this.error) return;
+    if (this.error) {
+        return;
+    }
 
     // store error
     this.error = new Error(message);
@@ -304,13 +306,13 @@ Resource.prototype.abort = function (message) {
     }
     else if (this.data) {
         // single source
-        if (typeof this.data.src !== undefined) {
+        if (typeof this.data.src !== 'undefined') {
             this.data.src = '';
         }
         // multi-source
         else {
             while (this.data.firstChild) {
-                this.data.removeChild(this.data.firstChild)
+                this.data.removeChild(this.data.firstChild);
             }
         }
     }
@@ -326,7 +328,9 @@ Resource.prototype.abort = function (message) {
  * @param {function} [cb] - Optional callback to call once the resource is loaded.
  */
 Resource.prototype.load = function (cb) {
-    if (this.isLoading) return;
+    if (this.isLoading) {
+        return;
+    }
 
     this.isComplete = false;
     this.isLoading = true;
