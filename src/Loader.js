@@ -1,6 +1,7 @@
 'use strict';
 
-var async       = require('async');
+var async_eachSeries       = require('async/eachSeries');
+var async_queue = require('async/queue');
 var urlParser   = require('url');
 var Resource    = require('./Resource');
 var EventEmitter = require('eventemitter3');
@@ -93,7 +94,7 @@ function Loader(baseUrl, concurrency) {
      * @private
      * @member {Resource[]}
      */
-    this._queue = async.queue(this._boundLoadResource, concurrency);
+    this._queue = async_queue(this._boundLoadResource, concurrency);
 
     /**
      * All the resources for this loader keyed by name.
@@ -408,7 +409,7 @@ Loader.prototype._loadResource = function (resource, dequeue) {
     resource._dequeue = dequeue;
 
     // run before middleware
-    async.eachSeries(
+    async_eachSeries(
         this._beforeMiddleware,
         function (fn, next) {
             fn.call(self, resource, function () {
@@ -456,7 +457,7 @@ Loader.prototype._onLoad = function (resource) {
     var self = this;
 
     // run middleware, this *must* happen before dequeue so sub-assets get added properly
-    async.eachSeries(
+    async_eachSeries(
         this._afterMiddleware,
         function (fn, next) {
             fn.call(self, resource, next);
