@@ -10,6 +10,7 @@
         "expect": false,
         "Loader": false,
         "Resource": false,
+        "async": false,
         "fixtureData": false,
         "spritesheetMiddleware": false
     },

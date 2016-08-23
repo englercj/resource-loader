@@ -16,6 +16,7 @@
         "prefer-const": 0,
         "no-var": 0,
         "prefer-template": 0,
-        "object-shorthand": 0
+        "object-shorthand": 0,
+        "prefer-rest-params": 0
     }
 }

@@ -12,3 +12,4 @@ module.exports.middleware = {
     }
 };
 
+module.exports.async = require('./async');
