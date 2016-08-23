@@ -1,7 +1,7 @@
 'use strict';
 
 var EventEmitter    = require('eventemitter3');
-var _url            = require('url');
+var parseUri        = require('parse-uri');
 
 // tests is CORS is supported in XHR, if not we need to use XDR
 var useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
@@ -703,12 +703,13 @@ Resource.prototype._determineCrossOrigin = function (url, loc) {
     // parse with the node url lib, we can't use the properties of the anchor element
     // because they don't work in IE9 :(
     tempAnchor.href = url;
-    url = _url.parse(tempAnchor.href);
+    url = parseUri(tempAnchor.href, { strictMode: true });
 
     var samePort = (!url.port && loc.port === '') || (url.port === loc.port);
+    var protocol = url.protocol ? url.protocol + ':' : '';
 
     // if cross origin
-    if (url.hostname !== loc.hostname || !samePort || url.protocol !== loc.protocol) {
+    if (url.host !== loc.hostname || !samePort || protocol !== loc.protocol) {
         return 'anonymous';
     }
 

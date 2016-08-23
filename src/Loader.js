@@ -1,6 +1,6 @@
 'use strict';
 
-var urlParser       = require('url');
+var parseUri        = require('parse-uri');
 var async           = require('./async');
 var Resource        = require('./Resource');
 var EventEmitter    = require('eventemitter3');
@@ -377,10 +377,10 @@ Loader.prototype.load = function (cb) {
  * @return {string} The prepared url.
  */
 Loader.prototype._prepareUrl = function (url) {
-    var parsedUrl = urlParser.parse(url);
+    var parsedUrl = parseUri(url, { strictMode: true });
 
     // absolute url, just use it as is.
-    if (parsedUrl.protocol || !parsedUrl.pathname || parsedUrl.pathname.indexOf('//') === 0) {
+    if (parsedUrl.protocol || !parsedUrl.path || parsedUrl.path.indexOf('//') === 0) {
         return url;
     }
 
