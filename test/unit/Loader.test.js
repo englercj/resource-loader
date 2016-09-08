@@ -393,6 +393,21 @@ describe('Loader', function () {
             });
         });
 
+        it('should never have an invalid progress value', function (done) {
+            loader.add([
+                { name: 'hud', url: 'hud.png' },
+                { name: 'hud2', url: 'hud2.png' }
+            ]);
+
+            loader.on('progress', function (loader) {
+                expect(loader.progress).to.at.least(0).and.at.most(100);
+            });
+
+            loader.load(function () {
+                done();
+            });
+        });
+
         it('progress should be 100% on complete', function (done) {
             loader.add([
                 { name: 'hud', url: 'hud.png' },
@@ -419,6 +434,23 @@ describe('Loader', function () {
 
             loader.load(function () {
                 expect(spy).to.have.been.calledThrice;
+                done();
+            });
+        });
+
+        it('should never have an invalid progress value, even when a middleware adds more resources', function (done) {
+            loader.add([
+                { name: 'hud2', url: 'hud2.png' },
+                { name: 'hud_atlas', url: 'hud.json' }
+            ]);
+
+            loader.use(spritesheetMiddleware());
+
+            loader.on('progress', function (loader) {
+                expect(loader.progress).to.at.least(0).and.at.most(100);
+            });
+
+            loader.load(function () {
                 done();
             });
         });
