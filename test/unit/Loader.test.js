@@ -377,95 +377,150 @@ describe('Loader', function () {
     });
 
     describe('events', function () {
-        it('should call progress for each loaded asset', function (done) {
-            loader.add([
-                { name: 'hud', url: 'hud.png' },
-                { name: 'hud2', url: 'hud2.png' }
-            ]);
+        describe('with no additional subresources', function () {
+            it('should call progress for each loaded asset', function (done) {
+                loader.add([
+                    { name: 'hud', url: 'hud.png' },
+                    { name: 'hud2', url: 'hud2.png' }
+                ]);
 
-            var spy = sinon.spy();
+                var spy = sinon.spy();
 
-            loader.on('progress', spy);
+                loader.on('progress', spy);
 
-            loader.load(function () {
-                expect(spy).to.have.been.calledTwice;
-                done();
+                loader.load(function () {
+                    expect(spy).to.have.been.calledTwice;
+                    done();
+                });
+            });
+
+            it('should never have an invalid progress value', function (done) {
+                loader.add([
+                    { name: 'hud', url: 'hud.png' },
+                    { name: 'hud2', url: 'hud2.png' }
+                ]);
+
+                loader.on('progress', function (loader) {
+                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                });
+
+                loader.load(function () {
+                    done();
+                });
+            });
+
+            it('progress should be 100% on complete', function (done) {
+                loader.add([
+                    { name: 'hud', url: 'hud.png' },
+                    { name: 'hud2', url: 'hud2.png' }
+                ]);
+
+                loader.load(function () {
+                    expect(loader).to.have.property('progress', 100);
+                    done();
+                });
             });
         });
 
-        it('should never have an invalid progress value', function (done) {
-            loader.add([
-                { name: 'hud', url: 'hud.png' },
-                { name: 'hud2', url: 'hud2.png' }
-            ]);
+        describe('with one additional subresource', function () {
+            it('should call progress for each loaded asset', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.png' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
 
-            loader.on('progress', function (loader) {
-                expect(loader.progress).to.at.least(0).and.at.most(100);
+                loader.use(spritesheetMiddleware());
+
+                var spy = sinon.spy();
+
+                loader.on('progress', spy);
+
+                loader.load(function () {
+                    expect(spy).to.have.been.calledThrice;
+                    done();
+                });
             });
 
-            loader.load(function () {
-                done();
-            });
-        });
+            it('should never have an invalid progress value', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.png' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
 
-        it('progress should be 100% on complete', function (done) {
-            loader.add([
-                { name: 'hud', url: 'hud.png' },
-                { name: 'hud2', url: 'hud2.png' }
-            ]);
+                loader.use(spritesheetMiddleware());
 
-            loader.load(function () {
-                expect(loader).to.have.property('progress', 100);
-                done();
-            });
-        });
+                loader.on('progress', function (loader) {
+                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                });
 
-        it('should call progress for each loaded asset, even when a middleware adds more resources', function (done) {
-            loader.add([
-                { name: 'hud2', url: 'hud2.png' },
-                { name: 'hud_atlas', url: 'hud.json' }
-            ]);
-
-            loader.use(spritesheetMiddleware());
-
-            var spy = sinon.spy();
-
-            loader.on('progress', spy);
-
-            loader.load(function () {
-                expect(spy).to.have.been.calledThrice;
-                done();
-            });
-        });
-
-        it('should never have an invalid progress value, even when a middleware adds more resources', function (done) {
-            loader.add([
-                { name: 'hud2', url: 'hud2.png' },
-                { name: 'hud_atlas', url: 'hud.json' }
-            ]);
-
-            loader.use(spritesheetMiddleware());
-
-            loader.on('progress', function (loader) {
-                expect(loader.progress).to.at.least(0).and.at.most(100);
+                loader.load(function () {
+                    done();
+                });
             });
 
-            loader.load(function () {
-                done();
+            it('progress should be 100% on complete', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.png' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
+
+                loader.use(spritesheetMiddleware());
+
+                loader.load(function () {
+                    expect(loader).to.have.property('progress', 100);
+                    done();
+                });
             });
         });
 
-        it('progress should be 100% on complete, even when a middleware adds more resources', function (done) {
-            loader.add([
-                { name: 'hud2', url: 'hud2.png' },
-                { name: 'hud_atlas', url: 'hud.json' }
-            ]);
+        describe('with multiple additional subresources', function () {
+            it('should call progress for each loaded asset', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.json' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
 
-            loader.use(spritesheetMiddleware());
+                loader.use(spritesheetMiddleware());
 
-            loader.load(function () {
-                expect(loader).to.have.property('progress', 100);
-                done();
+                var spy = sinon.spy();
+
+                loader.on('progress', spy);
+
+                loader.load(function () {
+                    expect(spy).to.have.callCount(4);
+                    done();
+                });
+            });
+
+            it('should never have an invalid progress value', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.json' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
+
+                loader.use(spritesheetMiddleware());
+
+                loader.on('progress', function (loader) {
+                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                });
+
+                loader.load(function () {
+                    done();
+                });
+            });
+
+            it('progress should be 100% on complete', function (done) {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.json' },
+                    { name: 'hud_atlas', url: 'hud.json' }
+                ]);
+
+                loader.use(spritesheetMiddleware());
+
+                loader.load(function () {
+                    expect(loader).to.have.property('progress', 100);
+                    done();
+                });
             });
         });
     });
