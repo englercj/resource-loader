@@ -139,7 +139,9 @@ function Loader(baseUrl, concurrency) {
      */
 }
 
-Loader.prototype = Object.create(EventEmitter.prototype);
+Loader.prototype = Object.create(EventEmitter.prototype, {
+    constructor: {value: Loader}
+});
 Loader.prototype.constructor = Loader;
 module.exports = Loader;
 

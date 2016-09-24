@@ -240,7 +240,9 @@ function Resource(name, url, options) {
      */
 }
 
-Resource.prototype = Object.create(EventEmitter.prototype);
+Resource.prototype = Object.create(EventEmitter.prototype, {
+    constructor: {value: Resource}
+});
 Resource.prototype.constructor = Resource;
 module.exports = Resource;
 
