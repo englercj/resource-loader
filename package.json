@@ -30,7 +30,7 @@
     "docs": "jsdoc -c ./gulp/util/jsdoc.conf.json"
   },
   "dependencies": {
-    "eventemitter3": "^2.0.0"
+    "eventemitter3": "^2.0.0",
     "parse-uri": "^1.0.0"
   },
   "devDependencies": {
