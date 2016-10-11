@@ -657,7 +657,7 @@ describe('async', function () {
                 expect(q.buffer).to.equal(4);
                 done();
             });
-            it('should call the unsaturated callback if tasks length is less than concurrency minus buffer', function (done) {
+            it('should call the unsaturated callback if tasks length is less than concurrency minus buffer', function (done) { // eslint-disable-line max-len
                 var calls = [];
                 var q = async.queue(function (task, cb) {
                     calls.push('process ' + task);

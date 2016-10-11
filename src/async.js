@@ -76,7 +76,7 @@ function asyncQueue(worker, concurrency) {
         concurrency: concurrency,
         saturated: _noop,
         unsaturated: _noop,
-        buffer: concurrency / 4,
+        buffer: concurrency / 4, // eslint-disable-line no-magic-numbers
         empty: _noop,
         drain: _noop,
         error: _noop,
