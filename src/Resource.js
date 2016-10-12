@@ -454,7 +454,7 @@ export default class Resource {
      * @return {boolean} True if the flag is set.
      */
     _hasFlag(flag) {
-        return this._flags & flag;
+        return !!(this._flags & flag);
     }
 
     /**

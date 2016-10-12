@@ -377,7 +377,7 @@ export default class Loader {
         }
 
         // if the queue has already started we are done here
-        if (this._queue.started) {
+        if (this.loading) {
             return this;
         }
 
@@ -386,6 +386,8 @@ export default class Loader {
 
         // update loading state
         this.loading = true;
+
+        this._queue.resume();
 
         return this;
     }
