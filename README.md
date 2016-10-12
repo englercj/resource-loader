@@ -6,24 +6,23 @@ A generic resource loader, made with web games in mind.
 
 ```js
 // ctor
-var loader = new Loader();
+const loader = new Loader();
 
 loader
-    // chainable `add` to enqueue a resource
+    // Chainable `add` to enqueue a resource
     .add(name, url, options)
 
-    // chainable `before` to add a middleware that runs for each resource, *before* loading a resource.
-    // this is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
-    .before(cachingMiddleware);
+    // Chainable `pre` to add a middleware that runs for each resource, *before* loading that resource.
+    // This is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
+    .pre(cachingMiddleware)
 
-    // chainable `after` to add a middleware that runs for each resource, *after* loading a resource.
-    // this is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
-    .after(parsingMiddleware);
+    // Chainable `use` to add a middleware that runs for each resource, *after* loading that resource.
+    // This is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
+    .use(parsingMiddleware)
 
-
-    // `load` method loads the queue of resources, and calls the passed in callback called once all
+    // The `load` method loads the queue of resources, and calls the passed in callback called once all
     // resources have loaded.
-    .load(function (loader, resources) {
+    .load((loader, resources) => {
         // resources is an object where the key is the name of the resource loaded and the value is the resource object.
         // They have a couple default properties:
         // - `url`: The URL that the resource was loaded from
@@ -32,11 +31,11 @@ loader
         // also may contain other properties based on the middleware that runs.
     });
 
-// throughout the process multiple events can happen.
-loader.on('progress', ...); // called once per loaded/errored file
-loader.on('error', ...); // called once per errored file
-loader.on('load', ...); // called once per loaded file
-loader.on('complete', ...); // called once when the queued resources all load.
+// throughout the process multiple signals can be dispatched.
+loader.onProgress.add(() => {}); // called once per loaded/errored file
+loader.onError.add(() => {}); // called once per errored file
+loader.onLoad.add(() => {}); // called once per loaded file
+loader.onComplete.add(() => {}); // called once when the queued resources all load.
 ```
 
 ## Building
@@ -61,3 +60,8 @@ That will output the built distributables to `./dist`.
 - Chrome 20+
 - Safari 6+
 - Opera 12.1+
+
+## Upgrading to v2
+
+- No more events, all signals now
+- No more isJson, isXml, etc. Now use `res.type === Resource.TYPE.JSON`, etc.

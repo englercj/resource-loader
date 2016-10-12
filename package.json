@@ -1,49 +1,55 @@
 {
   "name": "resource-loader",
-  "version": "1.8.0",
-  "main": "./src/index.js",
+  "version": "2.0.0-dev",
+  "main": "./lib/index.js",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
-  "homepage": "https://github.com/englercj/asset-loader",
+  "homepage": "https://github.com/englercj/resource-loader",
   "repository": {
     "type": "git",
-    "url": "https://github.com/englercj/asset-loader.git"
+    "url": "https://github.com/englercj/resource-loader.git"
   },
   "bugs": {
-    "url": "https://github.com/englercj/asset-loader/issues"
+    "url": "https://github.com/englercj/resource-loader/issues"
   },
   "keywords": [],
   "files": [
     "dist",
+    "lib",
     "src"
   ],
   "scripts": {
-    "test": "npm run build && testem ci",
-    "start": "npm run build",
-    "travis": "npm run lint && npm test",
+    "test": "testem ci",
     "clean": "rm -rf ./dist && mkdir dist",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
-    "build": "npm run clean && browserify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js && npm run minify",
-    "dev": "npm run clean && watchify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
+    "build": "browserify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
+    "dev": "watchify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
     "lint": "eslint src/ && eslint test/",
-    "docs": "jsdoc -c ./gulp/util/jsdoc.conf.json"
+    "prepublish": "npm run build && npm run minify"
   },
   "dependencies": {
-    "eventemitter3": "^2.0.0",
+    "mini-signals": "^1.1.1",
     "parse-uri": "^1.0.0"
   },
   "devDependencies": {
     "@englercj/code-style": "^1.0.6",
+    "babel-preset-es2015": "^6.16.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
-    "eslint": "^3.1.1",
-    "ink-docstrap": "^1.2.1",
-    "jsdoc": "^3.4.0",
-    "sinon": "^1.17.5",
+    "eslint": "^3.7.1",
+    "ink-docstrap": "^1.3.0",
+    "jsdoc": "^3.4.2",
+    "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
-    "testem": "^1.10.2",
-    "uglify-js": "^2.7.0",
+    "testem": "^1.12.0",
+    "uglify-js": "^2.7.3",
     "watchify": "^3.7.0"
+  },
+  "babel": {
+    "presets": [
+      ["es2015", { "loose": true }]
+    ]
   }
 }

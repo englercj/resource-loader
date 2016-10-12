@@ -1,14 +1,11 @@
-'use strict';
+import Resource from '../../Resource';
+import b64 from '../../b64';
 
-var Resource = require('../../Resource');
-var b64 = require('../../b64');
-
-var Url = window.URL || window.webkitURL;
+const Url = window.URL || window.webkitURL;
 
 // a middleware for transforming XHR loaded Blobs into more useful objects
-
-module.exports = function () {
-    return function (resource, next) {
+export function blobMiddlewareFactory() {
+    return function blobMiddleware(resource, next) {
         if (!resource.data) {
             next();
 
@@ -19,7 +16,7 @@ module.exports = function () {
         if (resource.xhr && resource.xhrType === Resource.XHR_RESPONSE_TYPE.BLOB) {
             // if there is no blob support we probably got a binary string back
             if (!window.Blob || typeof resource.data === 'string') {
-                var type = resource.xhr.getResponseHeader('content-type');
+                const type = resource.xhr.getResponseHeader('content-type');
 
                 // this is an image, convert the binary string into a data url
                 if (type && type.indexOf('image') === 0) {
@@ -41,7 +38,7 @@ module.exports = function () {
             }
             // if content type says this is an image, then we should transform the blob into an Image object
             else if (resource.data.type.indexOf('image') === 0) {
-                var src = Url.createObjectURL(resource.data);
+                const src = Url.createObjectURL(resource.data);
 
                 resource.blob = resource.data;
                 resource.data = new Image();
@@ -50,7 +47,7 @@ module.exports = function () {
                 resource.isImage = true;
 
                 // cleanup the no longer used blob after the image loads
-                resource.data.onload = function () {
+                resource.data.onload = () => {
                     Url.revokeObjectURL(src);
                     resource.data.onload = null;
 

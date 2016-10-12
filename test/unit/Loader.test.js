@@ -12,8 +12,8 @@ describe('Loader', function () {
 
     it('should have correct public methods', function () {
         expect(loader).to.have.property('add').instanceOf(Function);
-        expect(loader).to.have.property('before').instanceOf(Function);
-        expect(loader).to.have.property('after').instanceOf(Function);
+        expect(loader).to.have.property('pre').instanceOf(Function);
+        expect(loader).to.have.property('use').instanceOf(Function);
         expect(loader).to.have.property('reset').instanceOf(Function);
         expect(loader).to.have.property('load').instanceOf(Function);
     });
@@ -31,10 +31,9 @@ describe('Loader', function () {
         it('creates a resource using all arguments', function () {
             loader.add(name, fixtureData.url, options, callback);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
@@ -43,17 +42,17 @@ describe('Loader', function () {
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
 
-            expect(res.listeners('afterMiddleware'))
-                .to.not.be.empty;
+            expect(res.onAfterMiddleware.handlers())
+                .to.not.be.empty
+                .and.to.equal([callback]);
         });
 
         it('creates a resource with just name, url, and options', function () {
             loader.add(name, fixtureData.url, options);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
@@ -66,16 +65,15 @@ describe('Loader', function () {
         it('creates a resource with just name, url, and a callback', function () {
             loader.add(name, fixtureData.url, callback);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
             expect(res).to.have.property('url', fixtureData.url);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -83,10 +81,9 @@ describe('Loader', function () {
         it('creates a resource with just name and url', function () {
             loader.add(name, fixtureData.url);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
@@ -96,10 +93,9 @@ describe('Loader', function () {
         it('creates a resource with just url, options, and a callback', function () {
             loader.add(fixtureData.url, options, callback);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', fixtureData.url);
@@ -108,7 +104,7 @@ describe('Loader', function () {
             expect(res).to.have.property('loadType', options.loadType);
             expect(res).to.have.property('xhrType', options.xhrType);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -116,10 +112,9 @@ describe('Loader', function () {
         it('creates a resource with just url and options', function () {
             loader.add(fixtureData.url, options);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', fixtureData.url);
@@ -132,16 +127,15 @@ describe('Loader', function () {
         it('creates a resource with just url and a callback', function () {
             loader.add(fixtureData.url, callback);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', fixtureData.url);
             expect(res).to.have.property('url', fixtureData.url);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -149,10 +143,9 @@ describe('Loader', function () {
         it('creates a resource with just url', function () {
             loader.add(fixtureData.url);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', fixtureData.url);
@@ -162,16 +155,15 @@ describe('Loader', function () {
         it('creates a resource with just an object (name/url keys) and callback param', function () {
             loader.add({ name: name, url: fixtureData.url }, callback);
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
             expect(res).to.have.property('url', fixtureData.url);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -179,16 +171,15 @@ describe('Loader', function () {
         it('creates a resource with just an object (name/url/callback keys)', function () {
             loader.add({ name: name, url: fixtureData.url, onComplete: callback });
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', name);
             expect(res).to.have.property('url', fixtureData.url);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -196,16 +187,15 @@ describe('Loader', function () {
         it('creates a resource with just an object (url/callback keys)', function () {
             loader.add({ url: fixtureData.url, onComplete: callback });
 
-            expect(loader._queue.length()).to.equal(0);
-            expect(loader._buffer).to.have.length(1);
+            expect(loader._queue.length()).to.equal(1);
 
-            var res = loader._buffer[0];
+            var res = loader._queue._tasks[0].data;
 
             expect(res).to.be.an.instanceOf(Resource);
             expect(res).to.have.property('name', fixtureData.url);
             expect(res).to.have.property('url', fixtureData.url);
 
-            expect(res.listeners('afterMiddleware'))
+            expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
@@ -220,7 +210,7 @@ describe('Loader', function () {
 
     describe('#before', function () {
         it('should add a middleware that runs before loading a resource', function () {
-            loader.before(function () {});
+            loader.pre(function () {});
 
             expect(loader._beforeMiddleware).to.have.length(1);
         });
@@ -228,7 +218,7 @@ describe('Loader', function () {
 
     describe('#after', function () {
         it('should add a middleware that runs after loading a resource', function () {
-            loader.after(function () {});
+            loader.use(function () {});
 
             expect(loader._afterMiddleware).to.have.length(1);
         });
@@ -255,16 +245,13 @@ describe('Loader', function () {
         });
 
         it('should reset the queue/buffer of the loader', function () {
-            loader._buffer.push('me');
             loader._numToLoad = 1;
             loader._queue.push('me');
-            expect(loader._buffer.length).to.equal(1);
             expect(loader._numToLoad).to.equal(1);
             expect(loader._queue.length()).to.equal(1);
             expect(loader._queue.started).to.equal(true);
 
             loader.reset();
-            expect(loader._buffer.length).to.equal(0);
             expect(loader._numToLoad).to.equal(0);
             expect(loader._queue.length()).to.equal(0);
             expect(loader._queue.started).to.equal(false);
@@ -358,7 +345,7 @@ describe('Loader', function () {
 
     describe('#_onComplete', function () {
         it('should emit the `complete` event', function (done) {
-            loader.on('complete', function (_l, resources) {
+            loader.onComplete.add(function (_l, resources) {
                 expect(_l).to.equal(loader);
                 expect(resources).to.equal(loader.resources);
 
@@ -386,7 +373,7 @@ describe('Loader', function () {
 
                 var spy = sinon.spy();
 
-                loader.on('progress', spy);
+                loader.onProgress.add(spy);
 
                 loader.load(function () {
                     expect(spy).to.have.been.calledTwice;
@@ -400,7 +387,7 @@ describe('Loader', function () {
                     { name: 'hud2', url: 'hud2.png' }
                 ]);
 
-                loader.on('progress', function (loader) {
+                loader.onProgress.add(function (loader) {
                     expect(loader.progress).to.at.least(0).and.at.most(100);
                 });
 
@@ -433,7 +420,7 @@ describe('Loader', function () {
 
                 var spy = sinon.spy();
 
-                loader.on('progress', spy);
+                loader.onProgress.add(spy);
 
                 loader.load(function () {
                     expect(spy).to.have.been.calledThrice;
@@ -449,7 +436,7 @@ describe('Loader', function () {
 
                 loader.use(spritesheetMiddleware());
 
-                loader.on('progress', function (loader) {
+                loader.onProgress.add(function (loader) {
                     expect(loader.progress).to.at.least(0).and.at.most(100);
                 });
 
@@ -484,7 +471,7 @@ describe('Loader', function () {
 
                 var spy = sinon.spy();
 
-                loader.on('progress', spy);
+                loader.onProgress.add(spy);
 
                 loader.load(function () {
                     expect(spy).to.have.callCount(4);
@@ -500,7 +487,7 @@ describe('Loader', function () {
 
                 loader.use(spritesheetMiddleware());
 
-                loader.on('progress', function (loader) {
+                loader.onProgress.add(function (loader) {
                     expect(loader.progress).to.at.least(0).and.at.most(100);
                 });
 

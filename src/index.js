@@ -1,15 +1,10 @@
-/* eslint global-require: 0 */
-'use strict';
+import Loader from './Loader';
+import Resource from './Resource';
+import * as async from './async';
+import * as b64 from './b64';
 
-module.exports = require('./Loader');
-module.exports.Resource = require('./Resource');
-module.exports.middleware = {
-    caching: {
-        memory: require('./middlewares/caching/memory')
-    },
-    parsing: {
-        blob: require('./middlewares/parsing/blob')
-    }
-};
+Loader.Resource = Resource;
+Loader.async = async;
+Loader.base64 = b64;
 
-module.exports.async = require('./async');
+module.exports = Loader; // eslint-disable-line no-undef

@@ -23,5 +23,11 @@ npm-debug.log
 !.gitkeep
 *__temp
 *.sqlite
+.snyk
+.commit
+entry-*.js
 node_modules/
 dist/
+docs/
+typings/
+!src/typings/

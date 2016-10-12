@@ -1,22 +1,16 @@
 {
     "extends": "./node_modules/@englercj/code-style/.eslintrc.json",
     "env": {
-        "commonjs": true,
         "browser": true
     },
     "parserOptions": {
-        "ecmaVersion": 5
+        "ecmaVersion": 6,
+        "sourceType": "module"
     },
     "rules": {
-        "comma-dangle": [2, "never"],
         "curly": [2, "all"],
-        "no-magic-numbers": [2, { "ignore": [0, 1, -1], "ignoreArrayIndexes": true, "enforceConst": false, "detectObjects": false }],
-        "func-names": 0,
-        // disable some ES6 stuff
-        "prefer-const": 0,
-        "no-var": 0,
-        "prefer-template": 0,
-        "object-shorthand": 0,
-        "prefer-rest-params": 0
+        "max-lines": 0,
+        "prefer-rest-params": 0,
+        "no-magic-numbers": 0
     }
 }

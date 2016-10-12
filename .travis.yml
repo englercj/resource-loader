@@ -18,10 +18,8 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 
 install:
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install testem
   - npm install
 
 script:
-  - npm run travis
+  - npm run lint
+  - npm test

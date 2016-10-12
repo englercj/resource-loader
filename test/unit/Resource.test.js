@@ -72,7 +72,7 @@ describe('Resource', function () {
         it('should emit the `complete` event', function () {
             var spy = sinon.spy();
 
-            res.on('complete', spy);
+            res.onComplete.add(spy);
 
             res.complete();
 
@@ -128,7 +128,7 @@ describe('Resource', function () {
         it('should emit the start event', function () {
             var spy = sinon.spy();
 
-            res.on('start', spy);
+            res.onStart.add(spy);
 
             res.load();
 
@@ -139,7 +139,7 @@ describe('Resource', function () {
         it('should emit the complete event', function () {
             var spy = sinon.spy();
 
-            res.on('complete', spy);
+            res.onComplete.add(spy);
 
             res.load();
 
@@ -152,7 +152,7 @@ describe('Resource', function () {
         it('should not load and emit a complete event if complete is called before load', function () {
             var spy = sinon.spy();
 
-            res.on('complete', spy);
+            res.onComplete.add(spy);
 
             res.complete();
             res.load();
@@ -173,7 +173,7 @@ describe('Resource', function () {
         it('should load using a data url', function (done) {
             var res = new Resource(name, fixtureData.dataUrlGif);
 
-            res.on('complete', function () {
+            res.onComplete.add(function () {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
                     .and.have.property('src', fixtureData.dataUrlGif);
@@ -187,7 +187,7 @@ describe('Resource', function () {
         it('should load using a svg data url', function (done) {
             var res = new Resource(name, fixtureData.dataUrlSvg);
 
-            res.on('complete', function () {
+            res.onComplete.add(function () {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
                     .and.have.property('src', fixtureData.dataUrlSvg);
@@ -199,7 +199,7 @@ describe('Resource', function () {
         });
 
         it('should load using XHR', function (done) {
-            res.on('complete', function () {
+            res.onComplete.add(function () {
                 expect(res).to.have.property('data', fixtureData.dataJson);
                 done();
             });

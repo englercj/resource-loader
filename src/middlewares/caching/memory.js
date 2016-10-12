@@ -1,10 +1,8 @@
-'use strict';
-
 // a simple in-memory cache for resources
-var cache = {};
+const cache = {};
 
-module.exports = function () {
-    return function (resource, next) {
+export function memoryMiddlewareFactory() {
+    return function memoryMiddleware(resource, next) {
         // if cached, then set data and complete the resource
         if (cache[resource.url]) {
             resource.data = cache[resource.url];
@@ -12,11 +10,9 @@ module.exports = function () {
         }
         // if not cached, wait for complete and store it in the cache.
         else {
-            resource.once('complete', function () {
-                cache[this.url] = this.data;
-            });
+            resource.onComplete.once(() => (cache[this.url] = this.data));
         }
 
         next();
     };
-};
+}
