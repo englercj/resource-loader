@@ -2,7 +2,7 @@
     window.spritesheetMiddleware = function spritesheetMiddleware() {
         return function (resource, next) {
             // skip if no data, its not json, or it isn't spritesheet data
-            if (!resource.data || !resource.isJson || !resource.data.frames) {
+            if (!resource.data || resource.type !== Loader.Resource.TYPE.JSON || !resource.data.frames) {
                 next();
 
                 return;

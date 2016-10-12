@@ -65,9 +65,10 @@ export default class Loader {
          * @private
          * @member {function}
          * @param {Resource} r - The resource to load
+         * @param {Function} d - The dequeue function
          * @return {undefined}
          */
-        this._boundLoadResource = (r) => this._loadResource(r);
+        this._boundLoadResource = (r, d) => this._loadResource(r, d);
 
         /**
          * Used to track load completion.

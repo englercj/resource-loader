@@ -1,3 +1,7 @@
+'use strict';
+
+const Resource = Loader.Resource;
+
 describe('Resource', function () {
     var request;
     var res;
@@ -22,6 +26,7 @@ describe('Resource', function () {
 
     it('should construct properly with only a URL passed', function () {
         expect(res).to.have.property('name', name);
+        expect(res).to.have.property('type', Resource.TYPE.UNKNOWN);
         expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', undefined);
@@ -32,12 +37,8 @@ describe('Resource', function () {
         expect(res).to.have.property('xhr', null);
 
         expect(res).to.have.property('isDataUrl', false);
-        expect(res).to.have.property('isJson', false);
-        expect(res).to.have.property('isXml', false);
-        expect(res).to.have.property('isImage', false);
-        expect(res).to.have.property('isAudio', false);
-        expect(res).to.have.property('isVideo', false);
         expect(res).to.have.property('isComplete', false);
+        expect(res).to.have.property('isLoading', false);
     });
 
     it('should construct properly with options passed', function () {
@@ -50,6 +51,7 @@ describe('Resource', function () {
         });
 
         expect(res).to.have.property('name', name);
+        expect(res).to.have.property('type', Resource.TYPE.UNKNOWN);
         expect(res).to.have.property('url', fixtureData.url);
         expect(res).to.have.property('data', null);
         expect(res).to.have.property('crossOrigin', 'anonymous');
@@ -60,12 +62,8 @@ describe('Resource', function () {
         expect(res).to.have.property('xhr', null);
 
         expect(res).to.have.property('isDataUrl', false);
-        expect(res).to.have.property('isJson', false);
-        expect(res).to.have.property('isXml', false);
-        expect(res).to.have.property('isImage', false);
-        expect(res).to.have.property('isAudio', false);
-        expect(res).to.have.property('isVideo', false);
         expect(res).to.have.property('isComplete', false);
+        expect(res).to.have.property('isLoading', false);
     });
 
     describe('#complete', function () {
@@ -353,7 +351,7 @@ describe('Resource', function () {
             res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json';
             expect(res._getExtension()).to.equal('jpeg');
 
-            res.isDataUrl = true;
+            res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
             res.url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII='; // eslint-disable-line max-len
             expect(res._getExtension()).to.equal('png');
         });

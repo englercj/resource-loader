@@ -1,3 +1,7 @@
+'use strict';
+
+const async = Loader.async;
+
 describe('async', function () {
     describe('queue', function () {
         it('basics', function (done) {

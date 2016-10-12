@@ -1,3 +1,5 @@
+'use strict';
+
 describe('Loader', function () {
     var loader = null;
 
@@ -22,8 +24,8 @@ describe('Loader', function () {
         var name = 'test-resource';
         var options = {
             crossOrigin: true,
-            loadType: Resource.LOAD_TYPE.IMAGE,
-            xhrType: Resource.XHR_RESPONSE_TYPE.DOCUMENT
+            loadType: Loader.Resource.LOAD_TYPE.IMAGE,
+            xhrType: Loader.Resource.XHR_RESPONSE_TYPE.DOCUMENT
         };
 
         function callback() {}

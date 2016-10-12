@@ -1,8 +1,11 @@
 {
     "extends": "../.eslintrc.json",
     "env": {
-        "commonjs": false,
         "mocha": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "script"
     },
     "globals": {
         "chai": false,
@@ -15,12 +18,8 @@
         "spritesheetMiddleware": false
     },
     "rules": {
-        "strict": 0,
-        "no-undefined": 0,
-        "no-empty-function": 0,
         "no-unused-expressions": 0,
         "no-magic-numbers": 0,
-        "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
         "max-statements-per-line": [2, { "max": 2 }],
         "newline-per-chained-call": [2, { "ignoreChainWithDepth": 3 }]
     }
