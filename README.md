@@ -65,3 +65,5 @@ That will output the built distributables to `./dist`.
 
 - No more events, all signals now
 - No more isJson, isXml, etc. Now use `res.type === Resource.TYPE.JSON`, etc.
+- Removed `before` (in favor of `pre`) and `after` (in favor of `use`).
+- If a middleware adds more resources, it *must* pass in the parent resource in options for `.add()`.

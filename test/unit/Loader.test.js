@@ -208,6 +208,14 @@ describe('Loader', function () {
             expect(function () { loader.add(callback); }).to.throw(Error);
             expect(function () { loader.add(options, callback); }).to.throw(Error);
         });
+
+        it('throws an error if we are already loading and you have no parent resource', function () {
+            loader.add(fixtureData.url);
+
+            loader.load();
+
+            expect(() => loader.add(fixtureData.dataUrlGif)).to.throw(Error);
+        });
     });
 
     describe('#before', function () {
@@ -237,24 +245,18 @@ describe('Loader', function () {
 
         it('should reset the progress of the loader', function () {
             loader.progress = 100;
-            loader._progressChunk = 100;
             expect(loader.progress).to.equal(100);
-            expect(loader._progressChunk).to.equal(100);
 
             loader.reset();
             expect(loader.progress).to.equal(0);
-            expect(loader._progressChunk).to.equal(0);
         });
 
         it('should reset the queue/buffer of the loader', function () {
-            loader._numToLoad = 1;
             loader._queue.push('me');
-            expect(loader._numToLoad).to.equal(1);
             expect(loader._queue.length()).to.equal(1);
             expect(loader._queue.started).to.equal(true);
 
             loader.reset();
-            expect(loader._numToLoad).to.equal(0);
             expect(loader._queue.length()).to.equal(0);
             expect(loader._queue.started).to.equal(false);
         });

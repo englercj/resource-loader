@@ -144,16 +144,33 @@ export default class Resource {
          * when `loadType` is `Resource.LOAD_TYPE.XHR`.
          *
          * @member {XMLHttpRequest}
+         * @readonly
          */
         this.xhr = null;
 
         /**
+         * The child resources this resource owns.
+         *
+         * @member {Resource[]}
+         * @readonly
+         */
+        this.children = [];
+
+        /**
          * The resource type.
          *
-         * @private
          * @member {Resource.TYPE}
+         * @readonly
          */
-        this._resourceType = Resource.TYPE.UNKNOWN;
+        this.type = Resource.TYPE.UNKNOWN;
+
+        /**
+         * The progress chunk owned by this resource.
+         *
+         * @member {number}
+         * @readonly
+         */
+        this.progressChunk = 0;
 
         /**
          * The `dequeue` method that will be used a storage place for the async queue dequeue method
@@ -302,16 +319,6 @@ export default class Resource {
     }
 
     /**
-     * The type of this resource. Intended to be checked against the {@link Resource.TYPE} enum.
-     *
-     * @member {Resource.TYPE}
-     * @readonly
-     */
-    get type() {
-        return this._resourceType;
-    }
-
-    /**
      * Marks the resource as complete.
      *
      */
@@ -419,17 +426,17 @@ export default class Resource {
 
         switch (this.loadType) {
             case Resource.LOAD_TYPE.IMAGE:
-                this._resourceType = Resource.TYPE.IMAGE;
+                this.type = Resource.TYPE.IMAGE;
                 this._loadElement('image');
                 break;
 
             case Resource.LOAD_TYPE.AUDIO:
-                this._resourceType = Resource.TYPE.AUDIO;
+                this.type = Resource.TYPE.AUDIO;
                 this._loadSourceElement('audio');
                 break;
 
             case Resource.LOAD_TYPE.VIDEO:
-                this._resourceType = Resource.TYPE.VIDEO;
+                this.type = Resource.TYPE.VIDEO;
                 this._loadSourceElement('video');
                 break;
 
@@ -705,13 +712,13 @@ export default class Resource {
             // if text, just return it
             if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
                 this.data = xhr.responseText;
-                this._resourceType = Resource.TYPE.TEXT;
+                this.type = Resource.TYPE.TEXT;
             }
             // if json, parse into json object
             else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
                 try {
                     this.data = JSON.parse(xhr.responseText);
-                    this._resourceType = Resource.TYPE.JSON;
+                    this.type = Resource.TYPE.JSON;
                 }
                 catch (e) {
                     this.abort(`Error trying to parse loaded json: ${e}`);
@@ -735,7 +742,7 @@ export default class Resource {
                         this.data = div;
                     }
 
-                    this._resourceType = Resource.TYPE.XML;
+                    this.type = Resource.TYPE.XML;
                 }
                 catch (e) {
                     this.abort(`Error trying to parse loaded xml: ${e}`);

@@ -39,13 +39,6 @@ export default class Loader {
         this.loading = false;
 
         /**
-         * The percentage of total progress that a single resource represents.
-         *
-         * @member {number}
-         */
-        this._progressChunk = 0;
-
-        /**
          * The middleware to run before loading each resource.
          *
          * @member {function[]}
@@ -69,14 +62,6 @@ export default class Loader {
          * @return {undefined}
          */
         this._boundLoadResource = (r, d) => this._loadResource(r, d);
-
-        /**
-         * Used to track load completion.
-         *
-         * @private
-         * @member {number}
-         */
-        this._numToLoad = 0;
 
         /**
          * The resources waiting to be loaded.
@@ -279,6 +264,11 @@ export default class Loader {
             options = null;
         }
 
+        // if loading already you can only add resources that have a parent.
+        if (this.loading && (!options || !options.parentResource)) {
+            throw new Error('Cannot add resources while the loader is running.');
+        }
+
         // check if resource already exists.
         if (this.resources[name]) {
             throw new Error(`Resource named "${name}" already exists.`);
@@ -294,11 +284,22 @@ export default class Loader {
             this.resources[name].onAfterMiddleware.once(cb);
         }
 
-        this._numToLoad++;
+        // if loading make sure to adjust progress chunks for that parent and its children
+        if (this.loading) {
+            const parent = options.parentResource;
+            const fullChunk = parent.progressChunk * (parent.children.length + 1); // +1 for parent
+            const eachChunk = fullChunk / (parent.children.length + 2); // +2 for parent & new child
+
+            parent.children.push(this.resources[name]);
+            parent.progressChunk = eachChunk;
+
+            for (let i = 0; i < parent.children.length; ++i) {
+                parent.children[i].progressChunk = eachChunk;
+            }
+        }
 
         // add the resource to the queue
         this._queue.push(this.resources[name]);
-        this._progressChunk = (MAX_PROGRESS - this.progress) / (this._queue.length() + this._queue.running());
 
         return this;
     }
@@ -340,8 +341,6 @@ export default class Loader {
     reset() {
         this.progress = 0;
         this.loading = false;
-        this._progressChunk = 0;
-        this._numToLoad = 0;
 
         this._queue.kill();
         this._queue.pause();
@@ -382,12 +381,20 @@ export default class Loader {
             return this;
         }
 
-        // notify of start
-        this.onStart.dispatch(this);
+        // distribute progress chunks
+        const chunk = 100 / this._queue._tasks.length;
+
+        for (let i = 0; i < this._queue._tasks.length; ++i) {
+            this._queue._tasks[i].data.progressChunk = chunk;
+        }
 
         // update loading state
         this.loading = true;
 
+        // notify of start
+        this.onStart.dispatch(this);
+
+        // start loading
         this._queue.resume();
 
         return this;
@@ -469,6 +476,8 @@ export default class Loader {
      * @param {Resource} resource - The resource that was loaded
      */
     _onLoad(resource) {
+        resource._onLoadBinding = null;
+
         // run middleware, this *must* happen before dequeue so sub-assets get added properly
         async.eachSeries(
             this._afterMiddleware,
@@ -478,9 +487,7 @@ export default class Loader {
             () => {
                 resource.onAfterMiddleware.dispatch(resource);
 
-                this._numToLoad--;
-
-                this.progress += this._progressChunk;
+                this.progress += resource.progressChunk;
                 this.onProgress.dispatch(this, resource);
 
                 if (resource.error) {
@@ -490,15 +497,15 @@ export default class Loader {
                     this.onLoad.dispatch(this, resource);
                 }
 
+                // remove this resource from the async queue
+                resource._dequeue();
+
                 // do completion check
-                if (this._numToLoad === 0) {
+                if (this._queue.idle()) {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }
             }
         );
-
-        // remove this resource from the async queue
-        resource._dequeue();
     }
 }
