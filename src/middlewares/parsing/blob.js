@@ -21,12 +21,12 @@ export function blobMiddlewareFactory() {
                 // this is an image, convert the binary string into a data url
                 if (type && type.indexOf('image') === 0) {
                     resource.data = new Image();
-                    resource.data.src = 'data:' + type + ';base64,' + b64.encodeBinary(resource.xhr.responseText);
+                    resource.data.src = `data:${type};base64,${b64.encodeBinary(resource.xhr.responseText)}`;
 
-                    resource.type = Loader.Resource.TYPE.IMAGE;
+                    resource.type = Resource.TYPE.IMAGE;
 
                     // wait until the image loads and then callback
-                    resource.data.onload = function () {
+                    resource.data.onload = () => {
                         resource.data.onload = null;
 
                         next();
@@ -44,7 +44,7 @@ export function blobMiddlewareFactory() {
                 resource.data = new Image();
                 resource.data.src = src;
 
-                resource.type = Loader.Resource.TYPE.IMAGE;
+                resource.type = Resource.TYPE.IMAGE;
 
                 // cleanup the no longer used blob after the image loads
                 // TODO: Is this correct? Will the image be invalid after revoking?
@@ -62,4 +62,4 @@ export function blobMiddlewareFactory() {
 
         next();
     };
-};
+}
