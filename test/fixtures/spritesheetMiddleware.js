@@ -1,6 +1,8 @@
-(function () {
-    window.spritesheetMiddleware = function spritesheetMiddleware() {
-        return function (resource, next) {
+'use strict';
+
+(() => {
+    window.spritesheetMiddleware = function spritesheetMiddlewareFactory() {
+        return function spritesheetMiddleware(resource, next) {
             // skip if no data, its not json, or it isn't spritesheet data
             if (!resource.data || resource.type !== Loader.Resource.TYPE.JSON || !resource.data.frames) {
                 next();
@@ -8,25 +10,25 @@
                 return;
             }
 
-            var loadOptions = {
+            const loadOptions = {
                 crossOrigin: resource.crossOrigin,
                 loadType: Resource.LOAD_TYPE.IMAGE,
                 parentResource: resource,
             };
 
-            var route = dirname(resource.url.replace(this.baseUrl, ''));
-            var name = resource.name + '_image';
-            var url = route + '/' + resource.data.meta.image;
+            const route = dirname(resource.url.replace(this.baseUrl, ''));
+            const name = `${resource.name}_image`;
+            const url = `${route}/${resource.data.meta.image}`;
 
             // load the image for this sheet
-            this.add(name, url, loadOptions, function (/* res */) { next(); });
+            this.add(name, url, loadOptions, (/* res */) => next());
         };
     };
 
     function dirname(path) {
-        var result = posixSplitPath(path);
-        var root = result[0];
-        var dir = result[1];
+        const result = posixSplitPath(path);
+        const root = result[0];
+        let dir = result[1];
 
         if (!root && !dir) {
             // No dirname whatsoever
@@ -41,7 +43,7 @@
         return root + dir;
     }
 
-    var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+    const splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
 
     function posixSplitPath(filename) {
         return splitPathRe.exec(filename).slice(1);

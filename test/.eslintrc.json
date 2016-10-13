@@ -20,6 +20,7 @@
     "rules": {
         "no-unused-expressions": 0,
         "no-magic-numbers": 0,
+        "no-undefined": 0,
         "max-statements-per-line": [2, { "max": 2 }],
         "newline-per-chained-call": [2, { "ignoreChainWithDepth": 3 }]
     }

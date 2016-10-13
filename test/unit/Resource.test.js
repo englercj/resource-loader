@@ -2,29 +2,29 @@
 
 const Resource = Loader.Resource;
 
-describe('Resource', function () {
-    var request;
-    var res;
-    var xhr;
-    var name = 'test-resource';
+describe('Resource', () => {
+    let request;
+    let res;
+    let xhr;
+    const name = 'test-resource';
 
-    before(function () {
+    before(() => {
         xhr = sinon.useFakeXMLHttpRequest();
-        xhr.onCreate = function (req) {
+        xhr.onCreate = (req) => {
             request = req;
         };
     });
 
-    after(function () {
+    after(() => {
         xhr.restore();
     });
 
-    beforeEach(function () {
+    beforeEach(() => {
         res = new Resource(name, fixtureData.url);
         request = null;
     });
 
-    it('should construct properly with only a URL passed', function () {
+    it('should construct properly with only a URL passed', () => {
         expect(res).to.have.property('name', name);
         expect(res).to.have.property('type', Resource.TYPE.UNKNOWN);
         expect(res).to.have.property('url', fixtureData.url);
@@ -41,13 +41,13 @@ describe('Resource', function () {
         expect(res).to.have.property('isLoading', false);
     });
 
-    it('should construct properly with options passed', function () {
-        var meta = { some: 'thing' };
-        var res = new Resource(name, fixtureData.url, {
+    it('should construct properly with options passed', () => {
+        const meta = { some: 'thing' };
+        const res = new Resource(name, fixtureData.url, {
             crossOrigin: true,
             loadType: Resource.LOAD_TYPE.IMAGE,
             xhrType: Resource.XHR_RESPONSE_TYPE.BLOB,
-            metadata: meta
+            metadata: meta,
         });
 
         expect(res).to.have.property('name', name);
@@ -66,9 +66,9 @@ describe('Resource', function () {
         expect(res).to.have.property('isLoading', false);
     });
 
-    describe('#complete', function () {
-        it('should emit the `complete` event', function () {
-            var spy = sinon.spy();
+    describe('#complete', () => {
+        it('should emit the `complete` event', () => {
+            const spy = sinon.spy();
 
             res.onComplete.add(spy);
 
@@ -77,12 +77,12 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should remove events from the data element', function () {
-            var data = {
-                addEventListener: function () {},
-                removeEventListener: function () {}
+        it('should remove events from the data element', () => {
+            const data = {
+                addEventListener: () => { /* empty */ },
+                removeEventListener: () => { /* empty */ },
             };
-            var mock = sinon.mock(data);
+            const mock = sinon.mock(data);
 
             mock.expects('removeEventListener').once().withArgs('error');
             mock.expects('removeEventListener').once().withArgs('load');
@@ -95,12 +95,12 @@ describe('Resource', function () {
             mock.verify();
         });
 
-        it('should remove events from the xhr element', function () {
-            var data = {
-                addEventListener: function () {},
-                removeEventListener: function () {}
+        it('should remove events from the xhr element', () => {
+            const data = {
+                addEventListener: () => { /* empty */ },
+                removeEventListener: () => { /* empty */ },
             };
-            var mock = sinon.mock(data);
+            const mock = sinon.mock(data);
 
             mock.expects('removeEventListener').once().withArgs('error');
             mock.expects('removeEventListener').once().withArgs('abort');
@@ -114,7 +114,7 @@ describe('Resource', function () {
         });
     });
 
-    describe('#abort', function () {
+    describe('#abort', () => {
         it('should abort in-flight XHR requests');
         it('should abort in-flight XDR requests');
         it('should abort in-flight Image requests');
@@ -122,9 +122,9 @@ describe('Resource', function () {
         it('should abort in-flight Audio requests');
     });
 
-    describe('#load', function () {
-        it('should emit the start event', function () {
-            var spy = sinon.spy();
+    describe('#load', () => {
+        it('should emit the start event', () => {
+            const spy = sinon.spy();
 
             res.onStart.add(spy);
 
@@ -134,8 +134,8 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should emit the complete event', function () {
-            var spy = sinon.spy();
+        it('should emit the complete event', () => {
+            const spy = sinon.spy();
 
             res.onComplete.add(spy);
 
@@ -147,8 +147,8 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should not load and emit a complete event if complete is called before load', function () {
-            var spy = sinon.spy();
+        it('should not load and emit a complete event if complete is called before load', () => {
+            const spy = sinon.spy();
 
             res.onComplete.add(spy);
 
@@ -159,7 +159,7 @@ describe('Resource', function () {
             expect(spy).to.have.been.calledWith(res);
         });
 
-        it('should throw an error if complete is called twice', function () {
+        it('should throw an error if complete is called twice', () => {
             function fn() {
                 res.complete();
             }
@@ -168,10 +168,10 @@ describe('Resource', function () {
             expect(fn).to.throw(Error);
         });
 
-        it('should load using a data url', function (done) {
-            var res = new Resource(name, fixtureData.dataUrlGif);
+        it('should load using a data url', (done) => {
+            const res = new Resource(name, fixtureData.dataUrlGif);
 
-            res.onComplete.add(function () {
+            res.onComplete.add(() => {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
                     .and.have.property('src', fixtureData.dataUrlGif);
@@ -182,10 +182,10 @@ describe('Resource', function () {
             res.load();
         });
 
-        it('should load using a svg data url', function (done) {
-            var res = new Resource(name, fixtureData.dataUrlSvg);
+        it('should load using a svg data url', (done) => {
+            const res = new Resource(name, fixtureData.dataUrlSvg);
 
-            res.onComplete.add(function () {
+            res.onComplete.add(() => {
                 expect(res).to.have.property('data').instanceOf(Image)
                     .and.is.an.instanceOf(HTMLImageElement)
                     .and.have.property('src', fixtureData.dataUrlSvg);
@@ -196,8 +196,8 @@ describe('Resource', function () {
             res.load();
         });
 
-        it('should load using XHR', function (done) {
-            res.onComplete.add(function () {
+        it('should load using XHR', (done) => {
+            res.onComplete.add(() => {
                 expect(res).to.have.property('data', fixtureData.dataJson);
                 done();
             });
@@ -209,8 +209,8 @@ describe('Resource', function () {
             request.respond(200, fixtureData.dataJsonHeaders, fixtureData.dataJson);
         });
 
-        it('should load using Image', function () {
-            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.IMAGE });
+        it('should load using Image', () => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.IMAGE });
 
             res.load();
 
@@ -221,8 +221,8 @@ describe('Resource', function () {
                 .and.have.property('src', fixtureData.url);
         });
 
-        it('should load using Audio', function () {
-            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.AUDIO });
+        it('should load using Audio', () => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.AUDIO });
 
             res.load();
 
@@ -234,8 +234,8 @@ describe('Resource', function () {
             expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
 
-        it('should load using Video', function () {
-            var res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.VIDEO });
+        it('should load using Video', () => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.VIDEO });
 
             res.load();
 
@@ -247,12 +247,12 @@ describe('Resource', function () {
             expect(res.data.children[0]).to.have.property('src', fixtureData.url);
         });
 
-        it('should used the passed element for loading', function () {
-            var img = new Image();
-            var spy = sinon.spy(img, 'addEventListener');
-            var res = new Resource(name, fixtureData.url, {
+        it('should used the passed element for loading', () => {
+            const img = new Image();
+            const spy = sinon.spy(img, 'addEventListener');
+            const res = new Resource(name, fixtureData.url, {
                 loadType: Resource.LOAD_TYPE.IMAGE,
-                metadata: { loadElement: img }
+                metadata: { loadElement: img },
             });
 
             res.load();
@@ -263,12 +263,12 @@ describe('Resource', function () {
             spy.restore();
         });
 
-        it('should used the passed element for loading, and skip assigning src', function () {
-            var img = new Image();
-            var spy = sinon.spy(img, 'addEventListener');
-            var res = new Resource(name, fixtureData.url, {
+        it('should used the passed element for loading, and skip assigning src', () => {
+            const img = new Image();
+            const spy = sinon.spy(img, 'addEventListener');
+            const res = new Resource(name, fixtureData.url, {
                 loadType: Resource.LOAD_TYPE.IMAGE,
-                metadata: { loadElement: img, skipSource: true }
+                metadata: { loadElement: img, skipSource: true },
             });
 
             res.load();
@@ -280,50 +280,50 @@ describe('Resource', function () {
         });
     });
 
-    describe('#_determineCrossOrigin', function () {
-        it('should properly detect same-origin requests (#1)', function () {
+    describe('#_determineCrossOrigin', () => {
+        it('should properly detect same-origin requests (#1)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com',
                 { hostname: 'google.com', port: '', protocol: 'https:' }
             )).to.equal('');
         });
 
-        it('should properly detect same-origin requests (#2)', function () {
+        it('should properly detect same-origin requests (#2)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com:443',
                 { hostname: 'google.com', port: '', protocol: 'https:' }
             )).to.equal('');
         });
 
-        it('should properly detect same-origin requests (#3)', function () {
+        it('should properly detect same-origin requests (#3)', () => {
             expect(res._determineCrossOrigin(
                 'http://www.google.com:5678',
                 { hostname: 'www.google.com', port: '5678', protocol: 'http:' }
             )).to.equal('');
         });
 
-        it('should properly detect cross-origin requests (#1)', function () {
+        it('should properly detect cross-origin requests (#1)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com',
                 { hostname: 'google.com', port: '123', protocol: 'https:' }
             )).to.equal('anonymous');
         });
 
-        it('should properly detect cross-origin requests (#2)', function () {
+        it('should properly detect cross-origin requests (#2)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com',
                 { hostname: 'google.com', port: '', protocol: 'http:' }
             )).to.equal('anonymous');
         });
 
-        it('should properly detect cross-origin requests (#3)', function () {
+        it('should properly detect cross-origin requests (#3)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com',
                 { hostname: 'googles.com', port: '', protocol: 'https:' }
             )).to.equal('anonymous');
         });
 
-        it('should properly detect cross-origin requests (#4)', function () {
+        it('should properly detect cross-origin requests (#4)', () => {
             expect(res._determineCrossOrigin(
                 'https://google.com',
                 { hostname: 'www.google.com', port: '123', protocol: 'https:' }
@@ -331,8 +331,8 @@ describe('Resource', function () {
         });
     });
 
-    describe('#_getExtension', function () {
-        it('should return the proper extension', function () {
+    describe('#_getExtension', () => {
+        it('should return the proper extension', () => {
             res.url = 'http://www.google.com/image.png';
             expect(res._getExtension()).to.equal('png');
 
