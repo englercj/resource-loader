@@ -24,7 +24,7 @@
     "build": "browserify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
     "dev": "watchify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
-    "lint": "eslint src/ && eslint test/",
+    "lint": "eslint src/ test/",
     "start": "npm run clean && npm run build",
     "test": "npm run test-dev -- --single-run",
     "test-dev": "karma start test/karma.conf.js",
