@@ -10,6 +10,12 @@ const STATUS_NONE = 0;
 const STATUS_OK = 200;
 const STATUS_EMPTY = 204;
 
+// We can't set the `src` attribute to empty string, so on abort we set it to this 1px transparent gif
+const EMPTY_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
+// noop
+function _noop() { /* empty */ }
+
 /**
  * Manages the state and loading of a resource and all child resources.
  *
@@ -179,7 +185,7 @@ export default class Resource {
          * @private
          * @member {function}
          */
-        this._dequeue = null;
+        this._dequeue = _noop;
 
         /**
          * Used a storage place for the on load binding used privately by the loader.
@@ -380,7 +386,7 @@ export default class Resource {
         else if (this.data) {
             // single source
             if (typeof this.data.src !== 'undefined') {
-                this.data.src = '';
+                this.data.src = EMPTY_GIF;
             }
             // multi-source
             else {

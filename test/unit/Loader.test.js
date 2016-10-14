@@ -343,8 +343,28 @@ describe('Loader', () => {
     });
 
     describe('#_loadResource', () => {
-        it('should run the before middleware before loading the resource');
-        it('should load a resource passed into it');
+        it('should run the before middleware before loading the resource', () => {
+            const spy = sinon.spy();
+            const res = {};
+
+            loader.pre(spy);
+
+            loader._loadResource(res);
+
+            expect(spy).to.have.been.calledOnce
+                .and.calledOn(loader)
+                .and.calledWith(res);
+        });
+
+        it('should load a resource passed into it', () => {
+            const res = new Loader.Resource('mock', fixtureData.url);
+
+            res.load = sinon.spy();
+
+            loader._loadResource(res);
+
+            expect(res.load).to.have.been.calledOnce;
+        });
     });
 
     describe('#_onComplete', () => {
@@ -361,10 +381,53 @@ describe('Loader', () => {
     });
 
     describe('#_onLoad', () => {
-        it('should emit the `progress` event');
-        it('should emit the `error` event when the resource has an error');
-        it('should emit the `load` event when the resource loads successfully');
-        it('should run the after middleware');
+        it('should emit the `progress` event', () => {
+            const res = new Loader.Resource('mock', fixtureData.url);
+            const spy = sinon.spy();
+
+            loader.onProgress.once(spy);
+
+            loader._onLoad(res);
+
+            expect(spy).to.have.been.calledOnce;
+        });
+
+        it('should emit the `error` event when the resource has an error', () => {
+            const res = new Loader.Resource('mock', fixtureData.url);
+            const spy = sinon.spy();
+
+            res.error = new Error('mock error');
+
+            loader.onError.once(spy);
+
+            loader._onLoad(res);
+
+            expect(spy).to.have.been.calledOnce;
+        });
+
+        it('should emit the `load` event when the resource loads successfully', () => {
+            const res = new Loader.Resource('mock', fixtureData.url);
+            const spy = sinon.spy();
+
+            loader.onLoad.once(spy);
+
+            loader._onLoad(res);
+
+            expect(spy).to.have.been.calledOnce;
+        });
+
+        it('should run the after middleware', () => {
+            const spy = sinon.spy();
+            const res = {};
+
+            loader.use(spy);
+
+            loader._onLoad(res);
+
+            expect(spy).to.have.been.calledOnce
+                .and.calledOn(loader)
+                .and.calledWith(res);
+        });
     });
 
     describe('events', () => {

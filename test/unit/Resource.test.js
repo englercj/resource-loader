@@ -115,10 +115,34 @@ describe('Resource', () => {
     });
 
     describe('#abort', () => {
-        it('should abort in-flight XHR requests');
+        it('should abort in-flight XHR requests', () => {
+            res.load();
+
+            res.xhr.abort = sinon.spy();
+
+            res.abort();
+
+            expect(res.xhr.abort).to.have.been.calledOnce;
+        });
+
         it('should abort in-flight XDR requests');
-        it('should abort in-flight Image requests');
+
+        it('should abort in-flight Image requests', () => {
+            const img = new Image();
+
+            img.src = fixtureData.url;
+
+            res.data = img;
+
+            expect(res.data.src).to.equal(fixtureData.url);
+
+            res.abort();
+
+            expect(res.data.src).to.equal('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        });
+
         it('should abort in-flight Video requests');
+
         it('should abort in-flight Audio requests');
     });
 
