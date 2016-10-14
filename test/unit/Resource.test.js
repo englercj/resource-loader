@@ -128,22 +128,37 @@ describe('Resource', () => {
         it('should abort in-flight XDR requests');
 
         it('should abort in-flight Image requests', () => {
-            const img = new Image();
-
-            img.src = fixtureData.url;
-
-            res.data = img;
+            res.data = new Image();
+            res.data.src = fixtureData.url;
 
             expect(res.data.src).to.equal(fixtureData.url);
 
             res.abort();
 
-            expect(res.data.src).to.equal('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+            expect(res.data.src).to.equal(Resource.EMPTY_GIF);
         });
 
-        it('should abort in-flight Video requests');
+        it('should abort in-flight Video requests', () => {
+            res.data = document.createElement('video');
+            res.data.appendChild(document.createElement('source'));
 
-        it('should abort in-flight Audio requests');
+            expect(res.data.firstChild).to.exist;
+
+            res.abort();
+
+            expect(res.data.firstChild).to.not.exist;
+        });
+
+        it('should abort in-flight Audio requests', () => {
+            res.data = document.createElement('audio');
+            res.data.appendChild(document.createElement('source'));
+
+            expect(res.data.firstChild).to.exist;
+
+            res.abort();
+
+            expect(res.data.firstChild).to.not.exist;
+        });
     });
 
     describe('#load', () => {

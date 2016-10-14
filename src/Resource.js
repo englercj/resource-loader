@@ -10,9 +10,6 @@ const STATUS_NONE = 0;
 const STATUS_OK = 200;
 const STATUS_EMPTY = 204;
 
-// We can't set the `src` attribute to empty string, so on abort we set it to this 1px transparent gif
-const EMPTY_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-
 // noop
 function _noop() { /* empty */ }
 
@@ -385,8 +382,8 @@ export default class Resource {
         }
         else if (this.data) {
             // single source
-            if (typeof this.data.src !== 'undefined') {
-                this.data.src = EMPTY_GIF;
+            if (this.data.src) {
+                this.data.src = Resource.EMPTY_GIF;
             }
             // multi-source
             else {
@@ -1017,6 +1014,9 @@ Resource._xhrTypeMap = {
     text:       Resource.XHR_RESPONSE_TYPE.TEXT,
     txt:        Resource.XHR_RESPONSE_TYPE.TEXT,
 };
+
+// We can't set the `src` attribute to empty string, so on abort we set it to this 1px transparent gif
+Resource.EMPTY_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 
 /**
  * Quick helper to set a value on one of the extension maps. Ensures there is no
