@@ -268,6 +268,22 @@ describe('Loader', () => {
             loader.reset();
             expect(loader.resources).to.be.empty;
         });
+
+        it('with unloaded items continues to work', (done) => {
+            const loader = new Loader(fixtureData.baseUrl, 2);
+
+            loader.add(['hud.png', 'hud2.png', 'hud.json']).load();
+
+            setTimeout(() => {
+                const spy = sinon.spy();
+
+                loader.reset();
+                loader.add('hud2.json', spy).load(() => {
+                    expect(spy).to.have.been.calledOnce;
+                    done();
+                });
+            }, 0);
+        });
     });
 
     describe('#load', () => {

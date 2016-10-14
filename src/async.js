@@ -78,7 +78,9 @@ export function queue(worker, concurrency) {
             _insert(data, false, callback);
         },
         kill() {
+            workers = 0;
             q.drain = _noop;
+            q.started = false;
             q._tasks = [];
         },
         unshift(data, callback) {

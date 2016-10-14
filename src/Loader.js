@@ -344,7 +344,6 @@ export default class Loader {
 
         this._queue.kill();
         this._queue.pause();
-        this._queue.started = false;
 
         // abort all resource loads
         for (const k in this.resources) {
