@@ -993,7 +993,9 @@ Resource._xhrTypeMap = {
     tmx:        Resource.XHR_RESPONSE_TYPE.DOCUMENT,
     svg:        Resource.XHR_RESPONSE_TYPE.DOCUMENT,
 
-    // This was added to handle Tiled Tileset XML, but .tsx is also a TypeScript React Component...
+    // This was added to handle Tiled Tileset XML, but .tsx is also a TypeScript React Component.
+    // Since it is way less likely for people to be loading TypeScript files instead of Tiled files,
+    // this should probably be fine.
     tsx:        Resource.XHR_RESPONSE_TYPE.DOCUMENT,
 
     // images
@@ -1013,6 +1015,10 @@ Resource._xhrTypeMap = {
     // text
     text:       Resource.XHR_RESPONSE_TYPE.TEXT,
     txt:        Resource.XHR_RESPONSE_TYPE.TEXT,
+
+    // fonts
+    ttf:        Resource.XHR_RESPONSE_TYPE.BUFFER,
+    otf:        Resource.XHR_RESPONSE_TYPE.BUFFER,
 };
 
 // We can't set the `src` attribute to empty string, so on abort we set it to this 1px transparent gif
