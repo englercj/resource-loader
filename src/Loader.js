@@ -5,6 +5,7 @@ import Resource from './Resource';
 
 // some constants
 const MAX_PROGRESS = 100;
+const rgxExtractUrlHash = /(#[\w\-]+)?$/;
 
 /**
  * Manages the state and loading of multiple resources to load.
@@ -37,6 +38,31 @@ export default class Loader {
          * @member {boolean}
          */
         this.loading = false;
+
+        /**
+         * A querystring to append to every URL added to the loader.
+         *
+         * This should be a valid query string *without* the question-mark (`?`). The loader will
+         * also *not* escape values for you. Make sure to escape your parameters with
+         * [`encodeURIComponent`](https://mdn.io/encodeURIComponent) before assigning this property.
+         *
+         * @example
+         *
+         * ```js
+         * const loader = new Loader();
+         *
+         * loader.defaultQueryString = 'user=me&password=secret';
+         *
+         * // This will request 'image.png?user=me&password=secret'
+         * loader.add('image.png').load();
+         *
+         * loader.reset();
+         *
+         * // This will request 'image.png?v=1&user=me&password=secret'
+         * loader.add('iamge.png?v=1').load();
+         * ```
+         */
+        this.defaultQueryString = '';
 
         /**
          * The middleware to run before loading each resource.
@@ -408,21 +434,40 @@ export default class Loader {
      */
     _prepareUrl(url) {
         const parsedUrl = parseUri(url, { strictMode: true });
+        let result;
 
         // absolute url, just use it as is.
-        if (parsedUrl.protocol || !parsedUrl.path || parsedUrl.path.indexOf('//') === 0) {
-            return url;
+        if (parsedUrl.protocol || !parsedUrl.path || url.indexOf('//') === 0) {
+            result = url;
         }
-
         // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
-        if (this.baseUrl.length
+        else if (this.baseUrl.length
             && this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1
             && url.charAt(0) !== '/'
         ) {
-            return `${this.baseUrl}/${url}`;
+            result = `${this.baseUrl}/${url}`;
+        }
+        else {
+            result = this.baseUrl + url;
         }
 
-        return this.baseUrl + url;
+        // if we need to add a default querystring, there is a bit more work
+        if (this.defaultQueryString) {
+            const hash = rgxExtractUrlHash.exec(result)[0];
+
+            result = result.substr(0, result.length - hash.length);
+
+            if (result.indexOf('?') !== -1) {
+                result += `&${this.defaultQueryString}`;
+            }
+            else {
+                result += `?${this.defaultQueryString}`;
+            }
+
+            result += hash;
+        }
+
+        return result;
     }
 
     /**

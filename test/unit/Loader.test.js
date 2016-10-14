@@ -358,6 +358,88 @@ describe('Loader', () => {
         });
     });
 
+    describe('#_prepareUrl', () => {
+        it('should return the url as-is for absolute urls', () => {
+            const u1 = 'http://domain.com/image.png';
+            const u2 = 'https://domain.com';
+            const u3 = '//myshare/image.png';
+            const u4 = '//myshare/image.png?v=1#me';
+
+            expect(loader._prepareUrl(u1)).to.equal(u1);
+            expect(loader._prepareUrl(u2)).to.equal(u2);
+            expect(loader._prepareUrl(u3)).to.equal(u3);
+            expect(loader._prepareUrl(u4)).to.equal(u4);
+        });
+
+        it('should add the baseUrl for relative urls (no trailing slash on baseUrl)', () => {
+            const b = fixtureData.baseUrl;
+            const u1 = 'image.png';
+            const u2 = '/image.png';
+            const u3 = 'image.png?v=1';
+            const u4 = '/image.png?v=1#me';
+
+            expect(loader._prepareUrl(u1)).to.equal(`${b}/${u1}`);
+            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
+            expect(loader._prepareUrl(u3)).to.equal(`${b}/${u3}`);
+            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
+        });
+
+        it('should add the baseUrl for relative urls (yes trailing slash on baseUrl)', () => {
+            const b = loader.baseUrl = '/base/';
+            const u1 = 'image.png';
+            const u2 = '/image.png';
+            const u3 = 'image.png?v=1';
+            const u4 = '/image.png?v=1#me';
+
+            expect(loader._prepareUrl(u1)).to.equal(`${b}${u1}`);
+            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
+            expect(loader._prepareUrl(u3)).to.equal(`${b}${u3}`);
+            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
+        });
+
+        it('should add the defaultQueryString when set', () => {
+            const b = fixtureData.baseUrl;
+            const u1 = 'image.png';
+            const u2 = '/image.png';
+
+            loader.defaultQueryString = 'u=me&p=secret';
+
+            expect(loader._prepareUrl(u1))
+                .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
+
+            expect(loader._prepareUrl(u2))
+                .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
+        });
+
+        it('should add the defaultQueryString when if querystring already exists', () => {
+            const b = fixtureData.baseUrl;
+            const u1 = 'image.png?v=1';
+
+            loader.defaultQueryString = 'u=me&p=secret';
+
+            expect(loader._prepareUrl(u1))
+                .to.equal(`${b}/${u1}&${loader.defaultQueryString}`);
+        });
+
+        it('should add the defaultQueryString when hash exists', () => {
+            const b = fixtureData.baseUrl;
+
+            loader.defaultQueryString = 'u=me&p=secret';
+
+            expect(loader._prepareUrl('/image.png#me'))
+                .to.equal(`${b}/image.png?${loader.defaultQueryString}#me`);
+        });
+
+        it('should add the defaultQueryString when querystring and hash exists', () => {
+            const b = fixtureData.baseUrl;
+
+            loader.defaultQueryString = 'u=me&p=secret';
+
+            expect(loader._prepareUrl('/image.png?v=1#me'))
+                .to.equal(`${b}/image.png?v=1&${loader.defaultQueryString}#me`);
+        });
+    });
+
     describe('#_loadResource', () => {
         it('should run the before middleware before loading the resource', () => {
             const spy = sinon.spy();
