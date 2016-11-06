@@ -1,6 +1,6 @@
 {
   "name": "resource-loader",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./src/index.js",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
@@ -58,7 +58,12 @@
   },
   "babel": {
     "presets": [
-      ["es2015", { "loose": true }]
+      [
+        "es2015",
+        {
+          "loose": true
+        }
+      ]
     ]
   }
 }
