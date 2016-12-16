@@ -65,5 +65,8 @@
         }
       ]
     ]
+  },
+  "browserify": {
+    "transform": ["babelify"]
   }
 }
