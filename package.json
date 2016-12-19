@@ -1,7 +1,8 @@
 {
   "name": "resource-loader",
   "version": "2.0.1",
-  "main": "./src/index.js",
+  "main": "./dist/resource-loader.node.js",
+  "browser": false,
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
@@ -21,17 +22,20 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist && mkdir dist",
-    "build": "npm run clean && browserify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
+    "build": "browserify -d -t babelify -s Loader -e ./src/index.js -u http -o ./dist/resource-loader.js",
+    "build-node": "browserify --no-bundle-external --node -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.node.js",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
+    "minify-node": "uglifyjs --output ./dist/resource-loader.node.min.js -- ./dist/resource-loader.node.js",
     "dev": "watchify -d -t babelify -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
     "lint": "eslint src/ test/",
     "start": "npm run build",
     "test": "npm run test-dev -- --single-run",
     "test-dev": "karma start test/karma.conf.js",
     "docs": "jsdoc -c jsdoc.conf.json -R README.md",
-    "prepublish": "npm run build && npm run minify"
+    "prepublish": "npm run clean && npm run build && npm run minify && npm run build-node && npm run minify-node"
   },
   "dependencies": {
+    "babel": "^6.5.2",
     "mini-signals": "^1.1.1",
     "parse-uri": "^1.0.0"
   },
@@ -67,6 +71,8 @@
     ]
   },
   "browserify": {
-    "transform": ["babelify"]
+    "transform": [
+      "babelify"
+    ]
   }
 }

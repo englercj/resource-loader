@@ -1,8 +1,9 @@
 import parseUri from 'parse-uri';
 import Signal from 'mini-signals';
+const http = require('http');
 
 // tests is CORS is supported in XHR, if not we need to use XDR
-const useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
+const useXdr = (typeof window !== 'undefined') && !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
 let tempAnchor = null;
 
 // some status constants
@@ -443,6 +444,10 @@ export default class Resource {
                 this._loadSourceElement('video');
                 break;
 
+            case Resource.LOAD_TYPE.NODE_HTTP:
+                this._loadHttp();
+                break;
+
             case Resource.LOAD_TYPE.XHR:
                 /* falls through */
             default:
@@ -554,6 +559,76 @@ export default class Resource {
         this.data.addEventListener('canplaythrough', this._boundComplete, false);
 
         this.data.load();
+    }
+
+    _loadHttp() {
+        // if unset, determine the value
+        if (typeof this.httpType !== 'string') {
+            this.httpType = this._determineHttpType();
+        }
+
+        const req = http.get(this.url, (res) => {
+            const statusCode = res.statusCode;
+            const contentType = res.headers['content-type'];
+            const contentLength = res.headers['content-length'];
+
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+
+                if(contentLength && contentLength > 0) {
+                    this.onProgress.dispatch(this, data.length / contentLength);
+                }
+            });
+
+            res.on('end', () => {
+                this._loadHttpComplete(res, data);
+            });
+        }).on('error', (e) => {
+            this.abort(`http Request failed. Status: ${req.statusCode}, text: "${e.message}"`);
+        }).on('abort', (e) => {
+            this.abort(`http Request aborted. Status: ${req.statusCode}, text: "${e.message}"`);
+        })
+    }
+
+    _loadHttpComplete(res, data) {
+        // status can be 0 when using the `file://` protocol so we also check if a response is set
+        const status = res.statusCode;
+
+        if (status === STATUS_OK
+            || status === STATUS_EMPTY
+            || (status === STATUS_NONE && data.length > 0)
+        ) {
+            // if text, just return it
+            if (this.httpType === Resource.XHR_RESPONSE_TYPE.TEXT) {
+                this.data = data;
+                this.type = Resource.TYPE.TEXT;
+            }
+            // if json, parse into json object
+            else if (this.httpType === Resource.XHR_RESPONSE_TYPE.JSON) {
+                try {
+                    this.data = JSON.parse(data);
+                    this.type = Resource.TYPE.JSON;
+                }
+                catch (e) {
+                    this.abort(`Error trying to parse loaded json: ${e}`);
+
+                    return;
+                }
+            }
+            // other types just return the response
+            else {
+                this.data = data;
+            }
+        }
+        else {
+            this.abort(`[${res.statusCode}] ${res.statusMessage}: ${this.url}`);
+
+            return;
+        }
+
+        this.complete();
     }
 
     /**
@@ -784,7 +859,7 @@ export default class Resource {
         }
 
         // default is window.location
-        loc = loc || window.location;
+        loc = loc || (typeof window !== 'undefined' && window.location);
 
         if (!tempAnchor) {
             tempAnchor = document.createElement('a');
@@ -805,6 +880,10 @@ export default class Resource {
         }
 
         return '';
+    }
+
+    _determineHttpType() {
+        return Resource._xhrTypeMap[this._getExtension()] || Resource.XHR_RESPONSE_TYPE.TEXT;
     }
 
     /**
@@ -936,6 +1015,8 @@ Resource.LOAD_TYPE = {
     AUDIO:  3,
     /** Uses a `Video` object to load the resource. */
     VIDEO:  4,
+    /** Uses node's HTTP get to load the resource. */
+    NODE_HTTP: 5
 };
 
 /**
