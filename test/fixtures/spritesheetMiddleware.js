@@ -21,7 +21,8 @@
             const url = `${route}/${resource.data.meta.image}`;
 
             // load the image for this sheet
-            this.add(name, url, loadOptions, (/* res */) => next());
+            this.add(name, url, loadOptions, ()=>{});
+            next();
         };
     };
 
