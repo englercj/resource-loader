@@ -4,7 +4,7 @@ describe('Loader', () => {
     let loader = null;
 
     beforeEach(() => {
-        loader = new Loader(fixtureData.baseUrl);
+        loader = new Loader(fixtureData.baseUrl, 2);
     });
 
     it('should have correct properties', () => {
@@ -628,6 +628,7 @@ describe('Loader', () => {
         describe('with multiple additional subresources', () => {
             it('should call progress for each loaded asset', (done) => {
                 loader.add([
+                    { name: 'hud3', url: 'hud3.json' },
                     { name: 'hud2', url: 'hud2.json' },
                     { name: 'hud_atlas', url: 'hud.json' },
                 ]);
@@ -639,13 +640,14 @@ describe('Loader', () => {
                 loader.onProgress.add(spy);
 
                 loader.load(() => {
-                    expect(spy).to.have.callCount(4);
+                    expect(spy).to.have.callCount(6);
                     done();
                 });
             });
 
             it('should never have an invalid progress value', (done) => {
                 loader.add([
+                    { name: 'hud3', url: 'hud3.json' },
                     { name: 'hud2', url: 'hud2.json' },
                     { name: 'hud_atlas', url: 'hud.json' },
                 ]);
@@ -663,6 +665,7 @@ describe('Loader', () => {
 
             it('progress should be 100% on complete', (done) => {
                 loader.add([
+                    { name: 'hud3', url: 'hud3.json' },
                     { name: 'hud2', url: 'hud2.json' },
                     { name: 'hud_atlas', url: 'hud.json' },
                 ]);
