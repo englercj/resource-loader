@@ -1,6 +1,6 @@
 {
   "name": "resource-loader",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "main": "./lib/index.js",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
