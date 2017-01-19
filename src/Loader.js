@@ -310,17 +310,25 @@ export default class Loader {
             this.resources[name].onAfterMiddleware.once(cb);
         }
 
-        // if loading make sure to adjust progress chunks for that parent and its children
+        // if actively loading, make sure to adjust progress chunks for that parent and its children
         if (this.loading) {
             const parent = options.parentResource;
-            const fullChunk = parent.progressChunk * (parent.children.length + 1); // +1 for parent
-            const eachChunk = fullChunk / (parent.children.length + 2); // +2 for parent & new child
+            const incompleteChildren = [];
+
+            for (let i = 0; i < parent.children.length; ++i) {
+                if (!parent.children[i].isComplete) {
+                    incompleteChildren.push(parent.children[i]);
+                }
+            }
+
+            const fullChunk = parent.progressChunk * (incompleteChildren.length + 1); // +1 for parent
+            const eachChunk = fullChunk / (incompleteChildren.length + 2); // +2 for parent & new child
 
             parent.children.push(this.resources[name]);
             parent.progressChunk = eachChunk;
 
-            for (let i = 0; i < parent.children.length; ++i) {
-                parent.children[i].progressChunk = eachChunk;
+            for (let i = 0; i < incompleteChildren.length; ++i) {
+                incompleteChildren[i].progressChunk = eachChunk;
             }
         }
 
