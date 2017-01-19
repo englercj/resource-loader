@@ -27,17 +27,18 @@
   "scripts": {
     "clean": "rm -rf ./dist ./lib && mkdir dist && mkdir lib",
     "prebuild": "npm run lib",
-    "build": "browserify -d -s Loader -e ./lib/index.js -o ./dist/resource-loader.js",
+    "build": "npm run make-dist && browserify -d -s Loader -e ./lib/index.js -o ./dist/resource-loader.js",
     "lib": "babel src --out-dir lib -s",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
     "dev": "watchify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
     "lint": "eslint src/ test/",
     "start": "npm run build",
     "pretest": "npm run build",
-    "test": "npm run test-dev -- --single-run",
+    "test": "npm run build && npm run test-dev -- --single-run",
     "test-dev": "karma start test/karma.conf.js",
     "docs": "jsdoc -c jsdoc.conf.json -R README.md",
-    "prepublish": "npm run build && npm run minify"
+    "prepublish": "npm run build && npm run minify",
+    "make-dist": "mkdir -p dist"
   },
   "dependencies": {
     "mini-signals": "^1.1.1",

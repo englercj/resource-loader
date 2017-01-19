@@ -21,7 +21,10 @@
             const url = `${route}/${resource.data.meta.image}`;
 
             // load the image for this sheet
-            this.add(name, url, loadOptions, (/* res */) => next());
+            this.add(name, url, loadOptions, () => {
+                // image loaded
+            });
+            next();
         };
     };
 
@@ -43,7 +46,7 @@
         return root + dir;
     }
 
-    const splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+    const splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^/]+?|)(\.[^./]*|))(?:[/]*)$/;
 
     function posixSplitPath(filename) {
         return splitPathRe.exec(filename).slice(1);

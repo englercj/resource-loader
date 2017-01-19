@@ -5,7 +5,7 @@ import Resource from './Resource';
 
 // some constants
 const MAX_PROGRESS = 100;
-const rgxExtractUrlHash = /(#[\w\-]+)?$/;
+const rgxExtractUrlHash = /(#[\w-]+)?$/;
 
 /**
  * Manages the state and loading of multiple resources to load.
@@ -407,10 +407,20 @@ export default class Loader {
         }
 
         // distribute progress chunks
-        const chunk = 100 / this._queue._tasks.length;
+        let remaining = 100;
+        const chunk = remaining / this._queue._tasks.length;
+
+        let thisChunk;
 
         for (let i = 0; i < this._queue._tasks.length; ++i) {
-            this._queue._tasks[i].data.progressChunk = chunk;
+            if (i === this._queue._tasks.length - 1) {
+                thisChunk = remaining;
+            }
+            else {
+                thisChunk = chunk;
+                remaining -= chunk;
+            }
+            this._queue._tasks[i].data.progressChunk = thisChunk;
         }
 
         // update loading state
