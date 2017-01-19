@@ -25,4 +25,6 @@ install:
 
 script:
   - npm run lint
+  - npm run build
+  - npm run minify
   - npm test
