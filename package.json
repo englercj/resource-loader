@@ -24,9 +24,10 @@
     "README.md"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist ./lib && mkdir dist && mkdir lib",
-    "full-build": "npm run build && npm run minify",
-    "prebuild": "npm run clean && npm run lib",
+    "clean": "rm -rf ./dist ./lib && npm run setup",
+    "setup": "mkdirp dist lib",
+    "full-build": "npm run clean && npm run build && npm run minify",
+    "prebuild": "npm run setup && npm run lib",
     "build": "browserify -d -s Loader -e ./lib/index.js -o ./dist/resource-loader.js",
     "lib": "babel src --out-dir lib -s",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
@@ -58,6 +59,7 @@
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.1",
     "karma-sinon-chai": "^1.2.4",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
