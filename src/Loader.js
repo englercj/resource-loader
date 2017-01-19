@@ -79,6 +79,13 @@ export default class Loader {
         this._afterMiddleware = [];
 
         /**
+         * The tracks the resources we are currently completing parsing for.
+         *
+         * @member {Resource[]}
+         */
+        this._resourcesParsing = [];
+
+        /**
          * The `_loadResource` function bound with this object context.
          *
          * @private
@@ -530,6 +537,10 @@ export default class Loader {
     _onLoad(resource) {
         resource._onLoadBinding = null;
 
+        // remove this resource from the async queue, and add it to our list of resources that are being parsed
+        resource._dequeue();
+        this._resourcesParsing.push(resource);
+
         // run middleware, this *must* happen before dequeue so sub-assets get added properly
         async.eachSeries(
             this._afterMiddleware,
@@ -549,11 +560,10 @@ export default class Loader {
                     this.onLoad.dispatch(this, resource);
                 }
 
-                // remove this resource from the async queue
-                resource._dequeue();
+                this._resourcesParsing.splice(this._resourcesParsing.indexOf(resource), 1);
 
                 // do completion check
-                if (this._queue.idle()) {
+                if (this._queue.idle() && this._resourcesParsing.length === 0) {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }

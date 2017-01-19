@@ -483,6 +483,8 @@ describe('Loader', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
+            res._dequeue = sinon.spy();
+
             loader.onProgress.once(spy);
 
             loader._onLoad(res);
@@ -493,6 +495,8 @@ describe('Loader', () => {
         it('should emit the `error` event when the resource has an error', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
+
+            res._dequeue = sinon.spy();
 
             res.error = new Error('mock error');
 
@@ -507,6 +511,8 @@ describe('Loader', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
+            res._dequeue = sinon.spy();
+
             loader.onLoad.once(spy);
 
             loader._onLoad(res);
@@ -517,6 +523,8 @@ describe('Loader', () => {
         it('should run the after middleware', () => {
             const spy = sinon.spy();
             const res = {};
+
+            res._dequeue = sinon.spy();
 
             loader.use(spy);
 
