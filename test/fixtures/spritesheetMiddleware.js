@@ -43,7 +43,7 @@
         return root + dir;
     }
 
-    const splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+    const splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^/]+?|)(\.[^./]*|))(?:[/]*)$/;
 
     function posixSplitPath(filename) {
         return splitPathRe.exec(filename).slice(1);
