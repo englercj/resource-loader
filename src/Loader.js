@@ -5,7 +5,7 @@ import Resource from './Resource';
 
 // some constants
 const MAX_PROGRESS = 100;
-const rgxExtractUrlHash = /(#[\w\-]+)?$/;
+const rgxExtractUrlHash = /(#[\w-]+)?$/;
 
 /**
  * Manages the state and loading of multiple resources to load.
