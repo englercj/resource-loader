@@ -415,7 +415,8 @@ export default class Loader {
         for (let i = 0; i < this._queue._tasks.length; ++i) {
             if (i === this._queue._tasks.length - 1) {
                 thisChunk = remaining;
-            } else {
+            }
+            else {
                 thisChunk = chunk;
                 remaining -= chunk;
             }
