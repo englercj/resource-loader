@@ -409,11 +409,11 @@ export default class Loader {
         // distribute progress chunks
         let remaining = 100;
         const chunk = remaining / this._queue._tasks.length;
-        
+
         let thisChunk;
+
         for (let i = 0; i < this._queue._tasks.length; ++i) {
-            if (i == this._queue._tasks.length - 1)
-            {
+            if (i === this._queue._tasks.length - 1) {
                 thisChunk = remaining;
             } else {
                 thisChunk = chunk;
