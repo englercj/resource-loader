@@ -546,6 +546,24 @@ describe('Loader', () => {
                 });
             });
 
+            it('should call progress for each loaded asset, even with low concurrency', (done) => {
+                const loader = new Loader(fixtureData.baseUrl, 1);
+
+                loader.add([
+                    { name: 'hud', url: 'hud.png' },
+                    { name: 'hud2', url: 'hud2.png' },
+                ]);
+
+                const spy = sinon.spy();
+
+                loader.onProgress.add(spy);
+
+                loader.load(() => {
+                    expect(spy).to.have.been.calledTwice;
+                    done();
+                });
+            });
+
             it('should never have an invalid progress value', (done) => {
                 loader.add([
                     { name: 'hud', url: 'hud.png' },
@@ -576,6 +594,26 @@ describe('Loader', () => {
 
         describe('with one additional subresource', () => {
             it('should call progress for each loaded asset', (done) => {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.png' },
+                    { name: 'hud_atlas', url: 'hud.json' },
+                ]);
+
+                loader.use(spritesheetMiddleware());
+
+                const spy = sinon.spy();
+
+                loader.onProgress.add(spy);
+
+                loader.load(() => {
+                    expect(spy).to.have.been.calledThrice;
+                    done();
+                });
+            });
+
+            it('should call progress for each loaded asset, even with low concurrency', (done) => {
+                const loader = new Loader(fixtureData.baseUrl, 1);
+
                 loader.add([
                     { name: 'hud2', url: 'hud2.png' },
                     { name: 'hud_atlas', url: 'hud.json' },
