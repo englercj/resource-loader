@@ -5,7 +5,7 @@ import Resource from './Resource';
 
 // some constants
 const MAX_PROGRESS = 100;
-const rgxExtractUrlHash = /(#[\w\-]+)?$/;
+const rgxExtractUrlHash = /(#[\w-]+)?$/;
 
 /**
  * Manages the state and loading of multiple resources to load.
@@ -77,6 +77,13 @@ export default class Loader {
          * @member {function[]}
          */
         this._afterMiddleware = [];
+
+        /**
+         * The tracks the resources we are currently completing parsing for.
+         *
+         * @member {Resource[]}
+         */
+        this._resourcesParsing = [];
 
         /**
          * The `_loadResource` function bound with this object context.
@@ -310,17 +317,25 @@ export default class Loader {
             this.resources[name].onAfterMiddleware.once(cb);
         }
 
-        // if loading make sure to adjust progress chunks for that parent and its children
+        // if actively loading, make sure to adjust progress chunks for that parent and its children
         if (this.loading) {
             const parent = options.parentResource;
-            const fullChunk = parent.progressChunk * (parent.children.length + 1); // +1 for parent
-            const eachChunk = fullChunk / (parent.children.length + 2); // +2 for parent & new child
+            const incompleteChildren = [];
+
+            for (let i = 0; i < parent.children.length; ++i) {
+                if (!parent.children[i].isComplete) {
+                    incompleteChildren.push(parent.children[i]);
+                }
+            }
+
+            const fullChunk = parent.progressChunk * (incompleteChildren.length + 1); // +1 for parent
+            const eachChunk = fullChunk / (incompleteChildren.length + 2); // +2 for parent & new child
 
             parent.children.push(this.resources[name]);
             parent.progressChunk = eachChunk;
 
-            for (let i = 0; i < parent.children.length; ++i) {
-                parent.children[i].progressChunk = eachChunk;
+            for (let i = 0; i < incompleteChildren.length; ++i) {
+                incompleteChildren[i].progressChunk = eachChunk;
             }
         }
 
@@ -522,6 +537,10 @@ export default class Loader {
     _onLoad(resource) {
         resource._onLoadBinding = null;
 
+        // remove this resource from the async queue, and add it to our list of resources that are being parsed
+        resource._dequeue();
+        this._resourcesParsing.push(resource);
+
         // run middleware, this *must* happen before dequeue so sub-assets get added properly
         async.eachSeries(
             this._afterMiddleware,
@@ -541,11 +560,10 @@ export default class Loader {
                     this.onLoad.dispatch(this, resource);
                 }
 
-                // remove this resource from the async queue
-                resource._dequeue();
+                this._resourcesParsing.splice(this._resourcesParsing.indexOf(resource), 1);
 
                 // do completion check
-                if (this._queue.idle()) {
+                if (this._queue.idle() && this._resourcesParsing.length === 0) {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }

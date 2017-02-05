@@ -18,4 +18,6 @@ Loader.middleware = {
   }
 };
 
+// export manually, and also as default
 module.exports = Loader; // eslint-disable-line no-undef
+export default Loader;

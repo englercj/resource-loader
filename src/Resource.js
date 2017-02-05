@@ -93,6 +93,14 @@ export default class Resource {
         this.url = url;
 
         /**
+         * The extension used to load this resource.
+         *
+         * @member {string}
+         * @readonly
+         */
+        this.extension = this._getExtension();
+
+        /**
          * The data that was loaded by the resource.
          *
          * @member {any}
@@ -894,7 +902,7 @@ export default class Resource {
      * @return {Resource.XHR_RESPONSE_TYPE} The responseType to use.
      */
     _determineXhrType() {
-        return Resource._xhrTypeMap[this._getExtension()] || Resource.XHR_RESPONSE_TYPE.TEXT;
+        return Resource._xhrTypeMap[this.extension] || Resource.XHR_RESPONSE_TYPE.TEXT;
     }
 
     /**
@@ -905,7 +913,7 @@ export default class Resource {
      * @return {Resource.LOAD_TYPE} The loadType to use.
      */
     _determineLoadType() {
-        return Resource._loadTypeMap[this._getExtension()] || Resource.LOAD_TYPE.XHR;
+        return Resource._loadTypeMap[this.extension] || Resource.LOAD_TYPE.XHR;
     }
 
     /**

@@ -483,6 +483,8 @@ describe('Loader', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
+            res._dequeue = sinon.spy();
+
             loader.onProgress.once(spy);
 
             loader._onLoad(res);
@@ -493,6 +495,8 @@ describe('Loader', () => {
         it('should emit the `error` event when the resource has an error', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
+
+            res._dequeue = sinon.spy();
 
             res.error = new Error('mock error');
 
@@ -507,6 +511,8 @@ describe('Loader', () => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
+            res._dequeue = sinon.spy();
+
             loader.onLoad.once(spy);
 
             loader._onLoad(res);
@@ -517,6 +523,8 @@ describe('Loader', () => {
         it('should run the after middleware', () => {
             const spy = sinon.spy();
             const res = {};
+
+            res._dequeue = sinon.spy();
 
             loader.use(spy);
 
@@ -531,6 +539,24 @@ describe('Loader', () => {
     describe('events', () => {
         describe('with no additional subresources', () => {
             it('should call progress for each loaded asset', (done) => {
+                loader.add([
+                    { name: 'hud', url: 'hud.png' },
+                    { name: 'hud2', url: 'hud2.png' },
+                ]);
+
+                const spy = sinon.spy();
+
+                loader.onProgress.add(spy);
+
+                loader.load(() => {
+                    expect(spy).to.have.been.calledTwice;
+                    done();
+                });
+            });
+
+            it('should call progress for each loaded asset, even with low concurrency', (done) => {
+                const loader = new Loader(fixtureData.baseUrl, 1);
+
                 loader.add([
                     { name: 'hud', url: 'hud.png' },
                     { name: 'hud2', url: 'hud2.png' },
@@ -576,6 +602,26 @@ describe('Loader', () => {
 
         describe('with one additional subresource', () => {
             it('should call progress for each loaded asset', (done) => {
+                loader.add([
+                    { name: 'hud2', url: 'hud2.png' },
+                    { name: 'hud_atlas', url: 'hud.json' },
+                ]);
+
+                loader.use(spritesheetMiddleware());
+
+                const spy = sinon.spy();
+
+                loader.onProgress.add(spy);
+
+                loader.load(() => {
+                    expect(spy).to.have.been.calledThrice;
+                    done();
+                });
+            });
+
+            it('should call progress for each loaded asset, even with low concurrency', (done) => {
+                const loader = new Loader(fixtureData.baseUrl, 1);
+
                 loader.add([
                     { name: 'hud2', url: 'hud2.png' },
                     { name: 'hud_atlas', url: 'hud.json' },
