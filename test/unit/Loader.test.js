@@ -578,11 +578,15 @@ describe('Loader', () => {
                     { name: 'hud2', url: 'hud2.png' },
                 ]);
 
+                const expectedProgressValues = [50, 100];
+                let i = 0;
+
                 loader.onProgress.add((loader) => {
-                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                    expect(loader).to.have.property('progress', expectedProgressValues[i++]);
                 });
 
                 loader.load(() => {
+                    expect(loader).to.have.property('progress', 100);
                     done();
                 });
             });
@@ -647,11 +651,15 @@ describe('Loader', () => {
 
                 loader.use(spritesheetMiddleware());
 
+                const expectedProgressValues = [50, 75, 100];
+                let i = 0;
+
                 loader.onProgress.add((loader) => {
-                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                    expect(loader).to.have.property('progress', expectedProgressValues[i++]);
                 });
 
                 loader.load(() => {
+                    expect(loader).to.have.property('progress', 100);
                     done();
                 });
             });
@@ -698,11 +706,15 @@ describe('Loader', () => {
 
                 loader.use(spritesheetMiddleware());
 
+                const expectedProgressValues = [25, 50, 75, 100];
+                let i = 0;
+
                 loader.onProgress.add((loader) => {
-                    expect(loader.progress).to.at.least(0).and.at.most(100);
+                    expect(loader).to.have.property('progress', expectedProgressValues[i++]);
                 });
 
                 loader.load(() => {
+                    expect(loader).to.have.property('progress', 100);
                     done();
                 });
             });

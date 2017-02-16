@@ -337,6 +337,8 @@ export default class Loader {
             for (let i = 0; i < incompleteChildren.length; ++i) {
                 incompleteChildren[i].progressChunk = eachChunk;
             }
+
+            this.resources[name].progressChunk = eachChunk;
         }
 
         // add the resource to the queue
