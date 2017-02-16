@@ -21,7 +21,7 @@
         },
         "applicationName": "resource-loader",
         "footer"        : "Made by Chad Engler <chad@pantherdev.com>",
-        "copyright"     : "PIXI Copyright &copy; 2017 Matt Karl.",
+        "copyright"     : "Copyright &copy; 2017 Chad Engler.",
         "linenums"      : false
     },
     "markdown"  : {
