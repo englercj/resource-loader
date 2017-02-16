@@ -39,7 +39,7 @@
     "test-dev": "karma start test/karma.conf.js",
     "docs": "jsdoc -c jsdoc.conf.json -R README.md",
     "prepublish": "npm run full-build",
-    "predeploy": "npm run docs",
+    "predeploy": "rm -rf ./docs && npm run docs",
     "deploy": "gh-pages -d docs",
     "postpublish": "npm run deploy"
   },
