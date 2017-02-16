@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Class: Loader</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    
+    
+    <script>
+    var config = {"monospaceLinks":false,"cleverLinks":false,"default":{"outputSourceFiles":false},"applicationName":"resource-loader","footer":"Made by Chad Engler <chad@pantherdev.com>","copyright":"Copyright &copy; 2017 Chad Engler.","linenums":false};
+    </script>
+    
+
+    
+</head>
+<body>
+<div id="wrap" class="clearfix">
+    
+<div class="navigation">
+    <h3 class="applicationName"><a href="index.html">resource-loader</a></h3>
+
+    <div class="search">
+        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+    </div>
+    <ul class="list">
+    
+        <li class="item" data-name="Loader">
+            <span class="title">
+                <a href="Loader.html">Loader</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="Loader#defaultQueryString"><a href="Loader.html#defaultQueryString">defaultQueryString</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="Loader.OnCompleteSignal"><a href="Loader.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+            
+                <li data-name="Loader.OnErrorSignal"><a href="Loader.html#.OnErrorSignal">OnErrorSignal</a></li>
+            
+                <li data-name="Loader.OnLoadSignal"><a href="Loader.html#.OnLoadSignal">OnLoadSignal</a></li>
+            
+                <li data-name="Loader.OnProgressSignal"><a href="Loader.html#.OnProgressSignal">OnProgressSignal</a></li>
+            
+                <li data-name="Loader.OnStartSignal"><a href="Loader.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="Loader#add"><a href="Loader.html#add">add</a></li>
+            
+                <li data-name="Loader#load"><a href="Loader.html#load">load</a></li>
+            
+                <li data-name="Loader#reset"><a href="Loader.html#reset">reset</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="Resource">
+            <span class="title">
+                <a href="Resource.html">Resource</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="Resource.LOAD_TYPE"><a href="Resource.html#.LOAD_TYPE">LOAD_TYPE</a></li>
+            
+                <li data-name="Resource.STATUS_FLAGS"><a href="Resource.html#.STATUS_FLAGS">STATUS_FLAGS</a></li>
+            
+                <li data-name="Resource.TYPE"><a href="Resource.html#.TYPE">TYPE</a></li>
+            
+                <li data-name="Resource.XHR_RESPONSE_TYPE"><a href="Resource.html#.XHR_RESPONSE_TYPE">XHR_RESPONSE_TYPE</a></li>
+            
+                <li data-name="Resource#isComplete"><a href="Resource.html#isComplete">isComplete</a></li>
+            
+                <li data-name="Resource#isDataUrl"><a href="Resource.html#isDataUrl">isDataUrl</a></li>
+            
+                <li data-name="Resource#isLoading"><a href="Resource.html#isLoading">isLoading</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="Resource.OnCompleteSignal"><a href="Resource.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+            
+                <li data-name="Resource.OnProgressSignal"><a href="Resource.html#.OnProgressSignal">OnProgressSignal</a></li>
+            
+                <li data-name="Resource.OnStartSignal"><a href="Resource.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="Resource.setExtensionLoadType"><a href="Resource.html#.setExtensionLoadType">setExtensionLoadType</a></li>
+            
+                <li data-name="Resource.setExtensionXhrType"><a href="Resource.html#.setExtensionXhrType">setExtensionXhrType</a></li>
+            
+                <li data-name="Resource#abort"><a href="Resource.html#abort">abort</a></li>
+            
+                <li data-name="Resource#complete"><a href="Resource.html#complete">complete</a></li>
+            
+                <li data-name="Resource#load"><a href="Resource.html#load">load</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+    </ul>
+</div>
+    <div class="main">
+        <h1 class="page-title" data-filename="Loader.html">Class: Loader</h1>
+        
+
+
+
+<section>
+    
+<header>
+    <h2>
+    Loader
+    </h2>
+    
+        <div class="class-description"><p>Manages the state and loading of multiple resources to load.</p></div>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="Loader">
+            
+            new Loader<span class="signature">(<span class="optional">baseUrl</span>, <span class="optional">concurrency</span>)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 17
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>baseUrl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The base url for all resources loaded by this loader.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    10
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The number of resources to load concurrently.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="defaultQueryString">defaultQueryString</h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A querystring to append to every URL added to the loader.</p>
+<p>This should be a valid query string <em>without</em> the question-mark (<code>?</code>). The loader will<br>also <em>not</em> escape values for you. Make sure to escape your parameters with<br><a target="_blank" href="https://mdn.io/encodeURIComponent"><code>encodeURIComponent</code></a> before assigning this property.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+        <h5>Example</h5>
+        
+
+    
+    <pre class="prettyprint"><code>const loader = new Loader();
+
+loader.defaultQueryString = 'user=me&password=secret';
+
+// This will request 'image.png?user=me&password=secret'
+loader.add('image.png').load();
+
+loader.reset();
+
+// This will request 'image.png?v=1&user=me&password=secret'
+loader.add('iamge.png?v=1').load();</code></pre>
+    
+
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add">
+            
+            add<span class="signature">(<span class="optional">name</span>, <span class="optional">url</span>, <span class="optional">options</span>, <span class="optional">cb</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="Loader.html">Loader</a>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 263
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a resource (or multiple resources) to the loader queue.</p>
+<p>This function can take a wide variety of different parameters. The only thing that is always<br>required the url to load. All the following will work:</p>
+<pre class="prettyprint source lang-js"><code>loader
+    // normal param syntax
+    .add('key', 'http://...', function () {})
+    .add('http://...', function () {})
+    .add('http://...')
+
+    // object syntax
+    .add({
+        name: 'key2',
+        url: 'http://...'
+    }, function () {})
+    .add({
+        url: 'http://...'
+    }, function () {})
+    .add({
+        name: 'key3',
+        url: 'http://...'
+        onComplete: function () {}
+    })
+    .add({
+        url: 'https://...',
+        onComplete: function () {},
+        crossOrigin: true
+    })
+
+    // you can also pass an array of objects or urls or both
+    .add([
+        { name: 'key4', url: 'http://...', onComplete: function () {} },
+        { url: 'http://...', onComplete: function () {} },
+        'http://...'
+    ])
+
+    // and you can use both params and options
+    .add('key', 'http://...', { crossOrigin: true }, function () {})
+    .add('http://...', { crossOrigin: true }, function () {});</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The name of the resource to load, if not passed the url is used.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The url for this resource, relative to the baseUrl of this loader.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The options for the load.</p>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>crossOrigin</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Is this request cross-origin? Default is to determine automatically.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>loadType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.LOAD_TYPE">Resource.LOAD_TYPE</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    Resource.LOAD_TYPE.XHR
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>How should this resource be loaded?</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>xhrType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.XHR_RESPONSE_TYPE">Resource.XHR_RESPONSE_TYPE</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    Resource.XHR_RESPONSE_TYPE.DEFAULT
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>How should<br>     the data being loaded be interpreted when using XHR?</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>metadata</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Extra configuration for middleware and the Resource object.</p>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loadElement</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">HTMLImageElement</span>
+|
+
+<span class="param-type">HTMLAudioElement</span>
+|
+
+<span class="param-type">HTMLVideoElement</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The<br>     element to use for loading, instead of creating one.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>skipSource</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Skips adding source(s) to the load element. This<br>     is useful if you want to pass in a <code>loadElement</code> that you already added load sources to.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        <a href="Loader.html">Loader</a>
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="load">
+            
+            load<span class="signature">(<span class="optional">cb</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="Loader.html">Loader</a>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 414
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Starts loading the queued resources.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Optional callback that will be bound to the <code>complete</code> event.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        <a href="Loader.html">Loader</a>
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="reset">
+            
+            reset<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="Loader.html">Loader</a>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 383
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Resets the queue of the loader to prepare for a new load.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        <a href="Loader.html">Loader</a>
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+        
+        <dl>
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".OnCompleteSignal">
+            
+            Loader.OnCompleteSignal<span class="signature">(loader)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 195
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>When the loader completes loading resources it dispatches this callback.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loader</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Loader.html">Loader</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The loader that has finished loading resources.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".OnErrorSignal">
+            
+            Loader.OnErrorSignal<span class="signature">(loader, resource)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 169
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>When an error occurrs the loader and resource are disaptched.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loader</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Loader.html">Loader</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The loader the error happened in.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>resource</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html">Resource</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The resource that caused the error.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".OnLoadSignal">
+            
+            Loader.OnLoadSignal<span class="signature">(loader, resource)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 178
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>When a load completes the loader and resource are disaptched.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loader</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Loader.html">Loader</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The loader that laoded the resource.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>resource</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html">Resource</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The resource that has completed loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".OnProgressSignal">
+            
+            Loader.OnProgressSignal<span class="signature">(loader, resource)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 160
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>When the progress changes the loader and resource are disaptched.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loader</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Loader.html">Loader</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The loader the progress is advancing on.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>resource</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html">Resource</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The resource that has completed or failed to cause the progress to advance.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".OnStartSignal">
+            
+            Loader.OnStartSignal<span class="signature">(loader)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            Loader.js, line 187
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>When the loader starts loading resources it dispatches this callback.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>loader</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Loader.html">Loader</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The loader that has started loading resources.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            </dl>
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+
+        
+
+        <footer>
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Feb 16 2017 14:46:12 GMT-0800 (Pacific Standard Time)
+        </footer>
+    </div>
+</div>
+<script>prettyPrint();</script>
+<script src="scripts/jaguar.js"></script>
+</body>
+</html>
