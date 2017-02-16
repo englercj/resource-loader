@@ -7,7 +7,7 @@ function _noop() { /* empty */ }
 /**
  * Iterates an array in series.
  *
- * @param {*[]} array - Array to iterate.
+ * @param {any[]} array - Array to iterate.
  * @param {function} iterator - Function to call for each element.
  * @param {function} callback - Function to call when done, or on error.
  */

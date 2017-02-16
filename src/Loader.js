@@ -47,8 +47,6 @@ export default class Loader {
          * [`encodeURIComponent`](https://mdn.io/encodeURIComponent) before assigning this property.
          *
          * @example
-         *
-         * ```js
          * const loader = new Loader();
          *
          * loader.defaultQueryString = 'user=me&password=secret';
@@ -60,7 +58,6 @@ export default class Loader {
          *
          * // This will request 'image.png?v=1&user=me&password=secret'
          * loader.add('iamge.png?v=1').load();
-         * ```
          */
         this.defaultQueryString = '';
 
