@@ -7,6 +7,13 @@ describe('Loader', () => {
         loader = new Loader(fixtureData.baseUrl);
     });
 
+    it('should have exported correctly', () => {
+        expect(Loader).to.have.property('default', Loader);
+        expect(Loader).to.have.property('Resource');
+        expect(Loader).to.have.property('async');
+        expect(Loader).to.have.property('base64');
+    });
+
     it('should have correct properties', () => {
         expect(loader).to.have.property('baseUrl', fixtureData.baseUrl);
         expect(loader).to.have.property('progress', 0);
