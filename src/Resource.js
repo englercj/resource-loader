@@ -9,6 +9,8 @@ let tempAnchor = null;
 const STATUS_NONE = 0;
 const STATUS_OK = 200;
 const STATUS_EMPTY = 204;
+const STATUS_IE_BUG_EMPTY = 1223;
+const STATUS_TYPE_OK = 2;
 
 // noop
 function _noop() { /* empty */ }
@@ -713,22 +715,36 @@ export default class Resource {
      */
     _xhrOnLoad() {
         const xhr = this.xhr;
-        const status = typeof xhr.status === 'undefined' ? STATUS_OK : xhr.status; // XDR has no `.status`, assume 200.
+        let text = '';
+        let status = typeof xhr.status === 'undefined' ? STATUS_OK : xhr.status; // XDR has no `.status`, assume 200.
 
-        // status can be 0 when using the `file://` protocol so we also check if a response is set
-        if (status === STATUS_OK
-            || status === STATUS_EMPTY
-            || (status === STATUS_NONE && xhr.responseText.length > 0)
-        ) {
+        // responseText is accessible only if responseType is '' or 'text' and on older browsers
+        if (xhr.responseType === '' || xhr.responseType === 'text' || typeof xhr.responseType === 'undefined') {
+            text = xhr.responseText;
+        }
+
+        // status can be 0 when using the `file://` protocol so we also check if a response is set.
+        // If it has a response, we assume 200; otherwise a 0 status code with no contents is an aborted request.
+        if (status === STATUS_NONE && text.length > 0) {
+            status = STATUS_OK;
+        }
+        // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+        else if (status === STATUS_IE_BUG_EMPTY) {
+            status = STATUS_EMPTY;
+        }
+
+        const statusType = (status / 100) | 0;
+
+        if (statusType === STATUS_TYPE_OK) {
             // if text, just return it
             if (this.xhrType === Resource.XHR_RESPONSE_TYPE.TEXT) {
-                this.data = xhr.responseText;
+                this.data = text;
                 this.type = Resource.TYPE.TEXT;
             }
             // if json, parse into json object
             else if (this.xhrType === Resource.XHR_RESPONSE_TYPE.JSON) {
                 try {
-                    this.data = JSON.parse(xhr.responseText);
+                    this.data = JSON.parse(text);
                     this.type = Resource.TYPE.JSON;
                 }
                 catch (e) {
@@ -743,12 +759,12 @@ export default class Resource {
                     if (window.DOMParser) {
                         const domparser = new DOMParser();
 
-                        this.data = domparser.parseFromString(xhr.responseText, 'text/xml');
+                        this.data = domparser.parseFromString(text, 'text/xml');
                     }
                     else {
                         const div = document.createElement('div');
 
-                        div.innerHTML = xhr.responseText;
+                        div.innerHTML = text;
 
                         this.data = div;
                     }
@@ -763,7 +779,7 @@ export default class Resource {
             }
             // other types just return the response
             else {
-                this.data = xhr.response || xhr.responseText;
+                this.data = xhr.response || text;
             }
         }
         else {
