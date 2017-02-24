@@ -713,7 +713,7 @@ export default class Resource {
      */
     _xhrOnLoad() {
         const xhr = this.xhr;
-        const status = typeof xhr.status === 'undefined' ? xhr.status : STATUS_OK; // XDR has no `.status`, assume 200.
+        const status = typeof xhr.status === 'undefined' ? STATUS_OK : xhr.status; // XDR has no `.status`, assume 200.
 
         // status can be 0 when using the `file://` protocol so we also check if a response is set
         if (status === STATUS_OK
