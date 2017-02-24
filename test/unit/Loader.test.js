@@ -441,7 +441,7 @@ describe('Loader', () => {
     });
 
     describe('#_loadResource', () => {
-        it('should run the before middleware before loading the resource', () => {
+        it('should run the before middleware before loading the resource', (done) => {
             const spy = sinon.spy();
             const res = {};
 
@@ -449,9 +449,13 @@ describe('Loader', () => {
 
             loader._loadResource(res);
 
-            expect(spy).to.have.been.calledOnce
-                .and.calledOn(loader)
-                .and.calledWith(res);
+            setTimeout(() => {
+                expect(spy).to.have.been.calledOnce
+                    .and.calledOn(loader)
+                    .and.calledWith(res);
+
+                done();
+            }, 16);
         });
 
         it('should load a resource passed into it', () => {
@@ -520,7 +524,7 @@ describe('Loader', () => {
             expect(spy).to.have.been.calledOnce;
         });
 
-        it('should run the after middleware', () => {
+        it('should run the after middleware', (done) => {
             const spy = sinon.spy();
             const res = {};
 
@@ -530,9 +534,13 @@ describe('Loader', () => {
 
             loader._onLoad(res);
 
-            expect(spy).to.have.been.calledOnce
-                .and.calledOn(loader)
-                .and.calledWith(res);
+            setTimeout(() => {
+                expect(spy).to.have.been.calledOnce
+                    .and.calledOn(loader)
+                    .and.calledWith(res);
+
+                done();
+            }, 16);
         });
     });
 

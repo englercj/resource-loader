@@ -10,8 +10,9 @@ function _noop() { /* empty */ }
  * @param {Array.<*>} array - Array to iterate.
  * @param {function} iterator - Function to call for each element.
  * @param {function} callback - Function to call when done, or on error.
+ * @param {boolean} [deferNext=false] - Break synchronous each loop by calling next with a setTimeout of 1.
  */
-export function eachSeries(array, iterator, callback) {
+export function eachSeries(array, iterator, callback, deferNext) {
     let i = 0;
     const len = array.length;
 
@@ -24,7 +25,14 @@ export function eachSeries(array, iterator, callback) {
             return;
         }
 
-        iterator(array[i++], next);
+        if (deferNext) {
+            setTimeout(() => {
+                iterator(array[i++], next);
+            }, 1);
+        }
+        else {
+            iterator(array[i++], next);
+        }
     })();
 }
 

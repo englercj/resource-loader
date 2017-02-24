@@ -512,7 +512,8 @@ export default class Loader {
                     resource._onLoadBinding = resource.onComplete.once(this._onLoad, this);
                     resource.load();
                 }
-            }
+            },
+            true
         );
     }
 
@@ -540,7 +541,7 @@ export default class Loader {
         resource._dequeue();
         this._resourcesParsing.push(resource);
 
-        // run middleware, this *must* happen before dequeue so sub-assets get added properly
+        // run all the after middleware for this resource
         async.eachSeries(
             this._afterMiddleware,
             (fn, next) => {
@@ -566,7 +567,8 @@ export default class Loader {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }
-            }
+            },
+            true
         );
     }
 }
