@@ -538,8 +538,8 @@ export default class Loader {
         resource._onLoadBinding = null;
 
         // remove this resource from the async queue, and add it to our list of resources that are being parsed
-        resource._dequeue();
         this._resourcesParsing.push(resource);
+        resource._dequeue();
 
         // run all the after middleware for this resource
         async.eachSeries(
