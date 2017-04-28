@@ -338,6 +338,24 @@ describe('Loader', () => {
             });
         });
 
+        it ('should still run `after` middleware for all resources that have been completed in `before` middleware', (done) => {
+
+            const spy = sinon.spy((res, next) => next());
+
+            loader
+                .pre((res, next) => {
+                    res.complete();
+                    next();
+                })
+                .use(spy)
+                .add(fixtureData.dataUrlGif)
+                .add(fixtureData.url)
+                .load(() => {
+                    expect(spy).to.have.been.calledTwice;
+                    done();
+                });
+        });
+
         it('should properly load the resource', (done) => {
             const spy = sinon.spy((loader, resources) => {
                 expect(spy).to.have.been.calledOnce;
