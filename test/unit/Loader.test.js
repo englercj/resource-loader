@@ -338,8 +338,7 @@ describe('Loader', () => {
             });
         });
 
-        it ('should still run `after` middleware for all resources that have been completed in `before` middleware', (done) => {
-
+        it('should run `after` middleware for resources that have been completed in `before` middleware', (done) => {
             const spy = sinon.spy((res, next) => next());
 
             loader
