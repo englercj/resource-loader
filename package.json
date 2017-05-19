@@ -80,5 +80,10 @@
         }
       ]
     ]
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }
