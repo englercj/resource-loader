@@ -59,6 +59,9 @@ export default class Resource {
      *      element to use for loading, instead of creating one.
      * @param {boolean} [options.metadata.skipSource=false] - Skips adding source(s) to the load element. This
      *      is useful if you want to pass in a `loadElement` that you already added load sources to.
+     * @param {string|string[]} [options.metadata.mimeType] - The mime type to use for the source element of a video/audio
+     *      elment. If the urls are an array, you can pass this as an array as well where each index is the mime type to
+     *      use for the corresponding url index.
      */
     constructor(name, url, options) {
         if (typeof name !== 'string' || typeof url !== 'string') {
@@ -549,12 +552,20 @@ export default class Resource {
                 this.data.src = Array.isArray(this.url) ? this.url[0] : this.url;
             }
             else if (Array.isArray(this.url)) {
+                const mimeTypes = this.metadata.mimeType;
+
                 for (let i = 0; i < this.url.length; ++i) {
-                    this.data.appendChild(this._createSource(type, this.url[i]));
+                    this.data.appendChild(
+                        this._createSource(type, this.url[i], Array.isArray(mimeTypes) ? mimeTypes[i] : mimeTypes)
+                    );
                 }
             }
             else {
-                this.data.appendChild(this._createSource(type, this.url));
+                const mimeTypes = this.metadata.mimeType;
+
+                this.data.appendChild(
+                    this._createSource(type, this.url, Array.isArray(mimeTypes) ? mimeTypes[0] : mimeTypes)
+                );
             }
         }
 
@@ -642,7 +653,7 @@ export default class Resource {
      */
     _createSource(type, url, mime) {
         if (!mime) {
-            mime = `${type}/${url.substr(url.lastIndexOf('.') + 1)}`;
+            mime = `${type}/${this._getExtension(url)}`;
         }
 
         const source = document.createElement('source');

@@ -31,7 +31,6 @@
     "build": "browserify -d -s Loader -e ./lib/index.js -o ./dist/resource-loader.js",
     "lib": "babel src --out-dir lib -s",
     "minify": "uglifyjs --output ./dist/resource-loader.min.js -- ./dist/resource-loader.js",
-    "dev": "watchify -d -s Loader -e ./src/index.js -o ./dist/resource-loader.js",
     "lint": "eslint src/ test/",
     "start": "npm run full-build",
     "pretest": "npm run full-build",
