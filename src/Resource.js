@@ -881,11 +881,13 @@ export default class Resource {
         }
         else {
             const queryStart = url.indexOf('?');
+            const hashStart = url.indexOf('#');
+            const index = Math.min(
+                queryStart > -1 ? queryStart : url.length,
+                hashStart > -1 ? hashStart : url.length
+            );
 
-            if (queryStart !== -1) {
-                url = url.substring(0, queryStart);
-            }
-
+            url = url.substring(0, index);
             ext = url.substring(url.lastIndexOf('.') + 1);
         }
 

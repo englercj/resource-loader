@@ -393,6 +393,12 @@ describe('Resource', () => {
             res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json#/derp.mp3';
             expect(res._getExtension()).to.equal('jpeg');
 
+            res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            expect(res._getExtension()).to.equal('jpeg');
+
+            res.url = 'http://nowhere.me/image.jpeg#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            expect(res._getExtension()).to.equal('jpeg');
+
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
             res.url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII='; // eslint-disable-line max-len
             expect(res._getExtension()).to.equal('png');
@@ -419,6 +425,12 @@ describe('Resource', () => {
             res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json';
             expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
 
+            res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
+
+            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
+
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
             res.url = 'data:audio/wave;base64,UklGRjIAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAAABmYWN0BAAAAAAAAABkYXRhAAAAAA=='; // eslint-disable-line max-len
             expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
@@ -441,6 +453,12 @@ describe('Resource', () => {
             expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
 
             res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json';
+            expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
+
+            res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
+
+            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
             expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
 
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
