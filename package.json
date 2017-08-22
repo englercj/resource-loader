@@ -17,7 +17,6 @@
   "files": [
     "dist",
     "lib",
-    "src",
     "package.json",
     "CONTRIBUTING.md",
     "LICENSE",
@@ -69,15 +68,5 @@
     "sinon-chai": "^2.8.0",
     "uglify-js": "^2.7.5",
     "watchify": "^3.8.0"
-  },
-  "babel": {
-    "presets": [
-      [
-        "es2015",
-        {
-          "loose": true
-        }
-      ]
-    ]
   }
 }
