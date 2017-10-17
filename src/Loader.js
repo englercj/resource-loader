@@ -438,7 +438,7 @@ export default class Loader {
 
         return this;
     }
-    
+
     /**
      * The number of resources to load concurrently.
      *
@@ -446,10 +446,11 @@ export default class Loader {
      * @default 10
      */
     get concurrency() {
-        return this._queue.concurrency;   
+        return this._queue.concurrency;
     }
+    // eslint-disable-next-line require-jsdoc
     set concurrency(concurrency) {
-        this._queue.concurrency = concurrency;   
+        this._queue.concurrency = concurrency;
     }
 
     /**
