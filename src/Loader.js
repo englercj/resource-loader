@@ -440,6 +440,20 @@ export default class Loader {
     }
 
     /**
+     * The number of resources to load concurrently.
+     *
+     * @member {number}
+     * @default 10
+     */
+    get concurrency() {
+        return this._queue.concurrency;
+    }
+    // eslint-disable-next-line require-jsdoc
+    set concurrency(concurrency) {
+        this._queue.concurrency = concurrency;
+    }
+
+    /**
      * Prepares a url for usage based on the configuration of this object
      *
      * @private
