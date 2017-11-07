@@ -5,15 +5,17 @@
     <title>Class: Resource</title>
     
     
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
     <script src="scripts/jquery.min.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,700" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    <link type="text/css" rel="stylesheet" href="styles/main.css">
     
     
     <script>
@@ -28,48 +30,55 @@
     
 <div class="navigation">
     <h3 class="applicationName"><a href="index.html">resource-loader</a></h3>
-
+    <button id="menuToggle" class="btn btn-link btn-lg menu-toggle">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+    </button>
     <div class="search">
-        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+        <input id="search" type="text" class="form-control input-md" placeholder="Search...">
     </div>
     <ul class="list">
     
         <li class="item" data-name="Loader">
-            <span class="title">
-                <a href="Loader.html">Loader</a>
+            <span class="title ">
                 
+                <a href="Loader.html">Loader</a>
             </span>
             <ul class="members itemMembers">
             
             <span class="subtitle">Members</span>
             
-                <li data-name="Loader#defaultQueryString"><a href="Loader.html#defaultQueryString">defaultQueryString</a></li>
+                <li class="parent" data-name="Loader#concurrency"><a href="Loader.html#concurrency">concurrency</a></li>
+            
+                <li class="parent" data-name="Loader#defaultQueryString"><a href="Loader.html#defaultQueryString">defaultQueryString</a></li>
             
             </ul>
             <ul class="typedefs itemMembers">
             
             <span class="subtitle">Typedefs</span>
             
-                <li data-name="Loader.OnCompleteSignal"><a href="Loader.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+                <li class="parent" data-name="Loader.OnCompleteSignal"><a href="Loader.html#.OnCompleteSignal">OnCompleteSignal</a></li>
             
-                <li data-name="Loader.OnErrorSignal"><a href="Loader.html#.OnErrorSignal">OnErrorSignal</a></li>
+                <li class="parent" data-name="Loader.OnErrorSignal"><a href="Loader.html#.OnErrorSignal">OnErrorSignal</a></li>
             
-                <li data-name="Loader.OnLoadSignal"><a href="Loader.html#.OnLoadSignal">OnLoadSignal</a></li>
+                <li class="parent" data-name="Loader.OnLoadSignal"><a href="Loader.html#.OnLoadSignal">OnLoadSignal</a></li>
             
-                <li data-name="Loader.OnProgressSignal"><a href="Loader.html#.OnProgressSignal">OnProgressSignal</a></li>
+                <li class="parent" data-name="Loader.OnProgressSignal"><a href="Loader.html#.OnProgressSignal">OnProgressSignal</a></li>
             
-                <li data-name="Loader.OnStartSignal"><a href="Loader.html#.OnStartSignal">OnStartSignal</a></li>
+                <li class="parent" data-name="Loader.OnStartSignal"><a href="Loader.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
             
             </ul>
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="Loader#add"><a href="Loader.html#add">add</a></li>
+                <li class="parent" data-name="Loader#add"><a href="Loader.html#add">add</a></li>
             
-                <li data-name="Loader#load"><a href="Loader.html#load">load</a></li>
+                <li class="parent" data-name="Loader#load"><a href="Loader.html#load">load</a></li>
             
-                <li data-name="Loader#reset"><a href="Loader.html#reset">reset</a></li>
+                <li class="parent" data-name="Loader#reset"><a href="Loader.html#reset">reset</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -78,53 +87,56 @@
         </li>
     
         <li class="item" data-name="Resource">
-            <span class="title">
-                <a href="Resource.html">Resource</a>
+            <span class="title ">
                 
+                <a href="Resource.html">Resource</a>
             </span>
             <ul class="members itemMembers">
             
             <span class="subtitle">Members</span>
             
-                <li data-name="Resource.LOAD_TYPE"><a href="Resource.html#.LOAD_TYPE">LOAD_TYPE</a></li>
+                <li class="parent" data-name="Resource.LOAD_TYPE"><a href="Resource.html#.LOAD_TYPE">LOAD_TYPE</a></li>
             
-                <li data-name="Resource.STATUS_FLAGS"><a href="Resource.html#.STATUS_FLAGS">STATUS_FLAGS</a></li>
+                <li class="parent" data-name="Resource.STATUS_FLAGS"><a href="Resource.html#.STATUS_FLAGS">STATUS_FLAGS</a></li>
             
-                <li data-name="Resource.TYPE"><a href="Resource.html#.TYPE">TYPE</a></li>
+                <li class="parent" data-name="Resource.TYPE"><a href="Resource.html#.TYPE">TYPE</a></li>
             
-                <li data-name="Resource.XHR_RESPONSE_TYPE"><a href="Resource.html#.XHR_RESPONSE_TYPE">XHR_RESPONSE_TYPE</a></li>
+                <li class="parent" data-name="Resource.XHR_RESPONSE_TYPE"><a href="Resource.html#.XHR_RESPONSE_TYPE">XHR_RESPONSE_TYPE</a></li>
             
-                <li data-name="Resource#isComplete"><a href="Resource.html#isComplete">isComplete</a></li>
+                <li class="parent" data-name="Resource#isComplete"><a href="Resource.html#isComplete">isComplete</a></li>
             
-                <li data-name="Resource#isDataUrl"><a href="Resource.html#isDataUrl">isDataUrl</a></li>
+                <li class="parent" data-name="Resource#isDataUrl"><a href="Resource.html#isDataUrl">isDataUrl</a></li>
             
-                <li data-name="Resource#isLoading"><a href="Resource.html#isLoading">isLoading</a></li>
+                <li class="parent" data-name="Resource#isLoading"><a href="Resource.html#isLoading">isLoading</a></li>
             
             </ul>
             <ul class="typedefs itemMembers">
             
             <span class="subtitle">Typedefs</span>
             
-                <li data-name="Resource.OnCompleteSignal"><a href="Resource.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+                <li class="parent" data-name="Resource.OnCompleteSignal"><a href="Resource.html#.OnCompleteSignal">OnCompleteSignal</a></li>
             
-                <li data-name="Resource.OnProgressSignal"><a href="Resource.html#.OnProgressSignal">OnProgressSignal</a></li>
+                <li class="parent" data-name="Resource.OnProgressSignal"><a href="Resource.html#.OnProgressSignal">OnProgressSignal</a></li>
             
-                <li data-name="Resource.OnStartSignal"><a href="Resource.html#.OnStartSignal">OnStartSignal</a></li>
+                <li class="parent" data-name="Resource.OnStartSignal"><a href="Resource.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
             
             </ul>
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="Resource.setExtensionLoadType"><a href="Resource.html#.setExtensionLoadType">setExtensionLoadType</a></li>
+                <li class="parent" data-name="Resource.setExtensionLoadType"><a href="Resource.html#.setExtensionLoadType">setExtensionLoadType</a></li>
             
-                <li data-name="Resource.setExtensionXhrType"><a href="Resource.html#.setExtensionXhrType">setExtensionXhrType</a></li>
+                <li class="parent" data-name="Resource.setExtensionXhrType"><a href="Resource.html#.setExtensionXhrType">setExtensionXhrType</a></li>
             
-                <li data-name="Resource#abort"><a href="Resource.html#abort">abort</a></li>
+                <li class="parent" data-name="Resource#abort"><a href="Resource.html#abort">abort</a></li>
             
-                <li data-name="Resource#complete"><a href="Resource.html#complete">complete</a></li>
+                <li class="parent" data-name="Resource#complete"><a href="Resource.html#complete">complete</a></li>
             
-                <li data-name="Resource#load"><a href="Resource.html#load">load</a></li>
+                <li class="parent" data-name="Resource#load"><a href="Resource.html#load">load</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -143,15 +155,16 @@
 <section>
     
 <header>
-    <h2>
-    Resource
-    </h2>
-    
-        <div class="class-description"><p>Manages the state and loading of a resource and all child resources.</p></div>
-    
+    <div class="header content-size">
+        <h2>Resource
+        </h2>
+        
+            <div class="class-description"><p>Manages the state and loading of a resource and all child resources.</p></div>
+        
+    </div>
 </header>  
 
-<article>
+<article class="content-size">
     <div class="container-overview">
     
     
@@ -160,14 +173,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id="Resource">
-            
+            <a class="share-icon" href="#Resource"><span class="glyphicon glyphicon-link"></span></a>
             new Resource<span class="signature">(name, url, <span class="optional">options</span>)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 25
-        </div>
         
     </div>
 
@@ -655,11 +666,16 @@
     
         <h3 class="subsection-title">Members</h3>
         
-        <dl>
+        <dl class="list-members">
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".LOAD_TYPE"><span class="type-signature static">static,readonly</span>Resource.LOAD_TYPE<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id=".LOAD_TYPE">
+            <a class="share-icon" href="#.LOAD_TYPE"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.LOAD_TYPE<span class="type-signature type">number</span><span class="access-signature">static</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -850,7 +866,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".STATUS_FLAGS"><span class="type-signature static">static,readonly</span>Resource.STATUS_FLAGS<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id=".STATUS_FLAGS">
+            <a class="share-icon" href="#.STATUS_FLAGS"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.STATUS_FLAGS<span class="type-signature type">number</span><span class="access-signature">static</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1041,7 +1062,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".TYPE"><span class="type-signature static">static,readonly</span>Resource.TYPE<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id=".TYPE">
+            <a class="share-icon" href="#.TYPE"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.TYPE<span class="type-signature type">number</span><span class="access-signature">static</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1319,7 +1345,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".XHR_RESPONSE_TYPE"><span class="type-signature static">static,readonly</span>Resource.XHR_RESPONSE_TYPE<span class="type-signature type string">string</span> </h4>
+        <h4 class="name" id=".XHR_RESPONSE_TYPE">
+            <a class="share-icon" href="#.XHR_RESPONSE_TYPE"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.XHR_RESPONSE_TYPE<span class="type-signature type">string</span><span class="access-signature">static</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1568,7 +1599,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="isComplete"><span class="type-signature ">readonly</span>isComplete<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="isComplete">
+            <a class="share-icon" href="#isComplete"><span class="glyphicon glyphicon-link"></span></a>
+            isComplete<span class="type-signature type">boolean</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1613,7 +1649,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="isDataUrl"><span class="type-signature ">readonly</span>isDataUrl<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="isDataUrl">
+            <a class="share-icon" href="#isDataUrl"><span class="glyphicon glyphicon-link"></span></a>
+            isDataUrl<span class="type-signature type">boolean</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1658,7 +1699,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="isLoading"><span class="type-signature ">readonly</span>isLoading<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="isLoading">
+            <a class="share-icon" href="#isLoading"><span class="glyphicon glyphicon-link"></span></a>
+            isLoading<span class="type-signature type">boolean</span><span class="access-signature">readonly</span>
+            
+            
+        </h4>
     </div>
     
     
@@ -1705,19 +1751,17 @@
     
         <h3 class="subsection-title">Methods</h3>
         
-        <dl>
+        <dl class="list-methods">
             
 <dt>
     <div class="nameContainer">
         <h4 class="name" id=".setExtensionLoadType">
+            <a class="share-icon" href="#.setExtensionLoadType"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.setExtensionLoadType<span class="signature">(extname, loadType)</span><span class="access-signature">static</span>
             
-            <span class="type-signature static">static</span>Resource.setExtensionLoadType<span class="signature">(extname, loadType)</span>
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 33
-        </div>
         
     </div>
 
@@ -1849,14 +1893,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id=".setExtensionXhrType">
+            <a class="share-icon" href="#.setExtensionXhrType"><span class="glyphicon glyphicon-link"></span></a>
+            Resource.setExtensionXhrType<span class="signature">(extname, xhrType)</span><span class="access-signature">static</span>
             
-            <span class="type-signature static">static</span>Resource.setExtensionXhrType<span class="signature">(extname, xhrType)</span>
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 44
-        </div>
         
     </div>
 
@@ -1988,14 +2030,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id="abort">
-            
+            <a class="share-icon" href="#abort"><span class="glyphicon glyphicon-link"></span></a>
             abort<span class="signature">(message)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 382
-        </div>
         
     </div>
 
@@ -2104,14 +2144,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id="complete">
-            
+            <a class="share-icon" href="#complete"><span class="glyphicon glyphicon-link"></span></a>
             complete<span class="signature">()</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 343
-        </div>
         
     </div>
 
@@ -2175,14 +2213,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id="load">
-            
+            <a class="share-icon" href="#load"><span class="glyphicon glyphicon-link"></span></a>
             load<span class="signature">(<span class="optional">cb</span>)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 420
-        </div>
         
     </div>
 
@@ -2299,19 +2335,17 @@
     
         <h3 class="subsection-title">Type Definitions</h3>
         
-        <dl>
+        <dl class="list-definitions">
                 
 <dt>
     <div class="nameContainer">
         <h4 class="name" id=".OnCompleteSignal">
-            
+            <a class="share-icon" href="#.OnCompleteSignal"><span class="glyphicon glyphicon-link"></span></a>
             Resource.OnCompleteSignal<span class="signature">(resource)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 298
-        </div>
         
     </div>
 
@@ -2420,14 +2454,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id=".OnProgressSignal">
-            
+            <a class="share-icon" href="#.OnProgressSignal"><span class="glyphicon glyphicon-link"></span></a>
             Resource.OnProgressSignal<span class="signature">(resource, percentage)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 289
-        </div>
         
     </div>
 
@@ -2559,14 +2591,12 @@
 <dt>
     <div class="nameContainer">
         <h4 class="name" id=".OnStartSignal">
-            
+            <a class="share-icon" href="#.OnStartSignal"><span class="glyphicon glyphicon-link"></span></a>
             Resource.OnStartSignal<span class="signature">(resource)</span>
+            
+            
         </h4>
     
-        
-        <div class="tag-source">
-            Resource.js, line 281
-        </div>
         
     </div>
 
@@ -2674,6 +2704,8 @@
     
     
     
+
+    
 </article>
 
 </section>  
@@ -2684,12 +2716,14 @@
 
         
 
-        <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 29 2017 08:27:44 GMT-0700 (Pacific Daylight Time)
+        <footer class="content-size">
+            <div class="footer">
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Nov 07 2017 14:20:44 GMT-0800 (Pacific Standard Time)
+            </div>
         </footer>
     </div>
 </div>
 <script>prettyPrint();</script>
-<script src="scripts/jaguar.js"></script>
+<script src="scripts/main.js"></script>
 </body>
 </html>

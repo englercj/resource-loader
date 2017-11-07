@@ -5,15 +5,17 @@
     <title>Index</title>
     
     
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
     <script src="scripts/jquery.min.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,700" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    <link type="text/css" rel="stylesheet" href="styles/main.css">
     
     
     <script>
@@ -28,48 +30,55 @@
     
 <div class="navigation">
     <h3 class="applicationName"><a href="index.html">resource-loader</a></h3>
-
+    <button id="menuToggle" class="btn btn-link btn-lg menu-toggle">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+    </button>
     <div class="search">
-        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+        <input id="search" type="text" class="form-control input-md" placeholder="Search...">
     </div>
     <ul class="list">
     
         <li class="item" data-name="Loader">
-            <span class="title">
-                <a href="Loader.html">Loader</a>
+            <span class="title ">
                 
+                <a href="Loader.html">Loader</a>
             </span>
             <ul class="members itemMembers">
             
             <span class="subtitle">Members</span>
             
-                <li data-name="Loader#defaultQueryString"><a href="Loader.html#defaultQueryString">defaultQueryString</a></li>
+                <li class="parent" data-name="Loader#concurrency"><a href="Loader.html#concurrency">concurrency</a></li>
+            
+                <li class="parent" data-name="Loader#defaultQueryString"><a href="Loader.html#defaultQueryString">defaultQueryString</a></li>
             
             </ul>
             <ul class="typedefs itemMembers">
             
             <span class="subtitle">Typedefs</span>
             
-                <li data-name="Loader.OnCompleteSignal"><a href="Loader.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+                <li class="parent" data-name="Loader.OnCompleteSignal"><a href="Loader.html#.OnCompleteSignal">OnCompleteSignal</a></li>
             
-                <li data-name="Loader.OnErrorSignal"><a href="Loader.html#.OnErrorSignal">OnErrorSignal</a></li>
+                <li class="parent" data-name="Loader.OnErrorSignal"><a href="Loader.html#.OnErrorSignal">OnErrorSignal</a></li>
             
-                <li data-name="Loader.OnLoadSignal"><a href="Loader.html#.OnLoadSignal">OnLoadSignal</a></li>
+                <li class="parent" data-name="Loader.OnLoadSignal"><a href="Loader.html#.OnLoadSignal">OnLoadSignal</a></li>
             
-                <li data-name="Loader.OnProgressSignal"><a href="Loader.html#.OnProgressSignal">OnProgressSignal</a></li>
+                <li class="parent" data-name="Loader.OnProgressSignal"><a href="Loader.html#.OnProgressSignal">OnProgressSignal</a></li>
             
-                <li data-name="Loader.OnStartSignal"><a href="Loader.html#.OnStartSignal">OnStartSignal</a></li>
+                <li class="parent" data-name="Loader.OnStartSignal"><a href="Loader.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
             
             </ul>
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="Loader#add"><a href="Loader.html#add">add</a></li>
+                <li class="parent" data-name="Loader#add"><a href="Loader.html#add">add</a></li>
             
-                <li data-name="Loader#load"><a href="Loader.html#load">load</a></li>
+                <li class="parent" data-name="Loader#load"><a href="Loader.html#load">load</a></li>
             
-                <li data-name="Loader#reset"><a href="Loader.html#reset">reset</a></li>
+                <li class="parent" data-name="Loader#reset"><a href="Loader.html#reset">reset</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -78,53 +87,56 @@
         </li>
     
         <li class="item" data-name="Resource">
-            <span class="title">
-                <a href="Resource.html">Resource</a>
+            <span class="title ">
                 
+                <a href="Resource.html">Resource</a>
             </span>
             <ul class="members itemMembers">
             
             <span class="subtitle">Members</span>
             
-                <li data-name="Resource.LOAD_TYPE"><a href="Resource.html#.LOAD_TYPE">LOAD_TYPE</a></li>
+                <li class="parent" data-name="Resource.LOAD_TYPE"><a href="Resource.html#.LOAD_TYPE">LOAD_TYPE</a></li>
             
-                <li data-name="Resource.STATUS_FLAGS"><a href="Resource.html#.STATUS_FLAGS">STATUS_FLAGS</a></li>
+                <li class="parent" data-name="Resource.STATUS_FLAGS"><a href="Resource.html#.STATUS_FLAGS">STATUS_FLAGS</a></li>
             
-                <li data-name="Resource.TYPE"><a href="Resource.html#.TYPE">TYPE</a></li>
+                <li class="parent" data-name="Resource.TYPE"><a href="Resource.html#.TYPE">TYPE</a></li>
             
-                <li data-name="Resource.XHR_RESPONSE_TYPE"><a href="Resource.html#.XHR_RESPONSE_TYPE">XHR_RESPONSE_TYPE</a></li>
+                <li class="parent" data-name="Resource.XHR_RESPONSE_TYPE"><a href="Resource.html#.XHR_RESPONSE_TYPE">XHR_RESPONSE_TYPE</a></li>
             
-                <li data-name="Resource#isComplete"><a href="Resource.html#isComplete">isComplete</a></li>
+                <li class="parent" data-name="Resource#isComplete"><a href="Resource.html#isComplete">isComplete</a></li>
             
-                <li data-name="Resource#isDataUrl"><a href="Resource.html#isDataUrl">isDataUrl</a></li>
+                <li class="parent" data-name="Resource#isDataUrl"><a href="Resource.html#isDataUrl">isDataUrl</a></li>
             
-                <li data-name="Resource#isLoading"><a href="Resource.html#isLoading">isLoading</a></li>
+                <li class="parent" data-name="Resource#isLoading"><a href="Resource.html#isLoading">isLoading</a></li>
             
             </ul>
             <ul class="typedefs itemMembers">
             
             <span class="subtitle">Typedefs</span>
             
-                <li data-name="Resource.OnCompleteSignal"><a href="Resource.html#.OnCompleteSignal">OnCompleteSignal</a></li>
+                <li class="parent" data-name="Resource.OnCompleteSignal"><a href="Resource.html#.OnCompleteSignal">OnCompleteSignal</a></li>
             
-                <li data-name="Resource.OnProgressSignal"><a href="Resource.html#.OnProgressSignal">OnProgressSignal</a></li>
+                <li class="parent" data-name="Resource.OnProgressSignal"><a href="Resource.html#.OnProgressSignal">OnProgressSignal</a></li>
             
-                <li data-name="Resource.OnStartSignal"><a href="Resource.html#.OnStartSignal">OnStartSignal</a></li>
+                <li class="parent" data-name="Resource.OnStartSignal"><a href="Resource.html#.OnStartSignal">OnStartSignal</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
             
             </ul>
             <ul class="methods itemMembers">
             
             <span class="subtitle">Methods</span>
             
-                <li data-name="Resource.setExtensionLoadType"><a href="Resource.html#.setExtensionLoadType">setExtensionLoadType</a></li>
+                <li class="parent" data-name="Resource.setExtensionLoadType"><a href="Resource.html#.setExtensionLoadType">setExtensionLoadType</a></li>
             
-                <li data-name="Resource.setExtensionXhrType"><a href="Resource.html#.setExtensionXhrType">setExtensionXhrType</a></li>
+                <li class="parent" data-name="Resource.setExtensionXhrType"><a href="Resource.html#.setExtensionXhrType">setExtensionXhrType</a></li>
             
-                <li data-name="Resource#abort"><a href="Resource.html#abort">abort</a></li>
+                <li class="parent" data-name="Resource#abort"><a href="Resource.html#abort">abort</a></li>
             
-                <li data-name="Resource#complete"><a href="Resource.html#complete">complete</a></li>
+                <li class="parent" data-name="Resource#complete"><a href="Resource.html#complete">complete</a></li>
             
-                <li data-name="Resource#load"><a href="Resource.html#load">load</a></li>
+                <li class="parent" data-name="Resource#load"><a href="Resource.html#load">load</a></li>
             
             </ul>
             <ul class="events itemMembers">
@@ -157,7 +169,7 @@
 
 
     <section>
-        <article class="readme"><h1>Resource Loader <a target="_blank" href="https://travis-ci.org/englercj/resource-loader"><img src="https://travis-ci.org/englercj/resource-loader.svg?branch=master" alt="Build Status"></a></h1><p>A generic resource loader, made with web games in mind.</p>
+        <article class="readme content-size"><h1>Resource Loader <a target="_blank" href="https://travis-ci.org/englercj/resource-loader"><img src="https://travis-ci.org/englercj/resource-loader.svg?branch=master" alt="Build Status"></a></h1><p>A generic resource loader, made with web games in mind.</p>
 <h2>Usage</h2><pre class="prettyprint source lang-js"><code>// ctor
 const loader = new Loader();
 
@@ -213,12 +225,14 @@ loader.onComplete.add(() => {}); // called once when the queued resources all lo
 
         
 
-        <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 29 2017 08:27:44 GMT-0700 (Pacific Daylight Time)
+        <footer class="content-size">
+            <div class="footer">
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Nov 07 2017 14:20:44 GMT-0800 (Pacific Standard Time)
+            </div>
         </footer>
     </div>
 </div>
 <script>prettyPrint();</script>
-<script src="scripts/jaguar.js"></script>
+<script src="scripts/main.js"></script>
 </body>
 </html>
