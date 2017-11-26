@@ -319,6 +319,30 @@ describe('Resource', () => {
         });
     });
 
+    describe('#load inside cordova', () => {
+        beforeEach(() => {
+            xhr.status = 0;
+        });
+
+        it('should load resource even if the status is 0', () => {
+            xhr.responseText = 'I am loaded resource';
+
+            res.xhr = xhr;
+            res._xhrOnLoad();
+
+            expect(res.isComplete).to.equal(true);
+        });
+
+        it('should load resource with array buffer data', () => {
+            xhr.responseType = Resource.XHR_RESPONSE_TYPE.BUFFER;
+
+            res.xhr = xhr;
+            res._xhrOnLoad();
+
+            expect(res.isComplete).to.equal(true);
+        });
+    });
+
     describe('#_determineCrossOrigin', () => {
         it('should properly detect same-origin requests (#1)', () => {
             expect(res._determineCrossOrigin(
