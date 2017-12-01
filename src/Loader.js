@@ -16,6 +16,7 @@ export default class Loader {
     /**
      * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
      * @param {number} [concurrency=10] - The number of resources to load concurrently.
+     * @param {number} [middlewareConcurrency=1] - The number of resources to execute middlewares on concurrently.
      */
     constructor(baseUrl = '', concurrency = 10, middlewareConcurrency = 1) {
         /**
@@ -496,7 +497,7 @@ export default class Loader {
     // eslint-disable-next-line require-jsdoc
     set middlewareConcurrency(concurrency) {
         this._beforeMiddlewareQueue.concurrency = concurrency;
-		this._afterMiddlewareQueue.concurrency = concurrency;
+        this._afterMiddlewareQueue.concurrency = concurrency;
     }
 
     /**
@@ -555,7 +556,7 @@ export default class Loader {
         resource._dequeue = dequeue;
 
 		// add to before middleware execution queue
-		this._beforeMiddlewareQueue.push(resource);
+        this._beforeMiddlewareQueue.push(resource);
     }
 
     /**
@@ -579,8 +580,8 @@ export default class Loader {
         resource._onLoadBinding = null;
 
 		// add to after middleware execution queue
-		this._afterMiddlewareQueue.push(resource);
-		
+        this._afterMiddlewareQueue.push(resource);
+
         // remove this resource from the async queue
         resource._dequeue();
     }
@@ -611,11 +612,11 @@ export default class Loader {
                     resource._onLoadBinding = resource.onComplete.once(this._onLoad, this);
                     resource.load();
                 }
-				dequeue();
+                dequeue();
             },
             true
         );
-	}
+    }
 
     /**
      * Executes the after middlewares on a given resource.
@@ -644,15 +645,15 @@ export default class Loader {
                     this.onLoad.dispatch(this, resource);
                 }
 
-				dequeue();
+                dequeue();
 
                 // do completion check
-                if (this._queue.idle() && this._beforeMiddlewareQueue.idle() && this._afterMiddlewareQueue.idle() ) {
+                if (this._queue.idle() && this._beforeMiddlewareQueue.idle() && this._afterMiddlewareQueue.idle()) {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }
             },
             true
         );
-	}
+    }
 }
