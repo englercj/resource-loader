@@ -16,8 +16,9 @@ export default class Loader {
     /**
      * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
      * @param {number} [concurrency=10] - The number of resources to load concurrently.
+     * @param {number} [middlewareConcurrency=1] - The number of resources to execute middlewares on concurrently.
      */
-    constructor(baseUrl = '', concurrency = 10) {
+    constructor(baseUrl = '', concurrency = 10, middlewareConcurrency = 1) {
         /**
          * The base url for all resources loaded by this loader.
          *
@@ -76,13 +77,6 @@ export default class Loader {
         this._afterMiddleware = [];
 
         /**
-         * The tracks the resources we are currently completing parsing for.
-         *
-         * @member {Resource[]}
-         */
-        this._resourcesParsing = [];
-
-        /**
          * The `_loadResource` function bound with this object context.
          *
          * @private
@@ -109,6 +103,44 @@ export default class Loader {
          * @member {object<string, Resource>}
          */
         this.resources = {};
+
+        /**
+         * The `_executeBeforeMiddleware` function bound with this object context.
+         *
+         * @private
+         * @member {function}
+         * @param {Resource} r - The resource to load
+         * @param {Function} d - The dequeue function
+         * @return {undefined}
+         */
+        this._boundExecuteBeforeMiddleware = (r, d) => this._executeBeforeMiddleware(r, d);
+
+        /**
+         * The before middleware resources waiting to be executed.
+         *
+         * @private
+         * @member {Resource[]}
+         */
+        this._beforeMiddlewareQueue = async.queue(this._boundExecuteBeforeMiddleware, middlewareConcurrency);
+
+        /**
+         * The `_executeAfterMiddleware` function bound with this object context.
+         *
+         * @private
+         * @member {function}
+         * @param {Resource} r - The resource to load
+         * @param {Function} d - The dequeue function
+         * @return {undefined}
+         */
+        this._boundExecuteAfterMiddleware = (r, d) => this._executeAfterMiddleware(r, d);
+
+        /**
+         * The after middleware resources waiting to be executed.
+         *
+         * @private
+         * @member {Resource[]}
+         */
+        this._afterMiddlewareQueue = async.queue(this._boundExecuteAfterMiddleware, middlewareConcurrency);
 
         /**
          * Dispatched once per loaded or errored resource.
@@ -454,6 +486,21 @@ export default class Loader {
     }
 
     /**
+     * The number of resources to execute the middleware code on.
+     *
+     * @member {number}
+     * @default 1
+     */
+    get middlewareConcurrency() {
+        return this._afterMiddlewareQueue.concurrency;
+    }
+    // eslint-disable-next-line require-jsdoc
+    set middlewareConcurrency(concurrency) {
+        this._beforeMiddlewareQueue.concurrency = concurrency;
+        this._afterMiddlewareQueue.concurrency = concurrency;
+    }
+
+    /**
      * Prepares a url for usage based on the configuration of this object
      *
      * @private
@@ -508,27 +555,8 @@ export default class Loader {
     _loadResource(resource, dequeue) {
         resource._dequeue = dequeue;
 
-        // run before middleware
-        async.eachSeries(
-            this._beforeMiddleware,
-            (fn, next) => {
-                fn.call(this, resource, () => {
-                    // if the before middleware marks the resource as complete,
-                    // break and don't process any more before middleware
-                    next(resource.isComplete ? {} : null);
-                });
-            },
-            () => {
-                if (resource.isComplete) {
-                    this._onLoad(resource);
-                }
-                else {
-                    resource._onLoadBinding = resource.onComplete.once(this._onLoad, this);
-                    resource.load();
-                }
-            },
-            true
-        );
+		// add to before middleware execution queue
+        this._beforeMiddlewareQueue.push(resource);
     }
 
     /**
@@ -551,10 +579,53 @@ export default class Loader {
     _onLoad(resource) {
         resource._onLoadBinding = null;
 
-        // remove this resource from the async queue, and add it to our list of resources that are being parsed
-        this._resourcesParsing.push(resource);
-        resource._dequeue();
+		// add to after middleware execution queue
+        this._afterMiddlewareQueue.push(resource);
 
+        // remove this resource from the async queue
+        resource._dequeue();
+    }
+
+    /**
+     * Executes the before middlewares on a given resource.
+     *
+     * @private
+     * @param {Resource} resource - The resource to execute the middleware on.
+     * @param {function} dequeue - The function to call when we need to dequeue this item.
+     */
+    _executeBeforeMiddleware(resource, dequeue) {
+        // run before middleware
+        async.eachSeries(
+            this._beforeMiddleware,
+            (fn, next) => {
+                fn.call(this, resource, () => {
+                    // if the before middleware marks the resource as complete,
+                    // break and don't process any more before middleware
+                    next(resource.isComplete ? {} : null);
+                });
+            },
+            () => {
+                if (resource.isComplete) {
+                    this._onLoad(resource);
+                }
+                else {
+                    resource._onLoadBinding = resource.onComplete.once(this._onLoad, this);
+                    resource.load();
+                }
+                dequeue();
+            },
+            true
+        );
+    }
+
+    /**
+     * Executes the after middlewares on a given resource.
+     *
+     * @private
+     * @param {Resource} resource - The resource to execute the middleware on.
+     * @param {function} dequeue - The function to call when we need to dequeue this item.
+     */
+    _executeAfterMiddleware(resource, dequeue) {
         // run all the after middleware for this resource
         async.eachSeries(
             this._afterMiddleware,
@@ -574,10 +645,10 @@ export default class Loader {
                     this.onLoad.dispatch(this, resource);
                 }
 
-                this._resourcesParsing.splice(this._resourcesParsing.indexOf(resource), 1);
+                dequeue();
 
                 // do completion check
-                if (this._queue.idle() && this._resourcesParsing.length === 0) {
+                if (this._queue.idle() && this._beforeMiddlewareQueue.idle() && this._afterMiddlewareQueue.idle()) {
                     this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }

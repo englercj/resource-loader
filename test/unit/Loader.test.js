@@ -482,14 +482,18 @@ describe('Loader', () => {
             }, 16);
         });
 
-        it('should load a resource passed into it', () => {
+        it('should load a resource passed into it', (done) => {
             const res = new Loader.Resource('mock', fixtureData.url);
 
             res.load = sinon.spy();
 
             loader._loadResource(res);
 
-            expect(res.load).to.have.been.calledOnce;
+            setTimeout(() => {
+                expect(res.load).to.have.been.calledOnce;
+
+                done();
+            }, 16);
         });
     });
 
@@ -507,7 +511,7 @@ describe('Loader', () => {
     });
 
     describe('#_onLoad', () => {
-        it('should emit the `progress` event', () => {
+        it('should emit the `progress` event', (done) => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
@@ -517,10 +521,13 @@ describe('Loader', () => {
 
             loader._onLoad(res);
 
-            expect(spy).to.have.been.calledOnce;
+            setTimeout(() => {
+                expect(spy).to.have.been.calledOnce;
+                done();
+            }, 16);
         });
 
-        it('should emit the `error` event when the resource has an error', () => {
+        it('should emit the `error` event when the resource has an error', (done) => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
@@ -532,10 +539,13 @@ describe('Loader', () => {
 
             loader._onLoad(res);
 
-            expect(spy).to.have.been.calledOnce;
+            setTimeout(() => {
+                expect(spy).to.have.been.calledOnce;
+                done();
+            }, 16);
         });
 
-        it('should emit the `load` event when the resource loads successfully', () => {
+        it('should emit the `load` event when the resource loads successfully', (done) => {
             const res = new Loader.Resource('mock', fixtureData.url);
             const spy = sinon.spy();
 
@@ -545,7 +555,10 @@ describe('Loader', () => {
 
             loader._onLoad(res);
 
-            expect(spy).to.have.been.calledOnce;
+            setTimeout(() => {
+                expect(spy).to.have.been.calledOnce;
+                done();
+            }, 16);
         });
 
         it('should run the after middleware', (done) => {
