@@ -420,21 +420,25 @@ export default class Loader {
             return this;
         }
 
-        // distribute progress chunks
-        const chunk = 100 / this._queue._tasks.length;
-
-        for (let i = 0; i < this._queue._tasks.length; ++i) {
-            this._queue._tasks[i].data.progressChunk = chunk;
+        if (this._queue.idle()) {
+            this._onStart();
+            this._onComplete();
         }
+        else {
+            // distribute progress chunks
+            const numTasks = this._queue._tasks.length;
+            const chunk = 100 / numTasks;
 
-        // update loading state
-        this.loading = true;
+            for (let i = 0; i < this._queue._tasks.length; ++i) {
+                this._queue._tasks[i].data.progressChunk = chunk;
+            }
 
-        // notify of start
-        this.onStart.dispatch(this);
+            // notify we are starting
+            this._onStart();
 
-        // start loading
-        this._queue.resume();
+            // start loading
+            this._queue.resume();
+        }
 
         return this;
     }
@@ -532,13 +536,24 @@ export default class Loader {
     }
 
     /**
+     * Called once loading has started.
+     *
+     * @private
+     */
+    _onStart() {
+        this.progress = 0;
+        this.loading = true;
+        this.onStart.dispatch(this);
+    }
+
+    /**
      * Called once each resource has loaded.
      *
      * @private
      */
     _onComplete() {
+        this.progress = MAX_PROGRESS;
         this.loading = false;
-
         this.onComplete.dispatch(this, this.resources);
     }
 
@@ -578,7 +593,6 @@ export default class Loader {
 
                 // do completion check
                 if (this._queue.idle() && this._resourcesParsing.length === 0) {
-                    this.progress = MAX_PROGRESS;
                     this._onComplete();
                 }
             },
