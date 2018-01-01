@@ -294,6 +294,34 @@ describe('Loader', () => {
     });
 
     describe('#load', () => {
+        it('should call start/complete when add was not called', (done) => {
+            const spy = sinon.spy();
+            const spy2 = sinon.spy();
+
+            loader.onStart.add(spy);
+            loader.onComplete.add(spy2);
+
+            loader.load(() => {
+                expect(spy).to.have.been.calledOnce;
+                expect(spy2).to.have.been.calledOnce;
+                done();
+            });
+        });
+
+        it('should call start/complete when given an empty set of resources', (done) => {
+            const spy = sinon.spy();
+            const spy2 = sinon.spy();
+
+            loader.onStart.add(spy);
+            loader.onComplete.add(spy2);
+
+            loader.add([]).load(() => {
+                expect(spy).to.have.been.calledOnce;
+                expect(spy2).to.have.been.calledOnce;
+                done();
+            });
+        });
+
         it('should run the `before` middleware, before loading a resource', (done) => {
             const spy = sinon.spy((res, next) => next());
             const spy2 = sinon.spy((res, next) => next());
@@ -421,6 +449,20 @@ describe('Loader', () => {
             expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
         });
 
+        it('should add the queryString when set', () => {
+            const b = fixtureData.baseUrl;
+            const u1 = 'image.png';
+            const u2 = '/image.png';
+
+            loader.defaultQueryString = 'u=me&p=secret';
+
+            expect(loader._prepareUrl(u1))
+                .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
+
+            expect(loader._prepareUrl(u2))
+                .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
+        });
+
         it('should add the defaultQueryString when set', () => {
             const b = fixtureData.baseUrl;
             const u1 = 'image.png';
@@ -490,6 +532,18 @@ describe('Loader', () => {
             loader._loadResource(res);
 
             expect(res.load).to.have.been.calledOnce;
+        });
+    });
+
+    describe('#_onStart', () => {
+        it('should emit the `start` event', (done) => {
+            loader.onStart.add((_l) => {
+                expect(_l).to.equal(loader);
+
+                done();
+            });
+
+            loader._onStart();
         });
     });
 
