@@ -427,7 +427,7 @@ export default class Loader {
         else {
             // distribute progress chunks
             const numTasks = this._queue._tasks.length;
-            const chunk = 100 / numTasks;
+            const chunk = MAX_PROGRESS / numTasks;
 
             for (let i = 0; i < this._queue._tasks.length; ++i) {
                 this._queue._tasks[i].data.progressChunk = chunk;
@@ -579,7 +579,7 @@ export default class Loader {
             () => {
                 resource.onAfterMiddleware.dispatch(resource);
 
-                this.progress += resource.progressChunk;
+                this.progress = Math.min(MAX_PROGRESS, this.progress + resource.progressChunk);
                 this.onProgress.dispatch(this, resource);
 
                 if (resource.error) {

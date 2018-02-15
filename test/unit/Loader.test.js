@@ -659,16 +659,22 @@ describe('Loader', () => {
             });
 
             it('should never have an invalid progress value', (done) => {
-                loader.add([
-                    { name: 'hud', url: 'hud.png' },
-                    { name: 'hud2', url: 'hud2.png' },
-                ]);
-
-                const expectedProgressValues = [50, 100];
+                const total = 7;
                 let i = 0;
-
+                for (; i < total; i++) {
+                    loader.add([
+                        { name: `hud_${i}`, url: 'hud.png' },
+                    ]);
+                }
+                i = 0;
                 loader.onProgress.add((loader) => {
-                    expect(loader).to.have.property('progress', expectedProgressValues[i++]);
+                    i++;
+                    expect(loader.progress).to.be.above(0);
+                    if (i === total) {
+                        expect(loader.progress).to.be.at.most(100);
+                    } else {
+                        expect(loader.progress).to.be.below(100);
+                    }
                 });
 
                 loader.load(() => {
