@@ -661,6 +661,7 @@ describe('Loader', () => {
             it('should never have an invalid progress value', (done) => {
                 const total = 7;
                 let i = 0;
+
                 for (; i < total; i++) {
                     loader.add([
                         { name: `hud_${i}`, url: 'hud.png' },
@@ -672,7 +673,8 @@ describe('Loader', () => {
                     expect(loader.progress).to.be.above(0);
                     if (i === total) {
                         expect(loader.progress).to.be.at.most(100);
-                    } else {
+                    }
+                    else {
                         expect(loader.progress).to.be.below(100);
                     }
                 });

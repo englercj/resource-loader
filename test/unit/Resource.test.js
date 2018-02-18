@@ -420,7 +420,7 @@ describe('Resource', () => {
             res.url = 'http://nowhere.me/image.jpeg?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
             expect(res._getExtension()).to.equal('jpeg');
 
-            res.url = 'http://nowhere.me/image.jpeg#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            res.url = 'http://nowhere.me/image.jpeg#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two'; // eslint-disable-line max-len
             expect(res._getExtension()).to.equal('jpeg');
 
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
@@ -452,7 +452,7 @@ describe('Resource', () => {
             res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
             expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
 
-            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two'; // eslint-disable-line max-len
             expect(res._createSource('audio', res.url)).to.have.property('src', res.url);
 
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);
@@ -482,7 +482,7 @@ describe('Resource', () => {
             res.url = 'http://nowhere.me/audio.mp3?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
             expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
 
-            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two';
+            res.url = 'http://nowhere.me/audio.mp3#nothing-to-see-here?query=movie.wmv&file=data.json#/derp.mp3&?me=two'; // eslint-disable-line max-len
             expect(res._createSource('audio', res.url)).to.have.property('type', 'audio/mp3');
 
             res._setFlag(Resource.STATUS_FLAGS.DATA_URL, true);

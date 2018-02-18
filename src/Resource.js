@@ -59,9 +59,9 @@ export default class Resource {
      *      element to use for loading, instead of creating one.
      * @param {boolean} [options.metadata.skipSource=false] - Skips adding source(s) to the load element. This
      *      is useful if you want to pass in a `loadElement` that you already added load sources to.
-     * @param {string|string[]} [options.metadata.mimeType] - The mime type to use for the source element of a video/audio
-     *      elment. If the urls are an array, you can pass this as an array as well where each index is the mime type to
-     *      use for the corresponding url index.
+     * @param {string|string[]} [options.metadata.mimeType] - The mime type to use for the source element
+     *      of a video/audio elment. If the urls are an array, you can pass this as an array as well
+     *      where each index is the mime type to use for the corresponding url index.
      */
     constructor(name, url, options) {
         if (typeof name !== 'string' || typeof url !== 'string') {
