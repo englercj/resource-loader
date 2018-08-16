@@ -197,6 +197,16 @@ export default class Loader {
          * @callback OnCompleteSignal
          * @param {Loader} loader - The loader that has finished loading resources.
          */
+
+        // Add default before middleware
+        for (let i = 0; i < Loader._defaultBeforeMiddleware.length; ++i) {
+            this.pre(Loader._defaultBeforeMiddleware[i]);
+        }
+
+        // Add default after middleware
+        for (let i = 0; i < Loader._defaultAfterMiddleware.length; ++i) {
+            this.use(Loader._defaultAfterMiddleware[i]);
+        }
     }
 
     /**
@@ -600,3 +610,48 @@ export default class Loader {
         );
     }
 }
+
+/**
+ * A default array of middleware to run before loading each resource.
+ * Each of these middlewares are added to any new Loader instances when they are created.
+ *
+ * @member {function[]}
+ */
+Loader._defaultBeforeMiddleware = [];
+
+/**
+ * A default array of middleware to run after loading each resource.
+ * Each of these middlewares are added to any new Loader instances when they are created.
+ *
+ * @member {function[]}
+ */
+Loader._defaultAfterMiddleware = [];
+
+/**
+ * Sets up a middleware function that will run *before* the
+ * resource is loaded.
+ *
+ * @method before
+ * @param {function} fn - The middleware function to register.
+ * @return {Loader} Returns itself.
+ */
+Loader.pre = function LoaderPreStatic(fn) {
+    Loader._defaultBeforeMiddleware.push(fn);
+
+    return Loader;
+};
+
+/**
+ * Sets up a middleware function that will run *after* the
+ * resource is loaded.
+ *
+ * @alias use
+ * @method after
+ * @param {function} fn - The middleware function to register.
+ * @return {Loader} Returns itself.
+ */
+Loader.use = function LoaderUseStatic(fn) {
+    Loader._defaultAfterMiddleware.push(fn);
+
+    return Loader;
+};

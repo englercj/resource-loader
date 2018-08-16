@@ -7,6 +7,38 @@ describe('Loader', () => {
         loader = new Loader(fixtureData.baseUrl);
     });
 
+    describe('.pre', () => {
+        it('should add a middleware that runs before loading a resource', () => {
+            Loader.pre(() => { /* empty */ });
+
+            expect(Loader._defaultBeforeMiddleware).to.have.length(1);
+
+            loader = new Loader(fixtureData.baseUrl);
+
+            expect(loader._beforeMiddleware).to.have.length(1);
+        });
+
+        after(() => {
+            Loader._defaultBeforeMiddleware.length = 0;
+        });
+    });
+
+    describe('.use', () => {
+        it('should add a middleware that runs after loading a resource', () => {
+            Loader.use(() => { /* empty */ });
+
+            expect(Loader._defaultAfterMiddleware).to.have.length(1);
+
+            loader = new Loader(fixtureData.baseUrl);
+
+            expect(loader._afterMiddleware).to.have.length(1);
+        });
+
+        after(() => {
+            Loader._defaultAfterMiddleware.length = 0;
+        });
+    });
+
     it('should have exported correctly', () => {
         expect(Loader).to.have.property('default', Loader);
         expect(Loader).to.have.property('Resource');
@@ -225,7 +257,7 @@ describe('Loader', () => {
         });
     });
 
-    describe('#before', () => {
+    describe('#pre', () => {
         it('should add a middleware that runs before loading a resource', () => {
             loader.pre(() => { /* empty */ });
 
@@ -233,7 +265,7 @@ describe('Loader', () => {
         });
     });
 
-    describe('#after', () => {
+    describe('#use', () => {
         it('should add a middleware that runs after loading a resource', () => {
             loader.use(() => { /* empty */ });
 
