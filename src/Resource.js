@@ -686,7 +686,7 @@ export default class Resource {
             this.xhrType = this._determineXhrType();
         }
 
-        const xdr = this.xhr = new XDomainRequest();
+        const xdr = this.xhr = new XDomainRequest(); // eslint-disable-line no-undef
 
         // XDomainRequest has a few quirks. Occasionally it will abort requests
         // A way to avoid this is to make sure ALL callbacks are set even if not used
@@ -996,7 +996,6 @@ export default class Resource {
                 /* falls through */
             default:
                 return 'text/plain';
-
         }
     }
 }
