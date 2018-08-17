@@ -6,6 +6,7 @@ describe('Resource', () => {
     let request;
     let res;
     let xhr;
+    let clock;
     const name = 'test-resource';
 
     before(() => {
@@ -13,10 +14,12 @@ describe('Resource', () => {
         xhr.onCreate = (req) => {
             request = req;
         };
+        clock = sinon.useFakeTimers();
     });
 
     after(() => {
         xhr.restore();
+        clock.restore();
     });
 
     beforeEach(() => {
@@ -103,6 +106,7 @@ describe('Resource', () => {
             const mock = sinon.mock(data);
 
             mock.expects('removeEventListener').once().withArgs('error');
+            mock.expects('removeEventListener').once().withArgs('timeout');
             mock.expects('removeEventListener').once().withArgs('abort');
             mock.expects('removeEventListener').once().withArgs('progress');
             mock.expects('removeEventListener').once().withArgs('load');
@@ -316,6 +320,86 @@ describe('Resource', () => {
             expect(img).to.have.property('src', '');
 
             spy.restore();
+        });
+    });
+
+    describe('#load with timeout', () => {
+        it('should abort XHR loads', (done) => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.XHR, timeout: 100 });
+
+            res.onComplete.add(() => {
+                expect(res).to.have.property('error').instanceOf(Error);
+                expect(res).to.have.property('data').equal(null);
+                done();
+            });
+
+            res.load();
+
+            expect(request).to.exist;
+            request.triggerTimeout();
+        });
+
+        it('should abort Image loads', (done) => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.IMAGE, timeout: 1000 });
+
+            res.onComplete.add(() => {
+                expect(res).to.have.property('error').instanceOf(Error);
+
+                expect(res).to.have.property('data').instanceOf(Image)
+                    .and.is.an.instanceOf(HTMLImageElement)
+                    .and.have.property('src', Resource.EMPTY_GIF);
+                done();
+            });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(Image)
+                .and.is.an.instanceOf(HTMLImageElement)
+                .and.have.property('src', fixtureData.url);
+
+            clock.tick(1100);
+        });
+
+        it('should abort Audio loads', (done) => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.AUDIO, timeout: 1000 });
+
+            res.onComplete.add(() => {
+                expect(res).to.have.property('error').instanceOf(Error);
+                expect(res.data.children).to.have.length(0);
+                done();
+            });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(HTMLAudioElement);
+            expect(res.data.children).to.have.length(1);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
+
+            clock.tick(1100);
+        });
+
+        it('should abort Video loads', (done) => {
+            const res = new Resource(name, fixtureData.url, { loadType: Resource.LOAD_TYPE.VIDEO, timeout: 1000 });
+
+            res.onComplete.add(() => {
+                expect(res).to.have.property('error').instanceOf(Error);
+                expect(res.data.children).to.have.length(0);
+                done();
+            });
+
+            res.load();
+
+            expect(request).to.not.exist;
+
+            expect(res).to.have.property('data').instanceOf(HTMLVideoElement);
+            expect(res.data.children).to.have.length(1);
+            expect(res.data.children[0]).to.have.property('src', fixtureData.url);
+
+            clock.tick(1100);
         });
     });
 
