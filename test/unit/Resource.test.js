@@ -476,6 +476,18 @@ describe('Resource', () => {
                 { hostname: 'www.google.com', port: '123', protocol: 'https:' }
             )).to.equal('anonymous');
         });
+        it('should properly detect cross-origin requests (#5) - sandboxed iframe', () => {
+            const originalOrigin = window.origin;
+
+            // Set origin to null to simulate sandboxed iframe without 'allow-same-origin' attribute
+            window.origin = null;
+            expect(res._determineCrossOrigin(
+                'http://www.google.com:5678',
+                { hostname: 'www.google.com', port: '5678', protocol: 'http:' }
+            )).to.equal('anonymous');
+            // Restore origin to prevent test leakage.
+            window.origin = originalOrigin;
+        });
     });
 
     describe('#_getExtension', () => {

@@ -893,6 +893,13 @@ export default class Resource {
             return '';
         }
 
+        // A sandboxed iframe without the 'allow-same-origin' attribute will have
+        // an origin of null, and will always require crossOrigin requests
+        // regardless of whether the location matches.
+        if (window.origin === null) {
+            return 'anonymous';
+        }
+
         // default is window.location
         loc = loc || window.location;
 
