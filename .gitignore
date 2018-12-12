@@ -30,5 +30,3 @@ node_modules/
 dist/
 lib/
 docs/
-typings/
-!src/typings/
