@@ -1,7 +1,7 @@
 import parseUri from 'parse-uri';
 import Signal from 'mini-signals';
 
-// tests is CORS is supported in XHR, if not we need to use XDR
+// tests if CORS is supported in XHR, if not we need to use XDR
 const useXdr = !!(window.XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
 let tempAnchor = null;
 
@@ -20,7 +20,19 @@ function _noop() { /* empty */ }
  *
  * @class
  */
-export default class Resource {
+export class Resource {
+    /**
+     *
+     * @typedef {object} IMetadata
+     * @property {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [loadElement=null] - The
+     *      element to use for loading, instead of creating one.
+     * @property {boolean} [skipSource=false] - Skips adding source(s) to the load element. This
+     *      is useful if you want to pass in a `loadElement` that you already added load sources to.
+     * @property {string|string[]} [mimeType] - The mime type to use for the source element
+     *      of a video/audio elment. If the urls are an array, you can pass this as an array as well
+     *      where each index is the mime type to use for the corresponding url index.
+     */
+
     /**
      * Sets the load type to be used for a specific extension.
      *
@@ -57,14 +69,7 @@ export default class Resource {
      *      be loaded?
      * @param {Resource.XHR_RESPONSE_TYPE} [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] - How
      *      should the data being loaded be interpreted when using XHR?
-     * @param {object} [options.metadata] - Extra configuration for middleware and the Resource object.
-     * @param {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [options.metadata.loadElement=null] - The
-     *      element to use for loading, instead of creating one.
-     * @param {boolean} [options.metadata.skipSource=false] - Skips adding source(s) to the load element. This
-     *      is useful if you want to pass in a `loadElement` that you already added load sources to.
-     * @param {string|string[]} [options.metadata.mimeType] - The mime type to use for the source element
-     *      of a video/audio elment. If the urls are an array, you can pass this as an array as well
-     *      where each index is the mime type to use for the corresponding url index.
+     * @param {Resource.IMetadata} [options.metadata] - Extra configuration for middleware and the Resource object.
      */
     constructor(name, url, options) {
         if (typeof name !== 'string' || typeof url !== 'string') {
@@ -76,6 +81,7 @@ export default class Resource {
         /**
          * The state flags of this resource.
          *
+         * @private
          * @member {number}
          */
         this._flags = 0;
@@ -86,24 +92,24 @@ export default class Resource {
         /**
          * The name of this resource.
          *
-         * @member {string}
          * @readonly
+         * @member {string}
          */
         this.name = name;
 
         /**
          * The url used to load this resource.
          *
-         * @member {string}
          * @readonly
+         * @member {string}
          */
         this.url = url;
 
         /**
          * The extension used to load this resource.
          *
-         * @member {string}
          * @readonly
+         * @member {string}
          */
         this.extension = this._getExtension();
 
@@ -150,20 +156,15 @@ export default class Resource {
          * Note that if you pass in a `loadElement`, the Resource class takes ownership of it.
          * Meaning it will modify it as it sees fit.
          *
-         * @member {object}
-         * @property {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [loadElement=null] - The
-         *  element to use for loading, instead of creating one.
-         * @property {boolean} [skipSource=false] - Skips adding source(s) to the load element. This
-         *  is useful if you want to pass in a `loadElement` that you already added load sources
-         *  to.
+         * @member {Resource.IMetadata}
          */
         this.metadata = options.metadata || {};
 
         /**
          * The error that occurred while loading (if any).
          *
-         * @member {Error}
          * @readonly
+         * @member {Error}
          */
         this.error = null;
 
@@ -171,32 +172,32 @@ export default class Resource {
          * The XHR object that was used to load this resource. This is only set
          * when `loadType` is `Resource.LOAD_TYPE.XHR`.
          *
-         * @member {XMLHttpRequest}
          * @readonly
+         * @member {XMLHttpRequest}
          */
         this.xhr = null;
 
         /**
          * The child resources this resource owns.
          *
-         * @member {Resource[]}
          * @readonly
+         * @member {Resource[]}
          */
         this.children = [];
 
         /**
          * The resource type.
          *
-         * @member {Resource.TYPE}
          * @readonly
+         * @member {Resource.TYPE}
          */
         this.type = Resource.TYPE.UNKNOWN;
 
         /**
          * The progress chunk owned by this resource.
          *
-         * @member {number}
          * @readonly
+         * @member {number}
          */
         this.progressChunk = 0;
 
@@ -333,8 +334,8 @@ export default class Resource {
     /**
      * Stores whether or not this url is a data url.
      *
-     * @member {boolean}
      * @readonly
+     * @member {boolean}
      */
     get isDataUrl() {
         return this._hasFlag(Resource.STATUS_FLAGS.DATA_URL);
@@ -344,8 +345,8 @@ export default class Resource {
      * Describes if this resource has finished loading. Is true when the resource has completely
      * loaded.
      *
-     * @member {boolean}
      * @readonly
+     * @member {boolean}
      */
     get isComplete() {
         return this._hasFlag(Resource.STATUS_FLAGS.COMPLETE);
@@ -355,8 +356,8 @@ export default class Resource {
      * Describes if this resource is currently loading. Is true when the resource starts loading,
      * and is false again when complete.
      *
-     * @member {boolean}
      * @readonly
+     * @member {boolean}
      */
     get isLoading() {
         return this._hasFlag(Resource.STATUS_FLAGS.LOADING);
@@ -415,7 +416,7 @@ export default class Resource {
     /**
      * Kicks off loading of this resource. This method is asynchronous.
      *
-     * @param {function} [cb] - Optional callback to call once the resource is loaded.
+     * @param {OnCompleteSignal} [cb] - Optional callback to call once the resource is loaded.
      */
     load(cb) {
         if (this.isLoading) {

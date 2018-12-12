@@ -12,7 +12,7 @@ const rgxExtractUrlHash = /(#[\w-]+)?$/;
  *
  * @class
  */
-export default class Loader {
+export class Loader {
     /**
      * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
      * @param {number} [concurrency=10] - The number of resources to load concurrently.
@@ -58,12 +58,15 @@ export default class Loader {
          *
          * // This will request 'image.png?v=1&user=me&password=secret'
          * loader.add('iamge.png?v=1').load();
+         *
+         * @member {string}
          */
         this.defaultQueryString = '';
 
         /**
          * The middleware to run before loading each resource.
          *
+         * @private
          * @member {function[]}
          */
         this._beforeMiddleware = [];
@@ -71,6 +74,7 @@ export default class Loader {
         /**
          * The middleware to run after loading each resource.
          *
+         * @private
          * @member {function[]}
          */
         this._afterMiddleware = [];
@@ -78,6 +82,7 @@ export default class Loader {
         /**
          * The tracks the resources we are currently completing parsing for.
          *
+         * @private
          * @member {Resource[]}
          */
         this._resourcesParsing = [];
@@ -210,6 +215,29 @@ export default class Loader {
     }
 
     /**
+     * Options for a call to `.add()`.
+     *
+     * @see Loader#add
+     *
+     * @typedef {object} IAddOptions
+     * @property {string} [name] - The name of the resource to load, if not passed the url is used.
+     * @property {string} [key] - Alias for `name`.
+     * @property {string} [url] - The url for this resource, relative to the baseUrl of this loader.
+     * @property {string|boolean} [crossOrigin] - Is this request cross-origin? Default is to
+     *      determine automatically.
+     * @property {number} [timeout=0] - A timeout in milliseconds for the load. If the load takes
+     *      longer than this time it is cancelled and the load is considered a failure. If this value is
+     *      set to `0` then there is no explicit timeout.
+     * @property {Resource.LOAD_TYPE} [loadType=Resource.LOAD_TYPE.XHR] - How should this resource
+     *      be loaded?
+     * @property {Resource.XHR_RESPONSE_TYPE} [xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] - How
+     *      should the data being loaded be interpreted when using XHR?
+     * @property {Loader.OnCompleteSignal} [onComplete] - Callback to add an an onComplete signal istener.
+     * @property {Loader.OnCompleteSignal} [callback] - Alias for `onComplete`.
+     * @property {Resource.IMetadata} [metadata] - Extra configuration for middleware and the Resource object.
+     */
+
+    /**
      * Adds a resource (or multiple resources) to the loader queue.
      *
      * This function can take a wide variety of different parameters. The only thing that is always
@@ -253,28 +281,11 @@ export default class Loader {
      *     .add('http://...', { crossOrigin: true }, function () {});
      * ```
      *
-     * @param {string} [name] - The name of the resource to load, if not passed the url is used.
+     * @param {string|IAddOptions} [name] - The name of the resource to load, if not passed the url is used.
      * @param {string} [url] - The url for this resource, relative to the baseUrl of this loader.
-     * @param {object} [options] - The options for the load.
-     * @param {string|boolean} [options.crossOrigin] - Is this request cross-origin? Default is to
-     *      determine automatically.
-     * @param {number} [options.timeout=0] - A timeout in milliseconds for the load. If the load takes
-     *      longer than this time it is cancelled and the load is considered a failure. If this value is
-     *      set to `0` then there is no explicit timeout.
-     * @param {Resource.LOAD_TYPE} [options.loadType=Resource.LOAD_TYPE.XHR] - How should this resource
-     *      be loaded?
-     * @param {Resource.XHR_RESPONSE_TYPE} [options.xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] - How
-     *      should the data being loaded be interpreted when using XHR?
-     * @param {object} [options.metadata] - Extra configuration for middleware and the Resource object.
-     * @param {HTMLImageElement|HTMLAudioElement|HTMLVideoElement} [options.metadata.loadElement=null] - The
-     *      element to use for loading, instead of creating one.
-     * @param {boolean} [options.metadata.skipSource=false] - Skips adding source(s) to the load element. This
-     *      is useful if you want to pass in a `loadElement` that you already added load sources to.
-     * @param {string|string[]} [options.metadata.mimeType] - The mime type to use for the source element
-     *      of a video/audio elment. If the urls are an array, you can pass this as an array as well
-     *      where each index is the mime type to use for the corresponding url index.
-     * @param {function} [cb] - Function to call when this specific resource completes loading.
-     * @return {Loader} Returns itself.
+     * @param {IAddOptions} [options] - The options for the load.
+     * @param {Loader.OnCompleteSignal} [cb] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
      */
     add(name, url, options, cb) {
         // special case of an array of objects or urls
@@ -366,9 +377,8 @@ export default class Loader {
      * Sets up a middleware function that will run *before* the
      * resource is loaded.
      *
-     * @method before
      * @param {function} fn - The middleware function to register.
-     * @return {Loader} Returns itself.
+     * @return {this} Returns itself.
      */
     pre(fn) {
         this._beforeMiddleware.push(fn);
@@ -380,10 +390,8 @@ export default class Loader {
      * Sets up a middleware function that will run *after* the
      * resource is loaded.
      *
-     * @alias use
-     * @method after
      * @param {function} fn - The middleware function to register.
-     * @return {Loader} Returns itself.
+     * @return {this} Returns itself.
      */
     use(fn) {
         this._afterMiddleware.push(fn);
@@ -394,7 +402,7 @@ export default class Loader {
     /**
      * Resets the queue of the loader to prepare for a new load.
      *
-     * @return {Loader} Returns itself.
+     * @return {this} Returns itself.
      */
     reset() {
         this.progress = 0;
@@ -425,7 +433,7 @@ export default class Loader {
      * Starts loading the queued resources.
      *
      * @param {function} [cb] - Optional callback that will be bound to the `complete` event.
-     * @return {Loader} Returns itself.
+     * @return {this} Returns itself.
      */
     load(cb) {
         // register complete callback if they pass one
@@ -623,6 +631,7 @@ export default class Loader {
  * A default array of middleware to run before loading each resource.
  * Each of these middlewares are added to any new Loader instances when they are created.
  *
+ * @private
  * @member {function[]}
  */
 Loader._defaultBeforeMiddleware = [];
@@ -631,6 +640,7 @@ Loader._defaultBeforeMiddleware = [];
  * A default array of middleware to run after loading each resource.
  * Each of these middlewares are added to any new Loader instances when they are created.
  *
+ * @private
  * @member {function[]}
  */
 Loader._defaultAfterMiddleware = [];
@@ -639,7 +649,7 @@ Loader._defaultAfterMiddleware = [];
  * Sets up a middleware function that will run *before* the
  * resource is loaded.
  *
- * @method before
+ * @static
  * @param {function} fn - The middleware function to register.
  * @return {Loader} Returns itself.
  */
@@ -653,8 +663,7 @@ Loader.pre = function LoaderPreStatic(fn) {
  * Sets up a middleware function that will run *after* the
  * resource is loaded.
  *
- * @alias use
- * @method after
+ * @static
  * @param {function} fn - The middleware function to register.
  * @return {Loader} Returns itself.
  */

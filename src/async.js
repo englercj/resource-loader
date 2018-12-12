@@ -1,12 +1,22 @@
 /**
  * Smaller version of the async library constructs.
  *
+ * @namespace async
+ */
+
+/**
+ * Noop function
+ *
+ * @ignore
+ * @function
+ * @memberof async
  */
 function _noop() { /* empty */ }
 
 /**
  * Iterates an array in series.
  *
+ * @memberof async
  * @param {Array.<*>} array - Array to iterate.
  * @param {function} iterator - Function to call for each element.
  * @param {function} callback - Function to call when done, or on error.
@@ -39,6 +49,8 @@ export function eachSeries(array, iterator, callback, deferNext) {
 /**
  * Ensures a function is only called once.
  *
+ * @ignore
+ * @memberof async
  * @param {function} fn - The function to wrap.
  * @return {function} The wrapping function.
  */
@@ -58,6 +70,7 @@ function onlyOnce(fn) {
 /**
  * Async queue implementation,
  *
+ * @memberof async
  * @param {function} worker - The worker function to call for each task.
  * @param {number} concurrency - How many workers to run in parrallel.
  * @return {*} The async queue object.
