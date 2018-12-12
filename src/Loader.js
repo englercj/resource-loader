@@ -1,7 +1,7 @@
 import Signal from 'mini-signals';
 import parseUri from 'parse-uri';
 import * as async from './async';
-import Resource from './Resource';
+import { Resource } from './Resource';
 
 // some constants
 const MAX_PROGRESS = 100;
