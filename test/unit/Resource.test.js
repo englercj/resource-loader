@@ -479,8 +479,8 @@ describe('Resource', () => {
         it('should properly detect cross-origin requests (#5) - sandboxed iframe', () => {
             const originalOrigin = window.origin;
 
-            // Set origin to null to simulate sandboxed iframe without 'allow-same-origin' attribute
-            window.origin = null;
+            // Set origin to 'null' to simulate sandboxed iframe without 'allow-same-origin' attribute
+            window.origin = 'null';
             expect(res._determineCrossOrigin(
                 'http://www.google.com:5678',
                 { hostname: 'www.google.com', port: '5678', protocol: 'http:' }
