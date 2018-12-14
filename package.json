@@ -2,6 +2,7 @@
   "name": "resource-loader",
   "version": "2.2.1",
   "main": "./lib/index.js",
+  "types": "./typings/resource-loader.d.ts",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
@@ -17,6 +18,7 @@
   "files": [
     "dist",
     "lib",
+    "typings",
     "package.json",
     "CONTRIBUTING.md",
     "LICENSE",
