@@ -894,7 +894,6 @@ export class Resource {
             return '';
         }
 
-
         // A sandboxed iframe without the 'allow-same-origin' attribute will have a special
         // origin designed not to match window.location.origin, and will always require
         // crossOrigin requests regardless of whether the location matches.
