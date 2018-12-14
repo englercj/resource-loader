@@ -1,4 +1,4 @@
-import Resource from '../../Resource';
+import { Resource } from '../../Resource';
 import b64 from '../../b64';
 
 const Url = window.URL || window.webkitURL;
