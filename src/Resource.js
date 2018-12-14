@@ -1174,3 +1174,8 @@ function setExtMap(map, extname, val) {
 function reqType(xhr) {
     return xhr.toString().replace('object ', '');
 }
+
+// Backwards compat
+if (typeof module !== 'undefined') {
+    module.exports.default = Resource; // eslint-disable-line no-undef
+}

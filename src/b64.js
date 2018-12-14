@@ -67,3 +67,8 @@ export function encodeBinary(input) {
 
     return output;
 }
+
+// Backwards compat
+if (typeof module !== 'undefined') {
+    module.exports.default = encodeBinary; // eslint-disable-line no-undef
+}
