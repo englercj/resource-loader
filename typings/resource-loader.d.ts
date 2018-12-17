@@ -7,10 +7,10 @@ declare function encodeBinary(input: string): string;
 
 declare class Loader {
     constructor(baseUrl?: string, concurrency?: number);
-    static Resource: Resource;
-    static async: async;
-    static encodeBinary: encodeBinary;
-    static base64: encodeBinary;
+    static Resource: typeof Resource;
+    static async: typeof async;
+    static encodeBinary: typeof encodeBinary;
+    static base64: typeof encodeBinary;
     baseUrl: string;
     progress: number;
     loading: boolean;
@@ -18,7 +18,7 @@ declare class Loader {
     resources: {
         [key: string]: Resource;
     };
-    onProgress: Signal<Loader.OnProgressSignal>;
+    onProgress: Signal;
     onError: Signal;
     onLoad: Signal;
     onStart: Signal;

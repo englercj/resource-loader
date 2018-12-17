@@ -14,7 +14,7 @@ const b64 = require('./b64');
  *
  * @static
  * @memberof Loader
- * @member {Resource}
+ * @member {Class<Resource>}
  */
 Loader.Resource = Resource;
 
@@ -22,7 +22,7 @@ Loader.Resource = Resource;
  *
  * @static
  * @memberof Loader
- * @member {async}
+ * @member {Class<async>}
  */
 Loader.async = async;
 
@@ -30,7 +30,7 @@ Loader.async = async;
  *
  * @static
  * @memberof Loader
- * @member {encodeBinary}
+ * @member {Class<encodeBinary>}
  */
 Loader.encodeBinary = b64;
 
@@ -41,7 +41,7 @@ Loader.encodeBinary = b64;
  *
  * @static
  * @memberof Loader
- * @member {encodeBinary}
+ * @member {Class<encodeBinary>}
  */
 Loader.base64 = b64;
 
