@@ -160,49 +160,6 @@ export class Loader {
          */
         this.onComplete = new Signal();
 
-        /**
-         * When the progress changes the loader and resource are disaptched.
-         *
-         * @memberof Loader
-         * @callback OnProgressSignal
-         * @param {Loader} loader - The loader the progress is advancing on.
-         * @param {Resource} resource - The resource that has completed or failed to cause the progress to advance.
-         */
-
-        /**
-         * When an error occurrs the loader and resource are disaptched.
-         *
-         * @memberof Loader
-         * @callback OnErrorSignal
-         * @param {Loader} loader - The loader the error happened in.
-         * @param {Resource} resource - The resource that caused the error.
-         */
-
-        /**
-         * When a load completes the loader and resource are disaptched.
-         *
-         * @memberof Loader
-         * @callback OnLoadSignal
-         * @param {Loader} loader - The loader that laoded the resource.
-         * @param {Resource} resource - The resource that has completed loading.
-         */
-
-        /**
-         * When the loader starts loading resources it dispatches this callback.
-         *
-         * @memberof Loader
-         * @callback OnStartSignal
-         * @param {Loader} loader - The loader that has started loading resources.
-         */
-
-        /**
-         * When the loader completes loading resources it dispatches this callback.
-         *
-         * @memberof Loader
-         * @callback OnCompleteSignal
-         * @param {Loader} loader - The loader that has finished loading resources.
-         */
-
         // Add default before middleware
         for (let i = 0; i < Loader._defaultBeforeMiddleware.length; ++i) {
             this.pre(Loader._defaultBeforeMiddleware[i]);
@@ -213,6 +170,49 @@ export class Loader {
             this.use(Loader._defaultAfterMiddleware[i]);
         }
     }
+
+    /**
+     * When the progress changes the loader and resource are disaptched.
+     *
+     * @memberof Loader
+     * @callback OnProgressSignal
+     * @param {Loader} loader - The loader the progress is advancing on.
+     * @param {Resource} resource - The resource that has completed or failed to cause the progress to advance.
+     */
+
+    /**
+     * When an error occurrs the loader and resource are disaptched.
+     *
+     * @memberof Loader
+     * @callback OnErrorSignal
+     * @param {Loader} loader - The loader the error happened in.
+     * @param {Resource} resource - The resource that caused the error.
+     */
+
+    /**
+     * When a load completes the loader and resource are disaptched.
+     *
+     * @memberof Loader
+     * @callback OnLoadSignal
+     * @param {Loader} loader - The loader that laoded the resource.
+     * @param {Resource} resource - The resource that has completed loading.
+     */
+
+    /**
+     * When the loader starts loading resources it dispatches this callback.
+     *
+     * @memberof Loader
+     * @callback OnStartSignal
+     * @param {Loader} loader - The loader that has started loading resources.
+     */
+
+    /**
+     * When the loader completes loading resources it dispatches this callback.
+     *
+     * @memberof Loader
+     * @callback OnCompleteSignal
+     * @param {Loader} loader - The loader that has finished loading resources.
+     */
 
     /**
      * Options for a call to `.add()`.

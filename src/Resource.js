@@ -292,32 +292,32 @@ export class Resource {
          * @member {Signal}
          */
         this.onAfterMiddleware = new Signal();
-
-        /**
-         * When the resource starts to load.
-         *
-         * @memberof Resource
-         * @callback OnStartSignal
-         * @param {Resource} resource - The resource that the event happened on.
-         */
-
-        /**
-         * When the resource reports loading progress.
-         *
-         * @memberof Resource
-         * @callback OnProgressSignal
-         * @param {Resource} resource - The resource that the event happened on.
-         * @param {number} percentage - The progress of the load in the range [0, 1].
-         */
-
-        /**
-         * When the resource finishes loading.
-         *
-         * @memberof Resource
-         * @callback OnCompleteSignal
-         * @param {Resource} resource - The resource that the event happened on.
-         */
     }
+
+    /**
+     * When the resource starts to load.
+     *
+     * @memberof Resource
+     * @callback OnStartSignal
+     * @param {Resource} resource - The resource that the event happened on.
+     */
+
+    /**
+     * When the resource reports loading progress.
+     *
+     * @memberof Resource
+     * @callback OnProgressSignal
+     * @param {Resource} resource - The resource that the event happened on.
+     * @param {number} percentage - The progress of the load in the range [0, 1].
+     */
+
+    /**
+     * When the resource finishes loading.
+     *
+     * @memberof Resource
+     * @callback OnCompleteSignal
+     * @param {Resource} resource - The resource that the event happened on.
+     */
 
     /**
      * @memberof Resource
@@ -416,7 +416,7 @@ export class Resource {
     /**
      * Kicks off loading of this resource. This method is asynchronous.
      *
-     * @param {OnCompleteSignal} [cb] - Optional callback to call once the resource is loaded.
+     * @param {Resource.OnCompleteSignal} [cb] - Optional callback to call once the resource is loaded.
      */
     load(cb) {
         if (this.isLoading) {

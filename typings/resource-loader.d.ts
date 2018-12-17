@@ -18,7 +18,7 @@ declare class Loader {
     resources: {
         [key: string]: Resource;
     };
-    onProgress: Signal;
+    onProgress: Signal<Loader.OnProgressSignal>;
     onError: Signal;
     onLoad: Signal;
     onStart: Signal;
@@ -87,10 +87,13 @@ declare class Resource {
     readonly isLoading: boolean;
     complete(): void;
     abort(message: string): void;
-    load(cb?: OnCompleteSignal): void;
+    load(cb?: Resource.OnCompleteSignal): void;
 }
 
 declare module Resource {
+    type OnStartSignal = (resource: Resource) => void;
+    type OnProgressSignal = (resource: Resource, percentage: number) => void;
+    type OnCompleteSignal = (resource: Resource) => void;
     type IMetadata = {
         loadElement?: HTMLImageElement | HTMLAudioElement | HTMLVideoElement;
         skipSource?: boolean;
