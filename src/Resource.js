@@ -653,10 +653,10 @@ export class Resource {
 
         const xhr = this.xhr = new XMLHttpRequest();
 
-        xhr.timeout = this.timeout;
-
         // set the request type and url
         xhr.open('GET', this.url, true);
+
+        xhr.timeout = this.timeout;
 
         // load json as text and parse it ourselves. We do this because some browsers
         // *cough* safari *cough* can't deal with it.
