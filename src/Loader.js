@@ -284,7 +284,7 @@ export class Loader {
     /**
      * @function
      * @variation 1
-     * @param {Array<any>} params
+     * @param {...Array<any>} params
      * @return {this} Returns itself.
      *//**
      * @function
