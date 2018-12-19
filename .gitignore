@@ -11,6 +11,7 @@ npm-debug.log
 # project files
 .project
 .idea
+*.iml
 
 # vim swap files
 *.sw*

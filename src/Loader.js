@@ -280,9 +280,24 @@ export class Loader {
      *     .add('key', 'http://...', { crossOrigin: true }, function () {})
      *     .add('http://...', { crossOrigin: true }, function () {});
      * ```
-     *
-     * @param {string|IAddOptions} [name] - The name of the resource to load, if not passed the url is used.
-     * @param {string} [url] - The url for this resource, relative to the baseUrl of this loader.
+     */
+    /**
+     * @function
+     * @variation 1
+     * @param {Array<any>} params
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 2
+     * @param {string|Object|Array<any>} obj
+     * @param {IAddOptions} [options] - The options for the load.
+     * @param {Loader.OnCompleteSignal} [cb] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 3
+     * @param {string} name - The name of the resource to load, if not passed the url is used.
+     * @param {string} url - The url for this resource, relative to the baseUrl of this loader.
      * @param {IAddOptions} [options] - The options for the load.
      * @param {Loader.OnCompleteSignal} [cb] - Function to call when this specific resource completes loading.
      * @return {this} Returns itself.
