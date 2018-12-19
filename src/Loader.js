@@ -289,7 +289,7 @@ export class Loader {
      *//**
      * @function
      * @variation 2
-     * @param {string|Object|Array<any>} obj
+     * @param {string|object|Array<any>} obj
      * @param {IAddOptions} [options] - The options for the load.
      * @param {Loader.OnCompleteSignal} [cb] - Function to call when this specific resource completes loading.
      * @return {this} Returns itself.
