@@ -23,7 +23,9 @@ declare class Loader {
     onLoad: Signal;
     onStart: Signal;
     onComplete: Signal;
-    add(name?: string | IAddOptions, url?: string, options?: IAddOptions, cb?: Loader.OnCompleteSignal): this;
+    add(...params: any[]): this;
+    add(obj: string | any | any[], options?: IAddOptions, cb?: Loader.OnCompleteSignal): this;
+    add(name: string, url: string, options?: IAddOptions, cb?: Loader.OnCompleteSignal): this;
     pre(fn: (...params: any[]) => any): this;
     use(fn: (...params: any[]) => any): this;
     reset(): this;
