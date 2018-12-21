@@ -23,7 +23,12 @@ declare class Loader {
     onLoad: Signal;
     onStart: Signal;
     onComplete: Signal;
-    add(name?: string | IAddOptions, url?: string, options?: IAddOptions, cb?: Loader.OnCompleteSignal): this;
+    add(name: string, url: string, callback?: Resource.OnCompleteSignal): this;
+    add(name: string, url: string, options?: IAddOptions, callback?: Resource.OnCompleteSignal): this;
+    add(url: string, callback?: Resource.OnCompleteSignal): this;
+    add(url: string, options?: IAddOptions, callback?: Resource.OnCompleteSignal): this;
+    add(options: IAddOptions, callback?: Resource.OnCompleteSignal): this;
+    add(resources: (IAddOptions | string)[], callback?: Resource.OnCompleteSignal): this;
     pre(fn: (...params: any[]) => any): this;
     use(fn: (...params: any[]) => any): this;
     reset(): this;
@@ -49,8 +54,8 @@ declare type IAddOptions = {
     timeout?: number;
     loadType?: Resource.LOAD_TYPE;
     xhrType?: Resource.XHR_RESPONSE_TYPE;
-    onComplete?: Loader.OnCompleteSignal;
-    callback?: Loader.OnCompleteSignal;
+    onComplete?: Resource.OnCompleteSignal;
+    callback?: Resource.OnCompleteSignal;
     metadata?: Resource.IMetadata;
 };
 

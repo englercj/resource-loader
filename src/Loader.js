@@ -232,11 +232,12 @@ export class Loader {
      *      be loaded?
      * @property {Resource.XHR_RESPONSE_TYPE} [xhrType=Resource.XHR_RESPONSE_TYPE.DEFAULT] - How
      *      should the data being loaded be interpreted when using XHR?
-     * @property {Loader.OnCompleteSignal} [onComplete] - Callback to add an an onComplete signal istener.
-     * @property {Loader.OnCompleteSignal} [callback] - Alias for `onComplete`.
+     * @property {Resource.OnCompleteSignal} [onComplete] - Callback to add an an onComplete signal istener.
+     * @property {Resource.OnCompleteSignal} [callback] - Alias for `onComplete`.
      * @property {Resource.IMetadata} [metadata] - Extra configuration for middleware and the Resource object.
      */
 
+    /* eslint-disable require-jsdoc,valid-jsdoc */
     /**
      * Adds a resource (or multiple resources) to the loader queue.
      *
@@ -281,10 +282,45 @@ export class Loader {
      *     .add('http://...', { crossOrigin: true }, function () {});
      * ```
      *
-     * @param {string|IAddOptions} [name] - The name of the resource to load, if not passed the url is used.
-     * @param {string} [url] - The url for this resource, relative to the baseUrl of this loader.
+     * @function
+     * @variation 1
+     * @param {string} name - The name of the resource to load.
+     * @param {string} url - The url for this resource, relative to the baseUrl of this loader.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 2
+     * @param {string} name - The name of the resource to load.
+     * @param {string} url - The url for this resource, relative to the baseUrl of this loader.
      * @param {IAddOptions} [options] - The options for the load.
-     * @param {Loader.OnCompleteSignal} [cb] - Function to call when this specific resource completes loading.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 3
+     * @param {string} url - The url for this resource, relative to the baseUrl of this loader.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 4
+     * @param {string} url - The url for this resource, relative to the baseUrl of this loader.
+     * @param {IAddOptions} [options] - The options for the load.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 5
+     * @param {IAddOptions} options - The options for the load. This object must contain a `url` property.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
+     * @return {this} Returns itself.
+     *//**
+     * @function
+     * @variation 6
+     * @param {Array<IAddOptions|string>} resources - An array of resources to load, where each is
+     *      either an object with the options or a string url. If you pass an object, it must contain a `url` property.
+     * @param {Resource.OnCompleteSignal} [callback] - Function to call when this specific resource completes loading.
      * @return {this} Returns itself.
      */
     add(name, url, options, cb) {
@@ -372,6 +408,7 @@ export class Loader {
 
         return this;
     }
+    /* eslint-enable require-jsdoc,valid-jsdoc */
 
     /**
      * Sets up a middleware function that will run *before* the
