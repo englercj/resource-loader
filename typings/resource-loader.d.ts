@@ -1,3 +1,5 @@
+import Signal from 'mini-signals';
+
 declare namespace async {
     function eachSeries(array: any[], iterator: (...params: any[]) => any, callback: (...params: any[]) => any, deferNext?: boolean): void;
     function queue(worker: (...params: any[]) => any, concurrency: number): any;
@@ -18,11 +20,11 @@ declare class Loader {
     resources: {
         [key: string]: Resource;
     };
-    onProgress: Signal;
-    onError: Signal;
-    onLoad: Signal;
-    onStart: Signal;
-    onComplete: Signal;
+    onProgress: Signal<Loader.OnProgressSignal>;
+    onError: Signal<Loader.OnErrorSignal>;
+    onLoad: Signal<Loader.OnLoadSignal>;
+    onStart: Signal<Loader.OnStartSignal>;
+    onComplete: Signal<Loader.OnCompleteSignal>;
     add(name: string, url: string, callback?: Resource.OnCompleteSignal): this;
     add(name: string, url: string, options?: IAddOptions, callback?: Resource.OnCompleteSignal): this;
     add(url: string, callback?: Resource.OnCompleteSignal): this;
@@ -83,10 +85,10 @@ declare class Resource {
     readonly children: Resource[];
     readonly type: Resource.TYPE;
     readonly progressChunk: number;
-    onStart: Signal;
-    onProgress: Signal;
-    onComplete: Signal;
-    onAfterMiddleware: Signal;
+    onStart: Signal<Resource.OnStartSignal>;
+    onProgress: Signal<Resource.OnProgressSignal>;
+    onComplete: Signal<Resource.OnCompleteSignal>;
+    onAfterMiddleware: Signal<Resource.OnCompleteSignal>;
     readonly isDataUrl: boolean;
     readonly isComplete: boolean;
     readonly isLoading: boolean;

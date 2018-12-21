@@ -120,7 +120,7 @@ export class Loader {
          *
          * The callback looks like {@link Loader.OnProgressSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Loader.OnProgressSignal>}
          */
         this.onProgress = new Signal();
 
@@ -129,7 +129,7 @@ export class Loader {
          *
          * The callback looks like {@link Loader.OnErrorSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Loader.OnErrorSignal>}
          */
         this.onError = new Signal();
 
@@ -138,7 +138,7 @@ export class Loader {
          *
          * The callback looks like {@link Loader.OnLoadSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Loader.OnLoadSignal>}
          */
         this.onLoad = new Signal();
 
@@ -147,7 +147,7 @@ export class Loader {
          *
          * The callback looks like {@link Loader.OnStartSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Loader.OnStartSignal>}
          */
         this.onStart = new Signal();
 
@@ -156,7 +156,7 @@ export class Loader {
          *
          * The callback looks like {@link Loader.OnCompleteSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Loader.OnCompleteSignal>}
          */
         this.onComplete = new Signal();
 

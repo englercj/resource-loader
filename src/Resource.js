@@ -257,7 +257,7 @@ export class Resource {
          *
          * The callback looks like {@link Resource.OnStartSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Resource.OnStartSignal>}
          */
         this.onStart = new Signal();
 
@@ -270,7 +270,7 @@ export class Resource {
          *
          * The callback looks like {@link Resource.OnProgressSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Resource.OnProgressSignal>}
          */
         this.onProgress = new Signal();
 
@@ -280,7 +280,7 @@ export class Resource {
          *
          * The callback looks like {@link Resource.OnCompleteSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Resource.OnCompleteSignal>}
          */
         this.onComplete = new Signal();
 
@@ -289,7 +289,7 @@ export class Resource {
          *
          * The callback looks like {@link Resource.OnCompleteSignal}.
          *
-         * @member {Signal}
+         * @member {Signal<Resource.OnCompleteSignal>}
          */
         this.onAfterMiddleware = new Signal();
     }
