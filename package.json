@@ -1,6 +1,6 @@
 {
   "name": "resource-loader",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "main": "./lib/index.js",
   "types": "./typings/resource-loader.d.ts",
   "description": "A generic asset loader, made with web games in mind.",
