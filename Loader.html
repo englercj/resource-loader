@@ -150,7 +150,17 @@
             
                 <li class="parent  " data-name="Loader.use"><a href="Loader.html#.use">use</a></li>
             
-                <li class="parent  " data-name="Loader#add"><a href="Loader.html#add">add</a></li>
+                <li class="parent  " data-name="Loader#add(1)"><a href="Loader.html#add1">add</a></li>
+            
+                <li class="parent  " data-name="Loader#add(2)"><a href="Loader.html#add2">add</a></li>
+            
+                <li class="parent  " data-name="Loader#add(3)"><a href="Loader.html#add3">add</a></li>
+            
+                <li class="parent  " data-name="Loader#add(4)"><a href="Loader.html#add4">add</a></li>
+            
+                <li class="parent  " data-name="Loader#add(5)"><a href="Loader.html#add5">add</a></li>
+            
+                <li class="parent  " data-name="Loader#add(6)"><a href="Loader.html#add6">add</a></li>
             
                 <li class="parent  " data-name="Loader#load"><a href="Loader.html#load">load</a></li>
             
@@ -984,12 +994,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="add">
-            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="add1">
+            <a class="share-icon" href="#add1"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
                 add
             </span>
-            <span class="signature">(<span class="optional">name</span>, <span class="optional">url</span>, <span class="optional">options</span>, <span class="optional">cb</span>)</span><span class="type-signature">this</span>
+            <span class="signature">(name, url, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
             
             
             
@@ -1079,9 +1089,6 @@
             
                 
 <span class="param-type">string</span>
-|
-
-<span class="param-type"><a href="global.html#IAddOptions">IAddOptions</a></span>
 
 
             
@@ -1092,13 +1099,11 @@
             <td class="description last">
                 
                     
-                        <span class="optional">optional</span>
-                    
                     
                         
                     
                 
-                <p>The name of the resource to load, if not passed the url is used.</p></td>
+                <p>The name of the resource to load.</p></td>
         </tr>
 	
 	
@@ -1122,7 +1127,210 @@
             <td class="description last">
                 
                     
+                    
+                        
+                    
+                
+                <p>The url for this resource, relative to the baseUrl of this loader.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
                         <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        this
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add2">
+            <a class="share-icon" href="#add2"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                add
+            </span>
+            <span class="signature">(name, url, <span class="optional">options</span>, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name of the resource to load.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
                     
                     
                         
@@ -1165,13 +1373,751 @@
 	
         <tr>
             
-                <td class="name"><code>cb</code></td>
+                <td class="name"><code>callback</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="Loader.html#.OnCompleteSignal">Loader.OnCompleteSignal</a></span>
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        this
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add3">
+            <a class="share-icon" href="#add3"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                add
+            </span>
+            <span class="signature">(url, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The url for this resource, relative to the baseUrl of this loader.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        this
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add4">
+            <a class="share-icon" href="#add4"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                add
+            </span>
+            <span class="signature">(url, <span class="optional">options</span>, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The url for this resource, relative to the baseUrl of this loader.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#IAddOptions">IAddOptions</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The options for the load.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        this
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add5">
+            <a class="share-icon" href="#add5"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                add
+            </span>
+            <span class="signature">(options, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#IAddOptions">IAddOptions</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The options for the load. This object must contain a <code>url</code> property.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Function to call when this specific resource completes loading.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        this
+                        
+                    
+            </td>
+            <td class="description last">Returns itself.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="add6">
+            <a class="share-icon" href="#add6"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                add
+            </span>
+            <span class="signature">(resources, <span class="optional">callback</span>)</span><span class="type-signature">this</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>resources</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(<a href="global.html#IAddOptions">IAddOptions</a>|string)></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>An array of resources to load, where each is<br>     either an object with the options or a string url. If you pass an object, it must contain a <code>url</code> property.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
 
 
             
@@ -2486,7 +3432,7 @@
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Dec 17 2018 18:57:06 GMT-0800 (Pacific Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 01 2019 10:00:09 GMT-0700 (Pacific Daylight Time)
             </div>
         </footer>
     </div>
