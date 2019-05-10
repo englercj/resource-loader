@@ -42,7 +42,7 @@ loader.onComplete.add(() => {}); // called once when the queued resources all lo
 
 ## Building
 
-You will need to have [node][node] and [gulp][gulp] setup on your machine.
+You will need to have [node][node] setup on your machine.
 
 Then you can install dependencies and build:
 
@@ -53,7 +53,6 @@ npm i && npm run build
 That will output the built distributables to `./dist`.
 
 [node]:       http://nodejs.org/
-[gulp]:       http://gulpjs.com/
 
 ## Supported Browsers
 
