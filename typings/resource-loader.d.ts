@@ -1,3 +1,7 @@
+/// <reference path="./mini-signals.d.ts" />
+
+import Signal from 'mini-signals';
+
 /**
  * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
  * @param {number} [concurrency=10] - The number of resources to load concurrently.
