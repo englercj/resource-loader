@@ -33,6 +33,7 @@
     "prebuild": "run-s setup clean",
     "build": "rollup -c",
     "lint": "eslint src/ test/",
+    "watch": "rollup -cw",
     "start": "run-s build",
     "pretest": "run-s build",
     "test": "npm run test-dev -- --single-run",
