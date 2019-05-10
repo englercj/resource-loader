@@ -1,8 +1,17 @@
+/// <reference path="./mini-signals.d.ts" />
+
 import Signal from 'mini-signals';
 
 declare namespace async {
     function eachSeries(array: any[], iterator: (...params: any[]) => any, callback: (...params: any[]) => any, deferNext?: boolean): void;
     function queue(worker: (...params: any[]) => any, concurrency: number): any;
+}
+
+type Middleware = (resource:Resource, next:() => void) => void;
+
+declare namespace middleware {
+    function memoryMiddlewareFactory(): Middleware;
+    function blobMiddlewareFactory(): Middleware;
 }
 
 declare function encodeBinary(input: string): string;
@@ -31,13 +40,13 @@ declare class Loader {
     add(url: string, options?: IAddOptions, callback?: Resource.OnCompleteSignal): this;
     add(options: IAddOptions, callback?: Resource.OnCompleteSignal): this;
     add(resources: (IAddOptions | string)[], callback?: Resource.OnCompleteSignal): this;
-    pre(fn: (...params: any[]) => any): this;
-    use(fn: (...params: any[]) => any): this;
+    pre(fn: Middleware): this;
+    use(fn: Middleware): this;
     reset(): this;
     load(cb?: (...params: any[]) => any): this;
     concurrency: number;
-    static pre(fn: (...params: any[]) => any): Loader;
-    static use(fn: (...params: any[]) => any): Loader;
+    static pre(fn: Middleware): Loader;
+    static use(fn: Middleware): Loader;
 }
 
 declare module Loader {

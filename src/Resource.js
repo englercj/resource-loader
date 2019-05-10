@@ -20,7 +20,7 @@ function _noop() { /* empty */ }
  *
  * @class
  */
-export class Resource {
+class Resource {
     /**
      * Sets the load type to be used for a specific extension.
      *
@@ -1175,7 +1175,4 @@ function reqType(xhr) {
     return xhr.toString().replace('object ', '');
 }
 
-// Backwards compat
-if (typeof module !== 'undefined') {
-    module.exports.default = Resource; // eslint-disable-line no-undef
-}
+export { Resource };

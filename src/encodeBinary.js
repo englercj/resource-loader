@@ -3,6 +3,7 @@ const _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+
 /**
  * Encodes binary into base64.
  *
+ * @name encodeBinary
  * @param {string} input The input data to encode.
  * @returns {string} The encoded base64 string
  */
@@ -66,9 +67,4 @@ export function encodeBinary(input) {
     }
 
     return output;
-}
-
-// Backwards compat
-if (typeof module !== 'undefined') {
-    module.exports.default = encodeBinary; // eslint-disable-line no-undef
 }

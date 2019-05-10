@@ -12,7 +12,7 @@ const rgxExtractUrlHash = /(#[\w-]+)?$/;
  *
  * @class
  */
-export class Loader {
+class Loader {
     /**
      * @param {string} [baseUrl=''] - The base url for all resources loaded by this loader.
      * @param {number} [concurrency=10] - The number of resources to load concurrently.
@@ -29,6 +29,7 @@ export class Loader {
          * The progress percent of the loader going through the queue.
          *
          * @member {number}
+         * @default 0
          */
         this.progress = 0;
 
@@ -36,6 +37,7 @@ export class Loader {
          * Loading state of the loader, true if it is currently loading resources.
          *
          * @member {boolean}
+         * @default false
          */
         this.loading = false;
 
@@ -60,6 +62,7 @@ export class Loader {
          * loader.add('iamge.png?v=1').load();
          *
          * @member {string}
+         * @default ''
          */
         this.defaultQueryString = '';
 
@@ -709,3 +712,6 @@ Loader.use = function LoaderUseStatic(fn) {
 
     return Loader;
 };
+
+export { Loader };
+

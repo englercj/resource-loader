@@ -22,5 +22,5 @@ declare module "mini-signals"
         dispatch: CbType;
     }
 
-    export = MiniSignal;
+    export default MiniSignal;
 }
