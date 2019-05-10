@@ -10,6 +10,7 @@ const plugins = [
 const sourcemap = true;
 const freeze = false;
 const input = 'src/index.js';
+const bundleInput = 'src/bundle.js';
 const external = Object.keys(pkg.dependencies);
 const compiled = (new Date()).toUTCString().replace(/GMT/g, "UTC");
 
@@ -45,7 +46,7 @@ export default [
         ]
     },
     {
-        input,
+        input: bundleInput,
         plugins,
         output: {
             banner,
@@ -57,7 +58,7 @@ export default [
         }
     },
     {
-        input,
+        input: bundleInput,
         plugins: [].concat(plugins, terser({
             output: {
                 comments(node, comment) {

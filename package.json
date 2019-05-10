@@ -3,6 +3,7 @@
   "version": "2.2.4",
   "main": "./dist/resource-loader.cjs.js",
   "module": "./dist/resource-loader.esm.js",
+  "bundle": "./dist/resource-loader.js",
   "types": "./typings/resource-loader.d.ts",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
