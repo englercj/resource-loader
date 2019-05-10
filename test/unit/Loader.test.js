@@ -39,11 +39,11 @@ describe('Loader', () => {
         });
     });
 
-    it.skip('should have exported correctly', () => {
-        expect(Loader).to.have.property('default', Loader);
+    it('should have exported correctly', () => {
         expect(Loader).to.have.property('Resource');
         expect(Loader).to.have.property('async');
-        expect(Loader).to.have.property('base64');
+        expect(Loader).to.have.property('encodeBinary');
+        expect(Loader).to.have.property('middleware');
     });
 
     it('should have correct properties', () => {
