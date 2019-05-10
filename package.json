@@ -30,7 +30,7 @@
     "clean": "rimraf ./dist/* ./lib/* && run-s setup",
     "dts": "jsdoc -t node_modules/tsd-jsdoc/dist -r src -P package.json -d typings/",
     "setup": "mkdirp dist lib",
-    "prebuild": "run-s setup clean",
+    "prebuild": "run-s setup clean lint",
     "build": "rollup -c",
     "lint": "eslint src/ test/",
     "watch": "rollup -cw",
