@@ -17,6 +17,7 @@ function _noop() { /* empty */ }
  * Iterates an array in series.
  *
  * @memberof async
+ * @function eachSeries
  * @param {Array.<*>} array - Array to iterate.
  * @param {function} iterator - Function to call for each element.
  * @param {function} callback - Function to call when done, or on error.
@@ -71,6 +72,7 @@ function onlyOnce(fn) {
  * Async queue implementation,
  *
  * @memberof async
+ * @function queue
  * @param {function} worker - The worker function to call for each task.
  * @param {number} concurrency - How many workers to run in parrallel.
  * @return {*} The async queue object.

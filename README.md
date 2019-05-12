@@ -6,6 +6,8 @@ A generic resource loader, made with web games in mind.
 
 ```js
 // ctor
+import { Loader, middleware } from 'resource-loader';
+
 const loader = new Loader();
 
 loader
@@ -14,11 +16,11 @@ loader
 
     // Chainable `pre` to add a middleware that runs for each resource, *before* loading that resource.
     // This is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
-    .pre(cachingMiddleware)
+    .pre(middleware.caching)
 
     // Chainable `use` to add a middleware that runs for each resource, *after* loading that resource.
     // This is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
-    .use(parsingMiddleware)
+    .use(middleware.parsing)
 
     // The `load` method loads the queue of resources, and calls the passed in callback called once all
     // resources have loaded.
@@ -40,7 +42,7 @@ loader.onComplete.add(() => {}); // called once when the queued resources all lo
 
 ## Building
 
-You will need to have [node][node] and [gulp][gulp] setup on your machine.
+You will need to have [node][node] setup on your machine.
 
 Then you can install dependencies and build:
 
@@ -51,7 +53,6 @@ npm i && npm run build
 That will output the built distributables to `./dist`.
 
 [node]:       http://nodejs.org/
-[gulp]:       http://gulpjs.com/
 
 ## Supported Browsers
 
