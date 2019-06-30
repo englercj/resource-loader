@@ -1,6 +1,6 @@
 {
   "name": "resource-loader",
-  "version": "2.2.4",
+  "version": "2.3.0",
   "main": "./dist/resource-loader.cjs.js",
   "module": "./dist/resource-loader.esm.js",
   "bundle": "./dist/resource-loader.js",
