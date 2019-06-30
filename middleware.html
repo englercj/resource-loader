@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Global</title>
+    <title>Namespace: middleware</title>
     
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -319,7 +319,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="global.html">Global</h1>
+        <h1 class="page-title" data-filename="middleware.html">Namespace: middleware</h1>
         
 
 
@@ -328,7 +328,7 @@
     
 <header>
     <div class="header content-size">
-        <h2>Global
+        <h2>middleware
         </h2>
         
     </div>
@@ -388,14 +388,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="encodeBinary">
-            <a class="share-icon" href="#encodeBinary"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".caching">
+            <a class="share-icon" href="#.caching"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                encodeBinary
+                middleware.caching
             </span>
-            <span class="signature">(input)</span><span class="type-signature">string</span>
+            <span class="signature">(resource, next)</span>
             
-            
+            <span class="access-signature">static</span>
             
             
         </h4>
@@ -409,7 +409,7 @@
     
     
     <div class="description">
-        <p>Encodes binary into base64.</p>
+        <p>A simple in-memory cache for resource.</p>
     </div>
     
 
@@ -440,13 +440,13 @@
 	
         <tr>
             
-                <td class="name"><code>input</code></td>
+                <td class="name"><code>resource</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="Resource.html">Resource</a></span>
 
 
             
@@ -456,7 +456,30 @@
             
             <td class="description last">
                 
-                <p>The input data to encode.</p></td>
+                <p>Current Resource</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Callback when complete</p></td>
         </tr>
 	
 	
@@ -497,78 +520,57 @@
     
     
     
-    <h5>Returns:</h5>
     
-
-
-<table class="params">
-    <thead>
-    <tr>
+    
+        <h5>Example</h5>
         
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last">The encoded base64 string</td>
-        </tr>
-    
-    </tbody>
-</table>
 
     
+    <pre class="prettyprint"><code>import { Loader, middleware } from 'resource-loader';
+const loader = new Loader();
+loader.use(middleware.caching);</code></pre>
     
+
     
 </dd>
 
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Type Definitions</h3>
         
-        <dl class="list-definitions">
-                
+            
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="IAddOptions">
-            <a class="share-icon" href="#IAddOptions"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">IAddOptions</span>
-            <span class="type-signature type">object</span>
+        <h4 class="name" id=".parsing">
+            <a class="share-icon" href="#.parsing"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                middleware.parsing
+            </span>
+            <span class="signature">(resource, next)</span>
             
-            
+            <span class="access-signature">static</span>
             
             
         </h4>
-    </div>
     
+        
+    </div>
+
     
 </dt>
 <dd>
     
+    
     <div class="description">
-        <p>Options for a call to <code>.add()</code>.</p>
+        <p>A middleware for transforming XHR loaded Blobs into more useful objects</p>
     </div>
     
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
-<table class="props">
+    
+    
+    
+    
+    
+        
+
+<table class="params">
     <thead>
 	<tr>
 		
@@ -577,12 +579,6 @@
 		
 		<th>Type</th>
 		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -594,370 +590,55 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>resource</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="Resource.html">Resource</a></span>
 
 
             
             </td>
             
             
-                <td class="attributes">
+            
+            <td class="description last">
                 
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>The name of the resource to load, if not passed the url is used.</p></td>
+                <p>Current Resource</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>next</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">function</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
+            
+            <td class="description last">
                 
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Alias for <code>name</code>.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>The url for this resource, relative to the baseUrl of this loader.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>crossOrigin</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Is this request cross-origin? Default is to<br>
-determine automatically.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>timeout</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-            
-            <td class="description last"><p>A timeout in milliseconds for the load. If the load takes<br>
-longer than this time it is cancelled and the load is considered a failure. If this value is<br>
-set to <code>0</code> then there is no explicit timeout.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>loadType</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Resource.html#.LOAD_TYPE">Resource.LOAD_TYPE</a></span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                    Resource.LOAD_TYPE.XHR
-                
-                </td>
-            
-            
-            <td class="description last"><p>How should this resource<br>
-be loaded?</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>xhrType</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Resource.html#.XHR_RESPONSE_TYPE">Resource.XHR_RESPONSE_TYPE</a></span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                    Resource.XHR_RESPONSE_TYPE.DEFAULT
-                
-                </td>
-            
-            
-            <td class="description last"><p>How<br>
-should the data being loaded be interpreted when using XHR?</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>onComplete</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Callback to add an an onComplete signal istener.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Resource.html#.OnCompleteSignal">Resource.OnCompleteSignal</a></span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Alias for <code>onComplete</code>.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>metadata</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Resource.html#.IMetadata">Resource.IMetadata</a></span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last"><p>Extra configuration for middleware and the Resource object.</p></td>
+                <p>Callback when complete</p></td>
         </tr>
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -974,13 +655,6 @@ should the data being loaded be interpreted when using XHR?</p></td>
     
     
     
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Loader#add</li>
-        </ul>
-    </dd>
     
     
     
@@ -988,9 +662,31 @@ should the data being loaded be interpreted when using XHR?</p></td>
 
     
     
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+
+    
+    <pre class="prettyprint"><code>import { Loader, middleware } from 'resource-loader';
+const loader = new Loader();
+loader.use(middleware.parsing);</code></pre>
+    
+
+    
 </dd>
 
-            </dl>
+        </dl>
+    
+    
     
     
     
