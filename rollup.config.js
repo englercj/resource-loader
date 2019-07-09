@@ -18,7 +18,7 @@ const compiled = (new Date()).toUTCString().replace(/GMT/g, "UTC");
 
 const banner = `/*!
  * ${pkg.name} - v${pkg.version}
- * https://github.com/pixijs/pixi-sound
+ * https://github.com/englercj/resource-loader
  * Compiled ${compiled}
  *
  * ${pkg.name} is licensed under the MIT license.
