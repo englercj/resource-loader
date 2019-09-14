@@ -1,12 +1,13 @@
 sudo: false
 
 addons:
-  firefox: "64.0"
+  firefox: "latest"
 
 language: node_js
 
 node_js:
   - '10'
+  - '12'
 
 branches:
   only:
