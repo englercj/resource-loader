@@ -47,6 +47,8 @@ function reqType(xhr: XMLHttpRequest): string
 
 export class XhrLoadStrategy extends AbstractLoadStrategy<IXhrLoadConfig>
 {
+    static readonly ResponseType = XhrResponseType;
+
     private _boundOnLoad = this._onLoad.bind(this);
     private _boundOnAbort = this._onAbort.bind(this);
     private _boundOnError = this._onError.bind(this);
