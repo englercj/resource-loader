@@ -2,21 +2,32 @@
 
 A generic resource loader, made with web games in mind.
 
+## Philosophy
+
+This library was built to make it easier to load and prepare data asynchronously. The
+goal was mainly to unify the many different APIs browsers expose for loading data and
+smooth the differences between versions and vendors.
+
+It is not a goal of this library to be a resource caching and management system,
+just a loader. This library is for the actual mechanism of loading data. All
+caching, resource management, knowing what is loaded and what isn't, deciding
+what to load, etc, should all exist as logic outside of this library.
+
+As a more concrete statement, your project should have a Resource Manager that
+stores resources and manages data lifetime. When it decides something needs to be
+loaded from a remote source, only then does it create a loader and load them.
+
 ## Usage
 
 ```js
 // ctor
-import { Loader, middleware } from 'resource-loader';
+import { Loader } from 'resource-loader';
 
 const loader = new Loader();
 
 loader
     // Chainable `add` to enqueue a resource
     .add(name, url, options)
-
-    // Chainable `pre` to add a middleware that runs for each resource, *before* loading that resource.
-    // This is useful to implement custom caching modules (using filesystem, indexeddb, memory, etc).
-    .pre(middleware.caching)
 
     // Chainable `use` to add a middleware that runs for each resource, *after* loading that resource.
     // This is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
@@ -33,11 +44,12 @@ loader
         // also may contain other properties based on the middleware that runs.
     });
 
-// throughout the process multiple signals can be dispatched.
-loader.onProgress.add(() => {}); // called once per loaded/errored file
-loader.onError.add(() => {}); // called once per errored file
-loader.onLoad.add(() => {}); // called once per loaded file
-loader.onComplete.add(() => {}); // called once when the queued resources all load.
+// Throughout the process multiple signals can be dispatched.
+loader.onStart.add(() => {}); // Called when a resource starts loading.
+loader.onError.add(() => {}); // Called when a resource fails to load.
+loader.onLoad.add(() => {}); // Called when a resource successfully loads.
+loader.onProgress.add(() => {}); // Called when a resource finishes loading (success or fail).
+loader.onComplete.add(() => {}); // Called when all resources have finished loading.
 ```
 
 ## Building
@@ -52,7 +64,7 @@ npm i && npm run build
 
 That will output the built distributables to `./dist`.
 
-[node]:       http://nodejs.org/
+[node]: http://nodejs.org/
 
 ## Supported Browsers
 
@@ -61,10 +73,3 @@ That will output the built distributables to `./dist`.
 - Chrome 20+
 - Safari 6+
 - Opera 12.1+
-
-## Upgrading to v2
-
-- No more events, all signals now
-- No more isJson, isXml, etc. Now use `res.type === Resource.TYPE.JSON`, etc.
-- Removed `before` (in favor of `pre`) and `after` (in favor of `use`).
-- If a middleware adds more resources, it *must* pass in the parent resource in options for `.add()`.
