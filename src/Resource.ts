@@ -217,7 +217,7 @@ export class Resource
     private _determineCrossOrigin(url: string): string
     {
         // data: and javascript: urls are considered same-origin
-        if (url.indexOf('data:') === 0 || url.indexOf('javascript:'))
+        if (url.indexOf('data:') === 0 || url.indexOf('javascript:') === 0)
             return '';
 
         // A sandboxed iframe without the 'allow-same-origin' attribute will have a special

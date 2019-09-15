@@ -85,11 +85,6 @@ export class Loader
     resources: ResourceMap = {};
 
     /**
-     * Dispatched once per loaded or errored resource.
-     */
-    onProgress = new Signal<OnProgressSignal>();
-
-    /**
      * Dispatched once per errored resource.
      */
     onError = new Signal<OnErrorSignal>();
@@ -108,6 +103,11 @@ export class Loader
      * Dispatched when the queued resources all load.
      */
     onComplete = new Signal<OnCompleteSignal>();
+
+    /**
+     * Dispatched once per loaded or errored resource.
+     */
+    onProgress = new Signal<OnProgressSignal>();
 
     /**
      * The middleware to run after loading each resource.
