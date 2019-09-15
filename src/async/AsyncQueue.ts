@@ -1,37 +1,31 @@
 import { Signal } from 'type-signals';
 
 /**
- * Noop function
- *
- * @ignore
- */
-function _noop() { /* empty */ }
-
-/**
  * Ensures a function is only called once.
  *
  * @ignore
  * @typeparam R Return type of the function to wrap.
- * @param fn The function to wrap.
+ * @param func The function to wrap.
  * @return The wrapping function.
  */
-function onlyOnce<R>(fn: (...args: any[]) => R): () => R
+function onlyOnce<R>(func: (...args: any[]) => R): (...args: any[]) => R
 {
-    return function onceWrapper()
+    let fn: typeof func | null = func;
+
+    return function onceWrapper(this: any, ...args: any[])
     {
         if (fn === null)
             throw new Error('Callback was already called.');
 
         const callFn = fn;
-
         fn = null;
-        return callFn.apply(this, arguments);
+        return callFn.apply(this, args);
     };
 }
 
 export type INext = (err?: Error) => void;
 export type IWorker<T> = (item: T, next: INext) => void;
-export type IItemCallback = () => void;
+export type IItemCallback = (...args: any[]) => void;
 
 export type OnDoneSignal = () => void;
 export type OnSaturatedSignal = () => void;
@@ -59,6 +53,8 @@ export class AsyncQueue<T>
     private workers = 0;
     private buffer = 0;
     private paused = false;
+
+    private _started = false;
     private _tasks: ITask<T>[] = [];
 
     readonly onSaturated = new Signal<OnSaturatedSignal>();
@@ -75,11 +71,13 @@ export class AsyncQueue<T>
         this.buffer = concurrency / 4;
     }
 
+    get started() { return this._started; }
+
     reset()
     {
         this.onDrain.detachAll();
         this.workers = 0;
-        this.started = false;
+        this._started = false;
         this._tasks = [];
     }
 
@@ -161,7 +159,7 @@ export class AsyncQueue<T>
             throw new Error('task callback must be a function');
         }
 
-        this.started = true;
+        this._started = true;
 
         if (data == null && this.idle())
         {
@@ -182,25 +180,23 @@ export class AsyncQueue<T>
 
     private _next(task: ITask<T>)
     {
-        const self = this;
-
-        return function ()
+        return (err?: Error, ...args: any[]) =>
         {
-            self.workers -= 1;
+            this.workers -= 1;
 
             if (task.callback)
-                task.callback.apply(task, arguments);
+                task.callback(err, ...args);
 
-            if (arguments[0] != null)
-            self.onError.dispatch(arguments[0], task.data);
+            if (err)
+                this.onError.dispatch(err, task.data);
 
-            if (self.workers <= (self.concurrency - self.buffer))
-                self.onUnsaturated.dispatch();
+            if (this.workers <= (this.concurrency - this.buffer))
+                this.onUnsaturated.dispatch();
 
-            if (self.idle())
-                self.onDrain.dispatch();
+            if (this.idle())
+                this.onDrain.dispatch();
 
-            self.process();
+            this.process();
         };
     }
 }

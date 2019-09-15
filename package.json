@@ -4,7 +4,7 @@
   "main": "./dist/resource-loader.cjs.js",
   "module": "./dist/resource-loader.esm.js",
   "bundle": "./dist/resource-loader.js",
-  "types": "./typings/resource-loader.d.ts",
+  "types": "./dist/index.d.ts",
   "description": "A generic asset loader, made with web games in mind.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
@@ -25,9 +25,23 @@
     "LICENSE",
     "README.md"
   ],
-  "scripts": {},
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "prebuild": "npm run clean",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "start": "npm run build",
+    "pretest": "npm run build",
+    "test": "npm run test-dev -- --single-run",
+    "test-dev": "karma start test/karma.conf.js",
+    "docs": "typedoc --out docs --mode modules",
+    "prepublishOnly": "npm run build",
+    "predeploy": "rimraf ./docs && npm run docs",
+    "deploy": "gh-pages -d docs",
+    "postpublish": "npm run deploy"
+  },
   "dependencies": {
-    "type-signals": "englercj/type-signals",
+    "type-signals": "^1.0.3",
     "url-parse": "^1.4.7"
   },
   "devDependencies": {
@@ -45,10 +59,14 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.0",
     "rollup": "^1.20.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript2": "^0.24.0",
     "sinon": "^7.4.1",
     "sinon-chai": "^3.3.0",
+    "tslib": "^1.10.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.6.2"
   }
 }

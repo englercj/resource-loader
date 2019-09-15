@@ -62,7 +62,7 @@ export abstract class MediaElementLoadStrategy extends AbstractLoadStrategy<IMed
         this._element.load();
 
         if (config.timeout)
-            this._elementTimer = setTimeout(this._boundOnTimeout, config.timeout);
+            this._elementTimer = window.setTimeout(this._boundOnTimeout, config.timeout);
     }
 
     abort(): void

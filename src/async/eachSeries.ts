@@ -9,20 +9,18 @@
  */
 export function eachSeries<T>(
     array: T[],
-    iterator: (item: T, next: (err?: Error) => void),
+    iterator: (item: T, next: (err?: Error) => void) => void,
     callback: (err?: Error) => void,
     deferNext = false) : void
 {
     let i = 0;
     const len = array.length;
 
-    (function next(err)
+    (function next(err?: Error)
     {
         if (err || i === len)
         {
-            if (callback)
-                callback(err);
-
+            callback(err);
             return;
         }
 

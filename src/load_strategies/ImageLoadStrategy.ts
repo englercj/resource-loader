@@ -26,7 +26,7 @@ export class ImageLoadStrategy extends AbstractLoadStrategy<ILoadConfig>
         this._element.addEventListener('error', this._boundOnError, false);
 
         if (config.timeout)
-            this._elementTimer = setTimeout(this._boundOnTimeout, config.timeout);
+            this._elementTimer = window.setTimeout(this._boundOnTimeout, config.timeout);
     }
 
     abort(): void
