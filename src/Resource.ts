@@ -13,6 +13,11 @@ export type OnErrorSignal = (resource: Resource) => void;
 export type OnCompleteSignal = (resource: Resource) => void;
 export type OnProgressSignal = (resource: Resource, percent: number) => void;
 
+export interface IResourceOptions extends ILoadConfig
+{
+    strategy?: AbstractLoadStrategy | AbstractLoadStrategyCtor;
+}
+
 /**
  * Manages the state and loading of a resource and all child resources.
  */
@@ -151,19 +156,29 @@ export class Resource
      * @param name The name of the resource to load.
      * @param options The options for the load strategy that will be used.
      */
-    constructor(name: string, options: ILoadConfig)
+    constructor(name: string, options: IResourceOptions)
     {
         this.name = name;
 
         if (typeof options.crossOrigin !== 'string')
             options.crossOrigin = this._determineCrossOrigin(options.url);
 
-        let StrategyCtor = Resource._loadStrategyMap[getExtension(options.url)];
+        if (options.strategy && typeof options.strategy !== 'function')
+        {
+            this._strategy = options.strategy;
+        }
+        else
+        {
+            let StrategyCtor = options.strategy;
 
-        if (!StrategyCtor)
-            StrategyCtor = Resource._defaultLoadStrategy;
+            if (!StrategyCtor)
+                StrategyCtor = Resource._loadStrategyMap[getExtension(options.url)];
 
-        this._strategy = new StrategyCtor(options);
+            if (!StrategyCtor)
+                StrategyCtor = Resource._defaultLoadStrategy;
+
+            this._strategy = new StrategyCtor(options);
+        }
 
         this._strategy.onError.add(this._error, this);
         this._strategy.onComplete.add(this._complete, this);
