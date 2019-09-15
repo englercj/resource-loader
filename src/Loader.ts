@@ -110,14 +110,9 @@ export class Loader
     onComplete = new Signal<OnCompleteSignal>();
 
     /**
-     * The middleware to run before loading each resource.
-     */
-    private _beforeMiddleware: MiddlewareFn[] = [];
-
-    /**
      * The middleware to run after loading each resource.
      */
-    private _afterMiddleware: MiddlewareFn[] = [];
+    private _middleware: MiddlewareFn[] = [];
 
     /**
      * The tracks the resources we are currently completing parsing for.
@@ -145,16 +140,10 @@ export class Loader
         this._queue = new AsyncQueue<Resource>(this._boundLoadResource, concurrency);
         this._queue.pause();
 
-        // Add default before middleware
-        for (let i = 0; i < Loader._defaultBeforeMiddleware.length; ++i)
+        // Add default middleware
+        for (let i = 0; i < Loader._defaultMiddleware.length; ++i)
         {
-            this.pre(Loader._defaultBeforeMiddleware[i]);
-        }
-
-        // Add default after middleware
-        for (let i = 0; i < Loader._defaultAfterMiddleware.length; ++i)
-        {
-            this.use(Loader._defaultAfterMiddleware[i]);
+            this.use(Loader._defaultMiddleware[i]);
         }
     }
 
@@ -284,22 +273,12 @@ export class Loader
     }
 
     /**
-     * Sets up a middleware function that will run *before* the
-     * resource is loaded.
-     */
-    pre(fn: MiddlewareFn): this
-    {
-        this._beforeMiddleware.push(fn);
-        return this;
-    }
-
-    /**
      * Sets up a middleware function that will run *after* the
      * resource is loaded.
      */
     use(fn: MiddlewareFn): this
     {
-        this._afterMiddleware.push(fn);
+        this._middleware.push(fn);
         return this;
     }
 
@@ -439,32 +418,8 @@ export class Loader
     private _loadResource(resource: Resource, dequeue: Function): void
     {
         resource._dequeue = dequeue;
-
-        // run before middleware
-        eachSeries(
-            this._beforeMiddleware,
-            (fn, next) =>
-            {
-                fn.call(this, resource, () =>
-                {
-                    // if the before middleware marks the resource as complete,
-                    // break and don't process any more before middleware
-                    next(resource.isComplete ? new Error() : undefined);
-                });
-            },
-            () =>
-            {
-                if (resource.isComplete)
-                {
-                    this._onLoad(resource);
-                }
-                else
-                {
-                    resource._onCompleteBinding = resource.onComplete.once(this._onLoad, this);
-                    resource.load();
-                }
-            },
-            true);
+        resource._onCompleteBinding = resource.onComplete.once(this._onLoad, this);
+        resource.load();
     }
 
     /**
@@ -501,7 +456,7 @@ export class Loader
 
         // run all the after middleware for this resource
         eachSeries(
-            this._afterMiddleware,
+            this._middleware,
             (fn, next) =>
             {
                 fn.call(this, resource, next);
@@ -528,26 +483,10 @@ export class Loader
     }
 
     /**
-     * A default array of middleware to run before loading each resource.
-     * Each of these middlewares are added to any new Loader instances when they are created.
-     */
-    private static _defaultBeforeMiddleware: MiddlewareFn[] = [];
-
-    /**
      * A default array of middleware to run after loading each resource.
      * Each of these middlewares are added to any new Loader instances when they are created.
      */
-    private static _defaultAfterMiddleware: MiddlewareFn[] = [];
-
-    /**
-     * Sets up a middleware function that will run *before* the
-     * resource is loaded.
-     */
-    static pre(fn: MiddlewareFn): typeof Loader
-    {
-        Loader._defaultBeforeMiddleware.push(fn);
-        return Loader;
-    }
+    private static _defaultMiddleware: MiddlewareFn[] = [];
 
     /**
      * Sets up a middleware function that will run *after* the
@@ -555,7 +494,7 @@ export class Loader
      */
     static use(fn: MiddlewareFn): typeof Loader
     {
-        Loader._defaultAfterMiddleware.push(fn);
+        Loader._defaultMiddleware.push(fn);
         return Loader;
     }
 }
