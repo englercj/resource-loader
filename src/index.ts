@@ -8,3 +8,8 @@ export { XhrLoadStrategy } from './load_strategies/XhrLoadStrategy';
 export { Loader } from './Loader';
 export { Resource } from './Resource';
 export { ResourceType, ResourceState } from './resource_type';
+
+import { AsyncQueue } from './async/AsyncQueue';
+import { eachSeries } from './async/eachSeries';
+
+export const async = { AsyncQueue, eachSeries };

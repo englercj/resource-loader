@@ -1,4 +1,4 @@
-import * as Url from 'url-parse';
+import parseUri from 'parse-uri';
 import { Signal, SignalBinding } from 'type-signals';
 import { AbstractLoadStrategy, ILoadConfig, AbstractLoadStrategyCtor } from './load_strategies/AbstractLoadStrategy';
 import { ImageLoadStrategy } from './load_strategies/ImageLoadStrategy';
@@ -185,6 +185,7 @@ export class Resource
         this._strategy.onProgress.add(this._progress, this);
     }
 
+    get url(): string { return this._strategy.config.url; }
     get isLoading(): boolean { return this._state === ResourceState.Loading; }
     get isComplete(): boolean { return this._state === ResourceState.Complete; }
 
@@ -229,7 +230,7 @@ export class Resource
     /**
      * Determines if a URL is crossOrigin, and if so returns the crossOrigin string.
      */
-    private _determineCrossOrigin(url: string): string
+    private _determineCrossOrigin(url: string, loc = window.location): string
     {
         // data: and javascript: urls are considered same-origin
         if (url.indexOf('data:') === 0 || url.indexOf('javascript:') === 0)
@@ -249,8 +250,7 @@ export class Resource
         // don't work in IE9 :(
         Resource._tempAnchor.href = url;
 
-        const loc = window.location;
-        const parsed = new Url(Resource._tempAnchor.href);
+        const parsed = parseUri(Resource._tempAnchor.href, { strictMode: true });
 
         const samePort = (!parsed.port && loc.port === '') || (parsed.port === loc.port);
         const protocol = parsed.protocol ? `${parsed.protocol}:` : '';

@@ -4,13 +4,18 @@ import { ResourceType } from '../resource_type';
 // We can't set the `src` attribute to empty string, so on abort we set it to this 1px transparent gif
 const EMPTY_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 
-export class ImageLoadStrategy extends AbstractLoadStrategy<ILoadConfig>
+export interface IImageLoadConfig extends ILoadConfig
+{
+    loadElement?: HTMLImageElement;
+}
+
+export class ImageLoadStrategy extends AbstractLoadStrategy<IImageLoadConfig>
 {
     private _boundOnLoad = this._onLoad.bind(this);
     private _boundOnError = this._onError.bind(this);
     private _boundOnTimeout = this._onTimeout.bind(this);
 
-    private _element = document.createElement('img');
+    private _element = this._createElement();
     private _elementTimer = 0;
 
     load(): void
@@ -34,6 +39,14 @@ export class ImageLoadStrategy extends AbstractLoadStrategy<ILoadConfig>
         this._clearEvents();
         this._element.src = EMPTY_GIF;
         this._error('Image load aborted by the user.');
+    }
+
+    private _createElement(): HTMLImageElement
+    {
+        if (this.config.loadElement)
+            return this.config.loadElement;
+        else
+            return document.createElement('img')
     }
 
     private _clearEvents(): void

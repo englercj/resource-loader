@@ -33,6 +33,7 @@
     "start": "npm run build",
     "pretest": "npm run build",
     "test": "npm run test-dev -- --single-run",
+    "pretest-dev": "npm run build",
     "test-dev": "karma start test/karma.conf.js",
     "docs": "typedoc --out docs --mode modules",
     "prepublishOnly": "npm run build",
@@ -41,11 +42,10 @@
     "postpublish": "npm run deploy"
   },
   "dependencies": {
-    "type-signals": "^1.0.3",
-    "url-parse": "^1.4.7"
+    "parse-uri": "^1.0.0",
+    "type-signals": "^1.0.3"
   },
   "devDependencies": {
-    "@types/url-parse": "^1.4.3",
     "chai": "^4.2.0",
     "gh-pages": "^2.1.1",
     "karma": "^4.3.0",

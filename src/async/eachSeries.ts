@@ -10,7 +10,7 @@
 export function eachSeries<T>(
     array: T[],
     iterator: (item: T, next: (err?: Error) => void) => void,
-    callback: (err?: Error) => void,
+    callback?: (err?: Error) => void,
     deferNext = false) : void
 {
     let i = 0;
@@ -20,7 +20,8 @@ export function eachSeries<T>(
     {
         if (err || i === len)
         {
-            callback(err);
+            if (callback)
+                callback(err);
             return;
         }
 

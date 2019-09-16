@@ -6,6 +6,7 @@ export interface IMediaElementLoadConfig extends ILoadConfig
 {
     sourceSet?: string[];
     mimeTypes?: string[];
+    loadElement?: HTMLMediaElement;
 }
 
 export abstract class MediaElementLoadStrategy extends AbstractLoadStrategy<IMediaElementLoadConfig>
@@ -77,7 +78,10 @@ export abstract class MediaElementLoadStrategy extends AbstractLoadStrategy<IMed
 
     private _createElement(): HTMLMediaElement
     {
-        return document.createElement(this.elementType);
+        if (this.config.loadElement)
+            return this.config.loadElement;
+        else
+            return document.createElement(this.elementType);
     }
 
     private _clearEvents(): void

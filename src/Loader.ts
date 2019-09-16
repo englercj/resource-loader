@@ -1,4 +1,4 @@
-import * as Url from 'url-parse';
+import parseUri from 'parse-uri';
 import { Signal } from 'type-signals';
 import { AsyncQueue } from './async/AsyncQueue';
 import { Resource, OnCompleteSignal as OnResourceCompleteSignal } from './Resource';
@@ -26,6 +26,9 @@ export interface IAddOptions extends ILoadConfig
 {
     // Extra values to be used by specific load strategies.
     [key: string]: any;
+
+    // The url to load the resource from.
+    url: string;
 
     // The name of the resource to load, if not passed the url is used.
     name?: string;
@@ -213,6 +216,9 @@ export class Loader
                 url = name;
         }
 
+        if (!url)
+            throw new Error('You must specify the `url` property.');
+
         // if loading already you can only add resources that have a parent.
         if (this.loading && !resOptions.parentResource)
         {
@@ -369,11 +375,11 @@ export class Loader
      */
     private _prepareUrl(url: string): string
     {
-        const parsed = new Url(url);
+        const parsed = parseUri(url, { strictMode: true });
         let result;
 
         // absolute url, just use it as is.
-        if (parsed.protocol || !parsed.pathname || url.indexOf('//') === 0)
+        if (parsed.protocol || !parsed.path || url.indexOf('//') === 0)
         {
             result = url;
         }

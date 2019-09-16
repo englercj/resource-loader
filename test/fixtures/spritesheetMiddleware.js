@@ -4,24 +4,25 @@
     window.spritesheetMiddleware = function spritesheetMiddlewareFactory() {
         return function spritesheetMiddleware(resource, next) {
             // skip if no data, its not json, or it isn't spritesheet data
-            if (!resource.data || resource.type !== Loader.Resource.TYPE.JSON || !resource.data.frames) {
+            if (!resource.data || resource.type !== Loader.ResourceType.Json || !resource.data.frames) {
                 next();
 
                 return;
             }
 
+            const route = dirname(resource.url.replace(this.baseUrl, ''));
+
             const loadOptions = {
+                name: `${resource.name}_image`,
+                url: `${route}/${resource.data.meta.image}`,
                 crossOrigin: resource.crossOrigin,
-                loadType: Resource.LOAD_TYPE.IMAGE,
+                strategy: Loader.ImageLoadStrategy,
                 parentResource: resource,
+                onComplete: (/* res */) => next(),
             };
 
-            const route = dirname(resource.url.replace(this.baseUrl, ''));
-            const name = `${resource.name}_image`;
-            const url = `${route}/${resource.data.meta.image}`;
-
             // load the image for this sheet
-            this.add(name, url, loadOptions, (/* res */) => next());
+            this.add(loadOptions);
         };
     };
 

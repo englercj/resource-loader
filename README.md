@@ -73,3 +73,14 @@ That will output the built distributables to `./dist`.
 - Chrome 20+
 - Safari 6+
 - Opera 12.1+
+
+## Upgrading to v4
+
+- Before middleware has been removed, so no more `pre` function.
+- `crossOrigin` must now be a string if specified.
+- `Resource.LOAD_TYPE` enum replaced with Load Strategies.
+    * For example, `loadType: Resource.LOAD_TYPE.IMAGE` is now `strategy: Loader.ImageLoadStrategy`.
+- `Resource.XHR_RESPONSE_TYPE` enum replaced with `XhrLoadStrategy.ResponseType`.
+    * For example, `xhrType: Resource.XHR_RESPONSE_TYPE.DOCUMENT` is now `xhrType: Loader.XhrLoadStrategy.ResponseType.Document`.
+- Overloads for the `add` function have been simplified.
+- Async utilities are no longer exposed.
