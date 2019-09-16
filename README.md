@@ -27,11 +27,15 @@ const loader = new Loader();
 
 loader
     // Chainable `add` to enqueue a resource
-    .add(name, url, options)
+    .add(url)
 
     // Chainable `use` to add a middleware that runs for each resource, *after* loading that resource.
-    // This is useful to implement custom parsing modules (like spritesheet parsers, spine parser, etc).
-    .use(middleware.parsing)
+    // This is useful to implement custom parsing modules (like spritesheet parsers).
+    .use((resource, next) =>
+    {
+        // Be sure to call next() when you have completed your middleware work.
+        next();
+    })
 
     // The `load` method loads the queue of resources, and calls the passed in callback called once all
     // resources have loaded.
