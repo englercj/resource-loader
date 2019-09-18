@@ -166,6 +166,10 @@ export class Resource
         if (options.strategy && typeof options.strategy !== 'function')
         {
             this._strategy = options.strategy;
+
+            // Only `Resource` is allowed to set the config object,
+            // it is otherwise readonly.
+            (this._strategy as any).config = options;
         }
         else
         {
