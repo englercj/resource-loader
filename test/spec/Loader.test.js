@@ -332,10 +332,10 @@ describe('Loader', () => {
             const u3 = '//myshare/image.png';
             const u4 = '//myshare/image.png?v=1#me';
 
-            expect(loader._prepareUrl(u1)).to.equal(u1);
-            expect(loader._prepareUrl(u2)).to.equal(u2);
-            expect(loader._prepareUrl(u3)).to.equal(u3);
-            expect(loader._prepareUrl(u4)).to.equal(u4);
+            expect(loader._prepareUrl(u1, loader.baseUrl)).to.equal(u1);
+            expect(loader._prepareUrl(u2, loader.baseUrl)).to.equal(u2);
+            expect(loader._prepareUrl(u3, loader.baseUrl)).to.equal(u3);
+            expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(u4);
         });
 
         it('should add the baseUrl for relative urls (no trailing slash on baseUrl)', () => {
@@ -345,23 +345,23 @@ describe('Loader', () => {
             const u3 = 'image.png?v=1';
             const u4 = '/image.png?v=1#me';
 
-            expect(loader._prepareUrl(u1)).to.equal(`${b}/${u1}`);
-            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
-            expect(loader._prepareUrl(u3)).to.equal(`${b}/${u3}`);
-            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
+            expect(loader._prepareUrl(u1, loader.baseUrl)).to.equal(`${b}/${u1}`);
+            expect(loader._prepareUrl(u2, loader.baseUrl)).to.equal(`${b}${u2}`);
+            expect(loader._prepareUrl(u3, loader.baseUrl)).to.equal(`${b}/${u3}`);
+            expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(`${b}${u4}`);
         });
 
         it('should add the baseUrl for relative urls (yes trailing slash on baseUrl)', () => {
-            const b = loader.baseUrl = '/base/';
+            const b = '/base/';
             const u1 = 'image.png';
             const u2 = '/image.png';
             const u3 = 'image.png?v=1';
             const u4 = '/image.png?v=1#me';
 
-            expect(loader._prepareUrl(u1)).to.equal(`${b}${u1}`);
-            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
-            expect(loader._prepareUrl(u3)).to.equal(`${b}${u3}`);
-            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
+            expect(loader._prepareUrl(u1, b)).to.equal(`${b}${u1}`);
+            expect(loader._prepareUrl(u2, b)).to.equal(`${b}${u2}`);
+            expect(loader._prepareUrl(u3, b)).to.equal(`${b}${u3}`);
+            expect(loader._prepareUrl(u4, b)).to.equal(`${b}${u4}`);
         });
 
         it('should add the queryString when set', () => {
@@ -371,10 +371,10 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
 
-            expect(loader._prepareUrl(u2))
+            expect(loader._prepareUrl(u2, loader.baseUrl))
                 .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
         });
 
@@ -385,10 +385,10 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
 
-            expect(loader._prepareUrl(u2))
+            expect(loader._prepareUrl(u2, loader.baseUrl))
                 .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
         });
 
@@ -398,7 +398,7 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}&${loader.defaultQueryString}`);
         });
 
@@ -407,7 +407,7 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl('/image.png#me'))
+            expect(loader._prepareUrl('/image.png#me', loader.baseUrl))
                 .to.equal(`${b}/image.png?${loader.defaultQueryString}#me`);
         });
 
@@ -416,7 +416,7 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl('/image.png?v=1#me'))
+            expect(loader._prepareUrl('/image.png?v=1#me', loader.baseUrl))
                 .to.equal(`${b}/image.png?v=1&${loader.defaultQueryString}#me`);
         });
     });
