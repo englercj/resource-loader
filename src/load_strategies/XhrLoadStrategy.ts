@@ -6,12 +6,13 @@ import { ResourceType } from '../resource_type';
 // Mainly this is for IE9 support.
 const useXdr = !!((window as any).XDomainRequest && !('withCredentials' in (new XMLHttpRequest())));
 
-// some status constants
-const STATUS_NONE = 0;
-const STATUS_OK = 200;
-const STATUS_EMPTY = 204;
-const STATUS_IE_BUG_EMPTY = 1223;
-const STATUS_TYPE_OK = 2;
+const enum HttpStatus
+{
+    None = 0,
+    Ok = 200,
+    Empty = 204,
+    IeEmptyBug = 1223,
+}
 
 /**
  * The XHR response types.
@@ -182,7 +183,7 @@ export class XhrLoadStrategy extends AbstractLoadStrategy<IXhrLoadConfig>
         let text = '';
 
         // XDR has no `.status`, assume 200.
-        let status = typeof xhr.status === 'undefined' ? STATUS_OK : xhr.status;
+        let status = typeof xhr.status === 'undefined' ? HttpStatus.Ok : xhr.status;
 
         // responseText is accessible only if responseType is '' or 'text' and on older browsers
         if (typeof xhr.responseType === 'undefined' || xhr.responseType === '' || xhr.responseType === 'text')
@@ -192,19 +193,19 @@ export class XhrLoadStrategy extends AbstractLoadStrategy<IXhrLoadConfig>
 
         // status can be 0 when using the `file://` protocol so we also check if a response is set.
         // If it has a response, we assume 200; otherwise a 0 status code with no contents is an aborted request.
-        if (status === STATUS_NONE && (text.length > 0 || xhr.responseType === XhrResponseType.Buffer))
+        if (status === HttpStatus.None && (text.length > 0 || xhr.responseType === XhrResponseType.Buffer))
         {
-            status = STATUS_OK;
+            status = HttpStatus.Ok;
         }
         // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
-        else if (status === STATUS_IE_BUG_EMPTY)
+        else if (status === HttpStatus.IeEmptyBug)
         {
-            status = STATUS_EMPTY;
+            status = HttpStatus.Empty;
         }
 
-        const statusType = (status / 100) | 0;
+        const flattenedStatus = Math.floor(status / 100) * 100;
 
-        if (statusType !== STATUS_TYPE_OK)
+        if (flattenedStatus !== HttpStatus.Ok)
         {
             this._error(`[${xhr.status}] ${xhr.statusText}: ${xhr.responseURL}`);
             return;
