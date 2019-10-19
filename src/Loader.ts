@@ -30,6 +30,9 @@ export interface IAddOptions extends ILoadConfig
     // The url to load the resource from.
     url: string;
 
+    // A base url to use for just this resource load.
+    baseUrl?: string;
+
     // The name of the resource to load, if not passed the url is used.
     name?: string;
 
@@ -198,12 +201,14 @@ export class Loader
 
         let url = '';
         let name = '';
+        let baseUrl = this.baseUrl;
         let resOptions: IAddOptions = { url: '' };
 
         if (typeof options === 'object')
         {
             url = options.url;
             name = options.name || options.url;
+            baseUrl = options.baseUrl || baseUrl;
             resOptions = options;
         }
         else
@@ -232,7 +237,7 @@ export class Loader
         }
 
         // add base url if this isn't an absolute url
-        url = this._prepareUrl(url);
+        url = this._prepareUrl(url, baseUrl);
         resOptions.url = url;
 
         const resource = new Resource(name, resOptions);
@@ -373,7 +378,7 @@ export class Loader
     /**
      * Prepares a url for usage based on the configuration of this object
      */
-    private _prepareUrl(url: string): string
+    private _prepareUrl(url: string, baseUrl: string): string
     {
         const parsed = parseUri(url, { strictMode: true });
         let result;
@@ -384,15 +389,15 @@ export class Loader
             result = url;
         }
         // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
-        else if (this.baseUrl.length
-            && this.baseUrl.lastIndexOf('/') !== this.baseUrl.length - 1
+        else if (baseUrl.length
+            && baseUrl.lastIndexOf('/') !== baseUrl.length - 1
             && url.charAt(0) !== '/')
         {
-            result = `${this.baseUrl}/${url}`;
+            result = `${baseUrl}/${url}`;
         }
         else
         {
-            result = this.baseUrl + url;
+            result = baseUrl + url;
         }
 
         // if we need to add a default querystring, there is a bit more work

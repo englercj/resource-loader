@@ -10,6 +10,10 @@ export interface ILoadConfig
     // The url for this resource, relative to the baseUrl of this loader.
     url: string;
 
+    // A base url to use for just this resource load. This can be passed in
+    // as the base url for a subresource if desired.
+    baseUrl?: string;
+
     // String to use for crossOrigin properties on load elements.
     crossOrigin?: string;
 
