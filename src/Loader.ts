@@ -19,6 +19,12 @@ export type OnCompleteSignal = (loader: Loader, resources: ResourceMap) => void;
 
 export type MiddlewareFn = (resource: Resource, next: () => void) => void;
 
+export interface Middleware
+{
+    fn: MiddlewareFn;
+    priority: number;
+}
+
 /**
  * Options for a call to `.add()`.
  */
@@ -48,6 +54,11 @@ export interface IAddOptions extends ILoadConfig
  */
 export class Loader
 {
+    /**
+     * The default middleware priority (50).
+     */
+    static readonly DefaultMiddlewarePriority = 50;
+
     /**
      * The base url for all resources loaded by this loader.
      */
@@ -118,7 +129,7 @@ export class Loader
     /**
      * The middleware to run after loading each resource.
      */
-    private _middleware: MiddlewareFn[] = [];
+    private _middleware: Middleware[] = [];
 
     /**
      * The tracks the resources we are currently completing parsing for.
@@ -146,11 +157,8 @@ export class Loader
         this._queue = new AsyncQueue<Resource>(this._boundLoadResource, concurrency);
         this._queue.pause();
 
-        // Add default middleware
-        for (let i = 0; i < Loader._defaultMiddleware.length; ++i)
-        {
-            this.use(Loader._defaultMiddleware[i]);
-        }
+        // Add default middleware. This is already sorted so no need to do that again.
+        this._middleware = Loader._defaultMiddleware.slice();
     }
 
     /**
@@ -286,10 +294,16 @@ export class Loader
     /**
      * Sets up a middleware function that will run *after* the
      * resource is loaded.
+     *
+     * You can optionally specify a priority for this middleware
+     * which will determine the order middleware functions are run.
+     * A lower priority value will make the function run earlier.
+     * That is, priority 30 is run before priority 50.
      */
-    use(fn: MiddlewareFn): this
+    use(fn: MiddlewareFn, priority: number = Loader.DefaultMiddlewarePriority): this
     {
-        this._middleware.push(fn);
+        this._middleware.push({ fn, priority });
+        this._middleware.sort((a, b) => a.priority - b.priority);
         return this;
     }
 
@@ -468,9 +482,9 @@ export class Loader
         // run all the after middleware for this resource
         eachSeries(
             this._middleware,
-            (fn, next) =>
+            (middleware, next) =>
             {
-                fn.call(this, resource, next);
+                middleware.fn.call(this, resource, next);
             },
             () =>
             {
@@ -497,15 +511,21 @@ export class Loader
      * A default array of middleware to run after loading each resource.
      * Each of these middlewares are added to any new Loader instances when they are created.
      */
-    private static _defaultMiddleware: MiddlewareFn[] = [];
+    private static _defaultMiddleware: Middleware[] = [];
 
     /**
      * Sets up a middleware function that will run *after* the
      * resource is loaded.
+     *
+     * You can optionally specify a priority for this middleware
+     * which will determine the order middleware functions are run.
+     * A lower priority value will make the function run earlier.
+     * That is, priority 30 is run before priority 50.
      */
-    static use(fn: MiddlewareFn): typeof Loader
+    static use(fn: MiddlewareFn, priority = Loader.DefaultMiddlewarePriority): typeof Loader
     {
-        Loader._defaultMiddleware.push(fn);
+        Loader._defaultMiddleware.push({ fn, priority });
+        Loader._defaultMiddleware.sort((a, b) => a.priority - b.priority);
         return Loader;
     }
 }
