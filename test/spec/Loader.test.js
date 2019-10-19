@@ -24,6 +24,8 @@ describe('Loader', () => {
     });
 
     it('should have exported correctly', () => {
+        expect(Loader).to.have.property('DefaultMiddlewarePriority', 50);
+
         expect(Loader).to.have.property('AbstractLoadStrategy');
         expect(Loader).to.have.property('AudioLoadStrategy');
         expect(Loader).to.have.property('ImageLoadStrategy');
@@ -289,17 +291,37 @@ describe('Loader', () => {
             });
         });
 
-        it('should run the `after` middleware, after loading a resource', (done) => {
-            const spy = sinon.spy((res, next) => next());
-            const spy2 = sinon.spy((res, next) => next());
+        it('should run middleware, after loading a resource', (done) => {
+            const callOrder = [];
+            const spy1 = sinon.spy((res, next) => { callOrder.push(1); next(); });
+            const spy2 = sinon.spy((res, next) => { callOrder.push(2); next(); });
 
-            loader.use(spy);
+            loader.use(spy1);
             loader.use(spy2);
 
             loader.add(fixtureData.dataUrlGif);
 
             loader.load(() => {
-                expect(spy).to.have.been.calledOnce;
+                expect(callOrder).to.eql([1, 2]);
+                expect(spy1).to.have.been.calledOnce;
+                expect(spy2).to.have.been.calledOnce;
+                done();
+            });
+        });
+
+        it('should run middleware in priority order, after loading a resource', (done) => {
+            const callOrder = [];
+            const spy1 = sinon.spy((res, next) => { callOrder.push(1); next(); });
+            const spy2 = sinon.spy((res, next) => { callOrder.push(2); next(); });
+
+            loader.use(spy1);
+            loader.use(spy2, 40);
+
+            loader.add(fixtureData.dataUrlGif);
+
+            loader.load(() => {
+                expect(callOrder).to.eql([2, 1]);
+                expect(spy1).to.have.been.calledOnce;
                 expect(spy2).to.have.been.calledOnce;
                 done();
             });
@@ -500,7 +522,7 @@ describe('Loader', () => {
             expect(spy).to.have.been.calledOnce;
         });
 
-        it('should run the after middleware', (done) => {
+        it('should run middleware', (done) => {
             const spy = sinon.spy();
             const res = {};
 
