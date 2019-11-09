@@ -179,7 +179,7 @@ export class Loader
     {
         while (url.length && url.charAt(url.length - 1) === '/')
         {
-            url = url.substr(0, -1);
+            url = url.slice(0, -1);
         }
 
         this._baseUrl = url;

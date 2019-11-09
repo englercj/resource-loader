@@ -62,6 +62,16 @@ describe('Loader', () => {
         expect(loader).to.have.property('load').instanceOf(Function);
     });
 
+    describe('#baseUrl', () => {
+        it('trims trailing slashes', () => {
+            loader.baseUrl = '/a/b/';
+            expect(loader.baseUrl).to.equal('/a/b');
+
+            loader.baseUrl = '/c/d';
+            expect(loader.baseUrl).to.equal('/c/d');
+        });
+    });
+
     describe('#add', () => {
         const name = 'test-resource';
         const options = {
