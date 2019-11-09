@@ -72,6 +72,25 @@ describe('Loader', () => {
         });
     });
 
+    describe('#urlResolver', () => {
+        it('calls urlResolver', () => {
+            const spy = sinon.spy();
+
+            loader.urlResolver = () => { spy(); return ''; };
+            loader._prepareUrl('', '');
+
+            expect(spy).to.have.been.calledOnce;
+        });
+
+        it('uses the result of urlResolver', () => {
+            loader.urlResolver = (s) => s.replace('{token}', 'test');
+
+            const s = loader._prepareUrl('/{token}/', '/some/base/url');
+
+            expect(s).to.equal('/some/base/url/test/');
+        });
+    });
+
     describe('#add', () => {
         const name = 'test-resource';
         const options = {
