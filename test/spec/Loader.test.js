@@ -360,7 +360,7 @@ describe('Loader', () => {
             expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(u4);
         });
 
-        it('should add the baseUrl for relative urls (no trailing slash on baseUrl)', () => {
+        it('should add the baseUrl for relative urls', () => {
             const b = fixtureData.baseUrl;
             const u1 = 'image.png';
             const u2 = '/image.png';
@@ -371,19 +371,6 @@ describe('Loader', () => {
             expect(loader._prepareUrl(u2, loader.baseUrl)).to.equal(`${b}${u2}`);
             expect(loader._prepareUrl(u3, loader.baseUrl)).to.equal(`${b}/${u3}`);
             expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(`${b}${u4}`);
-        });
-
-        it('should add the baseUrl for relative urls (yes trailing slash on baseUrl)', () => {
-            const b = '/base/';
-            const u1 = 'image.png';
-            const u2 = '/image.png';
-            const u3 = 'image.png?v=1';
-            const u4 = '/image.png?v=1#me';
-
-            expect(loader._prepareUrl(u1, b)).to.equal(`${b}${u1}`);
-            expect(loader._prepareUrl(u2, b)).to.equal(`${b}${u2}`);
-            expect(loader._prepareUrl(u3, b)).to.equal(`${b}${u3}`);
-            expect(loader._prepareUrl(u4, b)).to.equal(`${b}${u4}`);
         });
 
         it('should add the queryString when set', () => {

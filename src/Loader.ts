@@ -18,6 +18,7 @@ export type OnStartSignal = (loader: Loader) => void;
 export type OnCompleteSignal = (loader: Loader, resources: ResourceMap) => void;
 
 export type MiddlewareFn = (resource: Resource, next: () => void) => void;
+export type UrlResolverFn = (url: string, parsed: ReturnType<typeof parseUri>) => string;
 
 export interface Middleware
 {
@@ -60,9 +61,11 @@ export class Loader
     static readonly DefaultMiddlewarePriority = 50;
 
     /**
-     * The base url for all resources loaded by this loader.
+     * A function that is called when preparing a url for use. This function
+     * can be used to modify the url just prior to `baseUrl` and `defaultQueryString`
+     * being applied.
      */
-    baseUrl: string;
+    urlResolver: UrlResolverFn | null = null;
 
     /**
      * The progress percent of the loader going through the queue.
@@ -127,6 +130,11 @@ export class Loader
     onProgress = new Signal<OnProgressSignal>();
 
     /**
+     * The base url for all resources loaded by this loader.
+     */
+    private _baseUrl = '';
+
+    /**
      * The middleware to run after loading each resource.
      */
     private _middleware: Middleware[] = [];
@@ -159,6 +167,22 @@ export class Loader
 
         // Add default middleware. This is already sorted so no need to do that again.
         this._middleware = Loader._defaultMiddleware.slice();
+    }
+
+    /**
+     * The base url for all resources loaded by this loader.
+     * Any trailing slashes are trimmed off.
+     */
+    get baseUrl(): string { return this._baseUrl; }
+
+    set baseUrl(url: string)
+    {
+        while (url.length && url.charAt(url.length - 1) === '/')
+        {
+            url = url.substr(0, -1);
+        }
+
+        this._baseUrl = url;
     }
 
     /**
@@ -209,7 +233,7 @@ export class Loader
 
         let url = '';
         let name = '';
-        let baseUrl = this.baseUrl;
+        let baseUrl = this._baseUrl;
         let resOptions: IAddOptions = { url: '' };
 
         if (typeof options === 'object')
@@ -394,47 +418,45 @@ export class Loader
      */
     private _prepareUrl(url: string, baseUrl: string): string
     {
-        const parsed = parseUri(url, { strictMode: true });
-        let result;
+        let parsed = parseUri(url, { strictMode: true });
 
-        // absolute url, just use it as is.
-        if (parsed.protocol || !parsed.path || url.indexOf('//') === 0)
+        if (this.urlResolver)
         {
-            result = url;
+            url = this.urlResolver(url, parsed);
+            parsed = parseUri(url, { strictMode: true });
         }
-        // if baseUrl doesn't end in slash and url doesn't start with slash, then add a slash inbetween
-        else if (baseUrl.length
-            && baseUrl.lastIndexOf('/') !== baseUrl.length - 1
-            && url.charAt(0) !== '/')
+
+        // Only add `baseUrl` for urls that are not absolute.
+        if (!parsed.protocol && url.indexOf('//') !== 0)
         {
-            result = `${baseUrl}/${url}`;
-        }
-        else
-        {
-            result = baseUrl + url;
+            // if the url doesn't start with a slash, then add one inbetween.
+            if (baseUrl.length && url.charAt(0) !== '/')
+                url = `${baseUrl}/${url}`;
+            else
+                url = baseUrl + url;
         }
 
         // if we need to add a default querystring, there is a bit more work
         if (this.defaultQueryString)
         {
-            const match = rgxExtractUrlHash.exec(result);
+            const match = rgxExtractUrlHash.exec(url);
 
             if (match)
             {
                 const hash = match[0];
 
-                result = result.substr(0, result.length - hash.length);
+                url = url.substr(0, url.length - hash.length);
 
-                if (result.indexOf('?') !== -1)
-                    result += `&${this.defaultQueryString}`;
+                if (url.indexOf('?') !== -1)
+                    url += `&${this.defaultQueryString}`;
                 else
-                    result += `?${this.defaultQueryString}`;
+                    url += `?${this.defaultQueryString}`;
 
-                result += hash;
+                url += hash;
             }
         }
 
-        return result;
+        return url;
     }
 
     /**
