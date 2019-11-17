@@ -1,4 +1,3 @@
-/* eslint-env node */
 'use strict';
 
 module.exports = function conf(config) {
@@ -35,7 +34,7 @@ module.exports = function conf(config) {
 
             // tests
             {
-                pattern: 'test/unit/**/*.test.js',
+                pattern: 'test/spec/**/*.test.js',
                 watched: true,
                 included: true,
                 served: true,
@@ -51,7 +50,8 @@ module.exports = function conf(config) {
         ],
     });
 
-    if (process.env.TRAVIS) {
+    if (process.env.TRAVIS)
+    {
         config.logLevel = config.LOG_DEBUG;
         config.browsers = ['Firefox'];
     }

@@ -1,24 +1,27 @@
+import typescript from 'rollup-plugin-typescript2';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 const plugins = [
+    typescript({
+        typescript: require('typescript'),
+        tsconfig: './tsconfig.json',
+    }),
     resolve(),
     commonjs(),
-    babel()
 ];
 const sourcemap = true;
 const freeze = false;
-const input = 'src/index.js';
-const bundleInput = 'src/bundle.js';
+const input = 'src/index.ts';
+const bundleInput = 'src/bundle.ts';
 const external = Object.keys(pkg.dependencies);
 const compiled = (new Date()).toUTCString().replace(/GMT/g, "UTC");
 
 const banner = `/*!
  * ${pkg.name} - v${pkg.version}
- * https://github.com/englercj/resource-loader
+ * ${pkg.homepage}
  * Compiled ${compiled}
  *
  * ${pkg.name} is licensed under the MIT license.

@@ -7,238 +7,212 @@ describe('Loader', () => {
         loader = new Loader(fixtureData.baseUrl);
     });
 
-    describe('.pre', () => {
-        it('should add a middleware that runs before loading a resource', () => {
-            Loader.pre(() => { /* empty */ });
-
-            expect(Loader._defaultBeforeMiddleware).to.have.length(1);
-
-            loader = new Loader(fixtureData.baseUrl);
-
-            expect(loader._beforeMiddleware).to.have.length(1);
-        });
-
-        after(() => {
-            Loader._defaultBeforeMiddleware.length = 0;
-        });
-    });
-
     describe('.use', () => {
         it('should add a middleware that runs after loading a resource', () => {
             Loader.use(() => { /* empty */ });
 
-            expect(Loader._defaultAfterMiddleware).to.have.length(1);
+            expect(Loader._defaultMiddleware).to.have.length(1);
 
             loader = new Loader(fixtureData.baseUrl);
 
-            expect(loader._afterMiddleware).to.have.length(1);
+            expect(loader._middleware).to.have.length(1);
         });
 
         after(() => {
-            Loader._defaultAfterMiddleware.length = 0;
+            Loader._defaultMiddleware.length = 0;
         });
     });
 
     it('should have exported correctly', () => {
+        expect(Loader).to.have.property('DefaultMiddlewarePriority', 50);
+
+        expect(Loader).to.have.property('AbstractLoadStrategy');
+        expect(Loader).to.have.property('AudioLoadStrategy');
+        expect(Loader).to.have.property('ImageLoadStrategy');
+        expect(Loader).to.have.property('MediaElementLoadStrategy');
+        expect(Loader).to.have.property('VideoLoadStrategy');
+        expect(Loader).to.have.property('XhrLoadStrategy');
         expect(Loader).to.have.property('Resource');
+        expect(Loader).to.have.property('ResourceType');
+        expect(Loader).to.have.property('ResourceState');
         expect(Loader).to.have.property('async');
-        expect(Loader).to.have.property('encodeBinary');
-        expect(Loader).to.have.property('middleware');
+
+        expect(Loader).to.have.property('use');
     });
 
     it('should have correct properties', () => {
         expect(loader).to.have.property('baseUrl', fixtureData.baseUrl);
         expect(loader).to.have.property('progress', 0);
+        expect(loader).to.have.property('concurrency', 10);
+        expect(loader).to.have.property('loading', false);
+        expect(loader).to.have.property('defaultQueryString', '');
+        expect(loader).to.have.property('resources');
+
+        expect(loader).to.have.property('onError');
+        expect(loader).to.have.property('onLoad');
+        expect(loader).to.have.property('onStart');
+        expect(loader).to.have.property('onComplete');
+        expect(loader).to.have.property('onProgress');
     });
 
     it('should have correct public methods', () => {
         expect(loader).to.have.property('add').instanceOf(Function);
-        expect(loader).to.have.property('pre').instanceOf(Function);
         expect(loader).to.have.property('use').instanceOf(Function);
         expect(loader).to.have.property('reset').instanceOf(Function);
         expect(loader).to.have.property('load').instanceOf(Function);
     });
 
+    describe('#baseUrl', () => {
+        it('trims trailing slashes', () => {
+            loader.baseUrl = '/a/b/';
+            expect(loader.baseUrl).to.equal('/a/b');
+
+            loader.baseUrl = '/c/d';
+            expect(loader.baseUrl).to.equal('/c/d');
+        });
+    });
+
+    describe('#urlResolver', () => {
+        it('calls urlResolver', () => {
+            const spy = sinon.spy();
+
+            loader.urlResolver = () => { spy(); return ''; };
+            loader._prepareUrl('', '');
+
+            expect(spy).to.have.been.calledOnce;
+        });
+
+        it('uses the result of urlResolver', () => {
+            loader.urlResolver = (s) => s.replace('{token}', 'test');
+
+            const s = loader._prepareUrl('/{token}/', '/some/base/url');
+
+            expect(s).to.equal('/some/base/url/test/');
+        });
+    });
+
     describe('#add', () => {
         const name = 'test-resource';
         const options = {
-            crossOrigin: true,
-            loadType: Loader.Resource.LOAD_TYPE.IMAGE,
-            xhrType: Loader.Resource.XHR_RESPONSE_TYPE.DOCUMENT,
+            crossOrigin: 'anonymous',
         };
 
         function callback() { /* empty */ }
 
-        it('creates a resource using all arguments', () => {
-            loader.add(name, fixtureData.url, options, callback);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
+        function checkResource(res, checks = {})
+        {
             expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
-            expect(res).to.have.property('loadType', options.loadType);
-            expect(res).to.have.property('xhrType', options.xhrType);
+            expect(res).to.have.property('name', checks.name || checks.url || name);
+            expect(res).to.have.property('url', checks.url || fixtureData.url);
+            expect(res).to.have.property('_strategy').that.is.an.instanceOf(checks.strategy || Loader.XhrLoadStrategy);
 
-            expect(res.onAfterMiddleware.handlers())
-                .to.not.be.empty
-                .and.to.equal([callback]);
-        });
+            const co = typeof checks.crossOrigin === 'string'
+                ? checks.crossOrigin
+                : options.crossOrigin;
 
-        it('creates a resource with just name, url, and options', () => {
-            loader.add(name, fixtureData.url, options);
+            expect(res._strategy.config).to.have.property('crossOrigin', co);
+        }
 
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
-            expect(res).to.have.property('loadType', options.loadType);
-            expect(res).to.have.property('xhrType', options.xhrType);
-        });
-
-        it('creates a resource with just name, url, and a callback', () => {
-            loader.add(name, fixtureData.url, callback);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
-
-            expect(res.onAfterMiddleware.handlers())
-                .to.not.be.empty
-                .and.to.equal([callback]);
-        });
-
-        it('creates a resource with just name and url', () => {
-            loader.add(name, fixtureData.url);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
-        });
-
-        it('creates a resource with just url, options, and a callback', () => {
-            loader.add(fixtureData.url, options, callback);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', fixtureData.url);
-            expect(res).to.have.property('url', fixtureData.url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
-            expect(res).to.have.property('loadType', options.loadType);
-            expect(res).to.have.property('xhrType', options.xhrType);
-
-            expect(res.onAfterMiddleware.handlers())
-                .to.not.be.empty
-                .and.to.equal([callback]);
-        });
-
-        it('creates a resource with just url and options', () => {
-            loader.add(fixtureData.url, options);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', fixtureData.url);
-            expect(res).to.have.property('url', fixtureData.url);
-            expect(res).to.have.property('crossOrigin', options.crossOrigin ? 'anonymous' : null);
-            expect(res).to.have.property('loadType', options.loadType);
-            expect(res).to.have.property('xhrType', options.xhrType);
-        });
-
-        it('creates a resource with just url and a callback', () => {
-            loader.add(fixtureData.url, callback);
-
-            expect(loader._queue.length()).to.equal(1);
-
-            const res = loader._queue._tasks[0].data;
-
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', fixtureData.url);
-            expect(res).to.have.property('url', fixtureData.url);
-
-            expect(res.onAfterMiddleware.handlers())
-                .to.not.be.empty
-                .and.to.equal([callback]);
-        });
-
-        it('creates a resource with just url', () => {
+        it('creates a resource using overload: (url)', () => {
             loader.add(fixtureData.url);
 
             expect(loader._queue.length()).to.equal(1);
 
             const res = loader._queue._tasks[0].data;
 
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', fixtureData.url);
-            expect(res).to.have.property('url', fixtureData.url);
+            checkResource(res, { name: fixtureData.url });
+
+            expect(res.onAfterMiddleware.handlers())
+                .to.be.empty;
         });
 
-        it('creates a resource with just an object (name/url keys) and callback param', () => {
-            loader.add({ name, url: fixtureData.url }, callback);
+        it('creates a resource using overload (name, url)', () => {
+            loader.add(name, fixtureData.url);
 
             expect(loader._queue.length()).to.equal(1);
 
             const res = loader._queue._tasks[0].data;
 
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
+            checkResource(res);
 
             expect(res.onAfterMiddleware.handlers())
-                .to.not.be.empty
-                .and.to.equal([callback]);
+                .to.be.empty;
         });
 
-        it('creates a resource with just an object (name/url/callback keys)', () => {
+        it('creates a resource using overload ({ url})', () => {
+            loader.add({ url: fixtureData.url });
+
+            expect(loader._queue.length()).to.equal(1);
+
+            const res = loader._queue._tasks[0].data;
+
+            checkResource(res, { name: fixtureData.url });
+
+            expect(res.onAfterMiddleware.handlers())
+                .to.be.empty;
+        });
+
+        it('creates a resource using overload ({ name, url })', () => {
+            loader.add({ name, url: fixtureData.url });
+
+            expect(loader._queue.length()).to.equal(1);
+
+            const res = loader._queue._tasks[0].data;
+
+            checkResource(res);
+
+            expect(res.onAfterMiddleware.handlers())
+                .to.be.empty;
+        });
+
+        it('creates a resource using overload ({ name, url, onComplete })', () => {
             loader.add({ name, url: fixtureData.url, onComplete: callback });
 
             expect(loader._queue.length()).to.equal(1);
 
             const res = loader._queue._tasks[0].data;
 
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', name);
-            expect(res).to.have.property('url', fixtureData.url);
+            checkResource(res);
 
             expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
         });
 
-        it('creates a resource with just an object (url/callback keys)', () => {
+        it('creates a resource using overload ({ url, onComplete })', () => {
             loader.add({ url: fixtureData.url, onComplete: callback });
 
             expect(loader._queue.length()).to.equal(1);
 
             const res = loader._queue._tasks[0].data;
 
-            expect(res).to.be.an.instanceOf(Resource);
-            expect(res).to.have.property('name', fixtureData.url);
-            expect(res).to.have.property('url', fixtureData.url);
+            checkResource(res, { name: fixtureData.url });
 
             expect(res.onAfterMiddleware.handlers())
                 .to.not.be.empty
                 .and.to.equal([callback]);
+        });
+
+        it('creates two resources using overload ([url1, url2])', () => {
+            loader.add([fixtureData.url, fixtureData.dataUrlGif]);
+
+            expect(loader._queue.length()).to.equal(2);
+
+            const res0 = loader._queue._tasks[0].data;
+            checkResource(res0, { url: fixtureData.url });
+
+            expect(res0.onAfterMiddleware.handlers())
+                .to.be.empty;
+
+            const res1 = loader._queue._tasks[1].data;
+            checkResource(res1, {
+                url: fixtureData.dataUrlGif,
+                strategy: Loader.ImageLoadStrategy,
+                crossOrigin: '',
+            });
+
+            expect(res1.onAfterMiddleware.handlers())
+                .to.be.empty;
         });
 
         it('throws an error if url isn\'t passed', () => {
@@ -257,19 +231,11 @@ describe('Loader', () => {
         });
     });
 
-    describe('#pre', () => {
-        it('should add a middleware that runs before loading a resource', () => {
-            loader.pre(() => { /* empty */ });
-
-            expect(loader._beforeMiddleware).to.have.length(1);
-        });
-    });
-
     describe('#use', () => {
         it('should add a middleware that runs after loading a resource', () => {
             loader.use(() => { /* empty */ });
 
-            expect(loader._afterMiddleware).to.have.length(1);
+            expect(loader._middleware).to.have.length(1);
         });
     });
 
@@ -317,7 +283,7 @@ describe('Loader', () => {
                 const spy = sinon.spy();
 
                 loader.reset();
-                loader.add('hud2.json', spy).load(() => {
+                loader.add({ url: 'hud2.json', onComplete: spy }).load(() => {
                     expect(spy).to.have.been.calledOnce;
                     done();
                 });
@@ -354,72 +320,40 @@ describe('Loader', () => {
             });
         });
 
-        it('should run the `before` middleware, before loading a resource', (done) => {
-            const spy = sinon.spy((res, next) => next());
-            const spy2 = sinon.spy((res, next) => next());
+        it('should run middleware, after loading a resource', (done) => {
+            const callOrder = [];
+            const spy1 = sinon.spy((res, next) => { callOrder.push(1); next(); });
+            const spy2 = sinon.spy((res, next) => { callOrder.push(2); next(); });
 
-            loader.pre(spy);
-            loader.pre(spy2);
-
-            loader.add(fixtureData.dataUrlGif);
-
-            loader.load(() => {
-                expect(spy).to.have.been.calledOnce;
-                expect(spy2).to.have.been.calledOnce;
-                done();
-            });
-        });
-
-        it('should stop running the `before` middleware when one calls complete()', (done) => {
-            const spy = sinon.spy((res, next) => {
-                res.complete();
-                next();
-            });
-            const spy2 = sinon.spy((res, next) => next());
-
-            loader.pre(spy);
-            loader.pre(spy2);
-
-            loader.add(fixtureData.dataUrlGif);
-
-            loader.load(() => {
-                expect(spy).to.have.been.calledOnce;
-                expect(spy2).to.have.not.been.called;
-                done();
-            });
-        });
-
-        it('should run the `after` middleware, after loading a resource', (done) => {
-            const spy = sinon.spy((res, next) => next());
-            const spy2 = sinon.spy((res, next) => next());
-
-            loader.use(spy);
+            loader.use(spy1);
             loader.use(spy2);
 
             loader.add(fixtureData.dataUrlGif);
 
             loader.load(() => {
-                expect(spy).to.have.been.calledOnce;
+                expect(callOrder).to.eql([1, 2]);
+                expect(spy1).to.have.been.calledOnce;
                 expect(spy2).to.have.been.calledOnce;
                 done();
             });
         });
 
-        it('should run `after` middleware for resources that have been completed in `before` middleware', (done) => {
-            const spy = sinon.spy((res, next) => next());
+        it('should run middleware in priority order, after loading a resource', (done) => {
+            const callOrder = [];
+            const spy1 = sinon.spy((res, next) => { callOrder.push(1); next(); });
+            const spy2 = sinon.spy((res, next) => { callOrder.push(2); next(); });
 
-            loader
-                .pre((res, next) => {
-                    res.complete();
-                    next();
-                })
-                .use(spy)
-                .add(fixtureData.dataUrlGif)
-                .add(fixtureData.url)
-                .load(() => {
-                    expect(spy).to.have.been.calledTwice;
-                    done();
-                });
+            loader.use(spy1);
+            loader.use(spy2, 40);
+
+            loader.add(fixtureData.dataUrlGif);
+
+            loader.load(() => {
+                expect(callOrder).to.eql([2, 1]);
+                expect(spy1).to.have.been.calledOnce;
+                expect(spy2).to.have.been.calledOnce;
+                done();
+            });
         });
 
         it('should properly load the resource', (done) => {
@@ -449,36 +383,23 @@ describe('Loader', () => {
             const u3 = '//myshare/image.png';
             const u4 = '//myshare/image.png?v=1#me';
 
-            expect(loader._prepareUrl(u1)).to.equal(u1);
-            expect(loader._prepareUrl(u2)).to.equal(u2);
-            expect(loader._prepareUrl(u3)).to.equal(u3);
-            expect(loader._prepareUrl(u4)).to.equal(u4);
+            expect(loader._prepareUrl(u1, loader.baseUrl)).to.equal(u1);
+            expect(loader._prepareUrl(u2, loader.baseUrl)).to.equal(u2);
+            expect(loader._prepareUrl(u3, loader.baseUrl)).to.equal(u3);
+            expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(u4);
         });
 
-        it('should add the baseUrl for relative urls (no trailing slash on baseUrl)', () => {
+        it('should add the baseUrl for relative urls', () => {
             const b = fixtureData.baseUrl;
             const u1 = 'image.png';
             const u2 = '/image.png';
             const u3 = 'image.png?v=1';
             const u4 = '/image.png?v=1#me';
 
-            expect(loader._prepareUrl(u1)).to.equal(`${b}/${u1}`);
-            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
-            expect(loader._prepareUrl(u3)).to.equal(`${b}/${u3}`);
-            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
-        });
-
-        it('should add the baseUrl for relative urls (yes trailing slash on baseUrl)', () => {
-            const b = loader.baseUrl = '/base/';
-            const u1 = 'image.png';
-            const u2 = '/image.png';
-            const u3 = 'image.png?v=1';
-            const u4 = '/image.png?v=1#me';
-
-            expect(loader._prepareUrl(u1)).to.equal(`${b}${u1}`);
-            expect(loader._prepareUrl(u2)).to.equal(`${b}${u2}`);
-            expect(loader._prepareUrl(u3)).to.equal(`${b}${u3}`);
-            expect(loader._prepareUrl(u4)).to.equal(`${b}${u4}`);
+            expect(loader._prepareUrl(u1, loader.baseUrl)).to.equal(`${b}/${u1}`);
+            expect(loader._prepareUrl(u2, loader.baseUrl)).to.equal(`${b}${u2}`);
+            expect(loader._prepareUrl(u3, loader.baseUrl)).to.equal(`${b}/${u3}`);
+            expect(loader._prepareUrl(u4, loader.baseUrl)).to.equal(`${b}${u4}`);
         });
 
         it('should add the queryString when set', () => {
@@ -488,10 +409,10 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
 
-            expect(loader._prepareUrl(u2))
+            expect(loader._prepareUrl(u2, loader.baseUrl))
                 .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
         });
 
@@ -502,10 +423,10 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}?${loader.defaultQueryString}`);
 
-            expect(loader._prepareUrl(u2))
+            expect(loader._prepareUrl(u2, loader.baseUrl))
                 .to.equal(`${b}${u2}?${loader.defaultQueryString}`);
         });
 
@@ -515,7 +436,7 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl(u1))
+            expect(loader._prepareUrl(u1, loader.baseUrl))
                 .to.equal(`${b}/${u1}&${loader.defaultQueryString}`);
         });
 
@@ -524,7 +445,7 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl('/image.png#me'))
+            expect(loader._prepareUrl('/image.png#me', loader.baseUrl))
                 .to.equal(`${b}/image.png?${loader.defaultQueryString}#me`);
         });
 
@@ -533,31 +454,14 @@ describe('Loader', () => {
 
             loader.defaultQueryString = 'u=me&p=secret';
 
-            expect(loader._prepareUrl('/image.png?v=1#me'))
+            expect(loader._prepareUrl('/image.png?v=1#me', loader.baseUrl))
                 .to.equal(`${b}/image.png?v=1&${loader.defaultQueryString}#me`);
         });
     });
 
     describe('#_loadResource', () => {
-        it('should run the before middleware before loading the resource', (done) => {
-            const spy = sinon.spy();
-            const res = {};
-
-            loader.pre(spy);
-
-            loader._loadResource(res);
-
-            setTimeout(() => {
-                expect(spy).to.have.been.calledOnce
-                    .and.calledOn(loader)
-                    .and.calledWith(res);
-
-                done();
-            }, 16);
-        });
-
         it('should load a resource passed into it', () => {
-            const res = new Loader.Resource('mock', fixtureData.url);
+            const res = new Loader.Resource('mock', { url: fixtureData.url });
 
             res.load = sinon.spy();
 
@@ -594,7 +498,7 @@ describe('Loader', () => {
 
     describe('#_onLoad', () => {
         it('should emit the `progress` event', () => {
-            const res = new Loader.Resource('mock', fixtureData.url);
+            const res = new Loader.Resource('mock', { url: fixtureData.url });
             const spy = sinon.spy();
 
             res._dequeue = sinon.spy();
@@ -607,7 +511,7 @@ describe('Loader', () => {
         });
 
         it('should emit the `error` event when the resource has an error', () => {
-            const res = new Loader.Resource('mock', fixtureData.url);
+            const res = new Loader.Resource('mock', { url: fixtureData.url });
             const spy = sinon.spy();
 
             res._dequeue = sinon.spy();
@@ -622,7 +526,7 @@ describe('Loader', () => {
         });
 
         it('should emit the `load` event when the resource loads successfully', () => {
-            const res = new Loader.Resource('mock', fixtureData.url);
+            const res = new Loader.Resource('mock', { url: fixtureData.url });
             const spy = sinon.spy();
 
             res._dequeue = sinon.spy();
@@ -634,7 +538,7 @@ describe('Loader', () => {
             expect(spy).to.have.been.calledOnce;
         });
 
-        it('should run the after middleware', (done) => {
+        it('should run middleware', (done) => {
             const spy = sinon.spy();
             const res = {};
 
