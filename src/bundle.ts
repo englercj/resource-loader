@@ -9,6 +9,7 @@ import { Loader } from './Loader';
 import { Resource } from './Resource';
 import { ResourceType, ResourceState } from './resource_type';
 
+// TODO: Hide this stuff and only expose for tests
 import { AsyncQueue } from './async/AsyncQueue';
 import { eachSeries } from './async/eachSeries';
 import { getExtension } from './utilities';

@@ -1,7 +1,7 @@
 import parseUri from 'parse-uri';
 import { Signal } from 'type-signals';
 import { AsyncQueue } from './async/AsyncQueue';
-import { Resource, OnCompleteSignal as OnResourceCompleteSignal } from './Resource';
+import { Resource } from './Resource';
 import { ILoadConfig } from './load_strategies/AbstractLoadStrategy';
 import { eachSeries } from './async/eachSeries';
 
@@ -9,20 +9,26 @@ import { eachSeries } from './async/eachSeries';
 const MAX_PROGRESS = 100;
 const rgxExtractUrlHash = /(#[\w-]+)?$/;
 
-export type ResourceMap = Partial<Record<string, Resource>>;
-
-export type OnProgressSignal = (loader: Loader, resource: Resource) => void;
-export type OnErrorSignal = (errMessage: string, loader: Loader, resource: Resource) => void;
-export type OnLoadSignal = (loader: Loader, resource: Resource) => void;
-export type OnStartSignal = (loader: Loader) => void;
-export type OnCompleteSignal = (loader: Loader, resources: ResourceMap) => void;
-
-export type MiddlewareFn = (resource: Resource, next: () => void) => void;
-export type UrlResolverFn = (url: string, parsed: ReturnType<typeof parseUri>) => string;
-
-export interface Middleware
+/**
+ * @category Type Aliases
+ */
+export namespace Loader
 {
-    fn: MiddlewareFn;
+    export type ResourceMap = Partial<Record<string, Resource>>;
+
+    export type OnProgressSignal = (loader: Loader, resource: Resource) => void;
+    export type OnErrorSignal = (errMessage: string, loader: Loader, resource: Resource) => void;
+    export type OnLoadSignal = (loader: Loader, resource: Resource) => void;
+    export type OnStartSignal = (loader: Loader) => void;
+    export type OnCompleteSignal = (loader: Loader, resources: ResourceMap) => void;
+
+    export type MiddlewareFn = (resource: Resource, next: () => void) => void;
+    export type UrlResolverFn = (url: string, parsed: ReturnType<typeof parseUri>) => string;
+}
+
+interface Middleware
+{
+    fn: Loader.MiddlewareFn;
     priority: number;
 }
 
@@ -44,7 +50,7 @@ export interface IAddOptions extends ILoadConfig
     name?: string;
 
     // Callback to add an an onComplete signal istener.
-    onComplete?: OnResourceCompleteSignal;
+    onComplete?: Resource.OnCompleteSignal;
 
     // Parent resource this newly added resource is a child of.
     parentResource?: Resource;
@@ -52,6 +58,7 @@ export interface IAddOptions extends ILoadConfig
 
 /**
  * Manages the state and loading of multiple resources to load.
+ * @preferred
  */
 export class Loader
 {
@@ -65,7 +72,7 @@ export class Loader
      * can be used to modify the url just prior to `baseUrl` and `defaultQueryString`
      * being applied.
      */
-    urlResolver: UrlResolverFn | null = null;
+    urlResolver: Loader.UrlResolverFn | null = null;
 
     /**
      * The progress percent of the loader going through the queue.
@@ -100,34 +107,34 @@ export class Loader
     defaultQueryString = '';
 
     /**
-     * All the resources for this loader keyed by name.
+     * All the resources for this loader keyed by name, or URL if no name was given.
      */
-    resources: ResourceMap = {};
+    resources: Loader.ResourceMap = {};
 
     /**
      * Dispatched once per errored resource.
      */
-    onError = new Signal<OnErrorSignal>();
+    readonly onError: Signal<Loader.OnErrorSignal> = new Signal<Loader.OnErrorSignal>();
 
     /**
      * Dispatched once per loaded resource.
      */
-    onLoad = new Signal<OnLoadSignal>();
+    readonly onLoad: Signal<Loader.OnLoadSignal> = new Signal<Loader.OnLoadSignal>();
 
     /**
      * Dispatched when the loader begins to process the queue.
      */
-    onStart = new Signal<OnStartSignal>();
+    readonly onStart: Signal<Loader.OnStartSignal> = new Signal<Loader.OnStartSignal>();
 
     /**
      * Dispatched when the queued resources all load.
      */
-    onComplete = new Signal<OnCompleteSignal>();
+    readonly onComplete: Signal<Loader.OnCompleteSignal> = new Signal<Loader.OnCompleteSignal>();
 
     /**
      * Dispatched once per loaded or errored resource.
      */
-    onProgress = new Signal<OnProgressSignal>();
+    readonly onProgress: Signal<Loader.OnProgressSignal> = new Signal<Loader.OnProgressSignal>();
 
     /**
      * The base url for all resources loaded by this loader.
@@ -324,7 +331,7 @@ export class Loader
      * A lower priority value will make the function run earlier.
      * That is, priority 30 is run before priority 50.
      */
-    use(fn: MiddlewareFn, priority: number = Loader.DefaultMiddlewarePriority): this
+    use(fn: Loader.MiddlewareFn, priority: number = Loader.DefaultMiddlewarePriority): this
     {
         this._middleware.push({ fn, priority });
         this._middleware.sort((a, b) => a.priority - b.priority);
@@ -365,7 +372,7 @@ export class Loader
     /**
      * Starts loading the queued resources.
      */
-    load(cb?: OnCompleteSignal): this
+    load(cb?: Loader.OnCompleteSignal): this
     {
         if (typeof cb === 'function')
             this.onComplete.once(cb);
@@ -544,7 +551,7 @@ export class Loader
      * A lower priority value will make the function run earlier.
      * That is, priority 30 is run before priority 50.
      */
-    static use(fn: MiddlewareFn, priority = Loader.DefaultMiddlewarePriority): typeof Loader
+    static use(fn: Loader.MiddlewareFn, priority = Loader.DefaultMiddlewarePriority): typeof Loader
     {
         Loader._defaultMiddleware.push({ fn, priority });
         Loader._defaultMiddleware.sort((a, b) => a.priority - b.priority);

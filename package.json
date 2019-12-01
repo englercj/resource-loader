@@ -34,7 +34,7 @@
     "test": "npm run test-dev -- --single-run",
     "pretest-dev": "npm run build",
     "test-dev": "karma start test/karma.conf.js",
-    "docs": "typedoc --out docs --mode modules",
+    "docs": "typedoc",
     "prepublishOnly": "npm run build",
     "predeploy": "rimraf ./docs && npm run docs",
     "deploy": "gh-pages -d docs",

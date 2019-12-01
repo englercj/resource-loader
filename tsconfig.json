@@ -9,6 +9,25 @@
         "sourceMap": true,
         "strict": true
     },
+    "typedocOptions": {
+        "mode": "file",
+        "out": "docs",
+        "excludeExternals": true,
+        "excludeNotExported": true,
+        "excludePrivate": true,
+        "toc": [
+            "AbstractLoadStrategy",
+            "AudioLoadStrategy",
+            "ImageLoadStrategy",
+            "MediaElementLoadStrategy",
+            "VideoLoadStrategy",
+            "XhrLoadStrategy",
+            "Loader",
+            "Resource",
+            "ResourceType",
+            "ResourceState"
+        ]
+    },
     "include": [
         "src/**/*",
         "types/**/*"

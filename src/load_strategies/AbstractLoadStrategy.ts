@@ -1,10 +1,6 @@
 import { Signal } from 'type-signals';
 import { ResourceType } from '../resource_type';
 
-export type OnErrorSignal = (errMessage: string) => void;
-export type OnCompleteSignal = (type: ResourceType, data: any) => void;
-export type OnProgressSignal = (percent: number) => void;
-
 export interface ILoadConfig
 {
     // The url for this resource, relative to the baseUrl of this loader.
@@ -21,18 +17,33 @@ export interface ILoadConfig
     timeout?: number;
 }
 
+/**
+ * @category Type Aliases
+ */
+export namespace AbstractLoadStrategy
+{
+    export type OnErrorSignal = (errMessage: string) => void;
+    export type OnCompleteSignal = (type: ResourceType, data: any) => void;
+    export type OnProgressSignal = (percent: number) => void;
+}
+
+/**
+ * Base load strategy interface that all custom load strategies
+ * are expected to inherit from and implement.
+ * @preferred
+ */
 export abstract class AbstractLoadStrategy<C extends ILoadConfig = ILoadConfig>
 {
     /**
      * Dispatched when the resource fails to load.
      */
-    readonly onError = new Signal<OnErrorSignal>();
+    readonly onError: Signal<AbstractLoadStrategy.OnErrorSignal> = new Signal<AbstractLoadStrategy.OnErrorSignal>();
 
     /**
      * Dispatched once this resource has loaded, if there was an error it will
      * be in the `error` property.
      */
-    readonly onComplete = new Signal<OnCompleteSignal>();
+    readonly onComplete: Signal<AbstractLoadStrategy.OnCompleteSignal> = new Signal<AbstractLoadStrategy.OnCompleteSignal>();
 
     /**
      * Dispatched each time progress of this resource load updates.
@@ -41,7 +52,7 @@ export abstract class AbstractLoadStrategy<C extends ILoadConfig = ILoadConfig>
      * is being loaded on a modern browser, using XHR, and the remote server
      * properly sets Content-Length headers, then this will be available.
      */
-    readonly onProgress = new Signal<OnProgressSignal>();
+    readonly onProgress: Signal<AbstractLoadStrategy.OnProgressSignal> = new Signal<AbstractLoadStrategy.OnProgressSignal>();
 
     constructor(readonly config: C)
     { }

@@ -8,18 +8,25 @@ import { XhrLoadStrategy } from './load_strategies/XhrLoadStrategy';
 import { ResourceType, ResourceState } from './resource_type';
 import { getExtension } from './utilities';
 
-export type OnStartSignal = (resource: Resource) => void;
-export type OnErrorSignal = (resource: Resource) => void;
-export type OnCompleteSignal = (resource: Resource) => void;
-export type OnProgressSignal = (resource: Resource, percent: number) => void;
-
 export interface IResourceOptions extends ILoadConfig
 {
     strategy?: AbstractLoadStrategy | AbstractLoadStrategyCtor;
 }
 
 /**
+ * @category Type Aliases
+ */
+export namespace Resource
+{
+    export type OnStartSignal = (resource: Resource) => void;
+    export type OnErrorSignal = (resource: Resource) => void;
+    export type OnCompleteSignal = (resource: Resource) => void;
+    export type OnProgressSignal = (resource: Resource, percent: number) => void;
+}
+
+/**
  * Manages the state and loading of a resource and all child resources.
+ * @preferred
  */
 export class Resource
 {
@@ -89,7 +96,7 @@ export class Resource
     /**
      * Dispatched when the resource beings to load.
      */
-    readonly onStart = new Signal<OnStartSignal>();
+    readonly onStart: Signal<Resource.OnStartSignal> = new Signal<Resource.OnStartSignal>();
 
     /**
      * Dispatched each time progress of this resource load updates.
@@ -98,18 +105,18 @@ export class Resource
      * is being loaded on a modern browser, using XHR, and the remote server
      * properly sets Content-Length headers, then this will be available.
      */
-    readonly onProgress = new Signal<OnProgressSignal>();
+    readonly onProgress: Signal<Resource.OnProgressSignal> = new Signal<Resource.OnProgressSignal>();
 
     /**
      * Dispatched once this resource has loaded, if there was an error it will
      * be in the `error` property.
      */
-    readonly onComplete = new Signal<OnCompleteSignal>();
+    readonly onComplete: Signal<Resource.OnCompleteSignal> = new Signal<Resource.OnCompleteSignal>();
 
     /**
      * Dispatched after this resource has had all the *after* middleware run on it.
      */
-    readonly onAfterMiddleware = new Signal<OnCompleteSignal>();
+    readonly onAfterMiddleware: Signal<Resource.OnCompleteSignal> = new Signal<Resource.OnCompleteSignal>();
 
     /**
      * The data that was loaded by the resource. The type of this member is
@@ -148,7 +155,7 @@ export class Resource
      *
      * @ignore
      */
-    _onCompleteBinding: SignalBinding<OnCompleteSignal> | null = null;
+    _onCompleteBinding: SignalBinding<Resource.OnCompleteSignal> | null = null;
 
     private _strategy: AbstractLoadStrategy;
     private _state = ResourceState.NotStarted;

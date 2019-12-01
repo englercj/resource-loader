@@ -57,11 +57,11 @@ export class AsyncQueue<T>
     private _started = false;
     private _tasks: ITask<T>[] = [];
 
-    readonly onSaturated = new Signal<OnSaturatedSignal>();
-    readonly onUnsaturated = new Signal<OnUnsaturatedSignal>();
-    readonly onEmpty = new Signal<OnEmptySignal>();
-    readonly onDrain = new Signal<OnDrainSignal>();
-    readonly onError = new Signal<OnErrorSignal<T>>();
+    readonly onSaturated: Signal<OnSaturatedSignal> = new Signal<OnSaturatedSignal>();
+    readonly onUnsaturated: Signal<OnUnsaturatedSignal> = new Signal<OnUnsaturatedSignal>();
+    readonly onEmpty: Signal<OnEmptySignal> = new Signal<OnEmptySignal>();
+    readonly onDrain: Signal<OnDrainSignal> = new Signal<OnDrainSignal>();
+    readonly onError: Signal<OnErrorSignal<T>> = new Signal<OnErrorSignal<T>>();
 
     constructor(readonly worker: IWorker<T>, public concurrency = 1)
     {
