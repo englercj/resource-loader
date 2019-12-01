@@ -48,6 +48,7 @@ export class Resource
         // videos
         mp4:        VideoLoadStrategy,
         webm:       VideoLoadStrategy,
+        mov:        VideoLoadStrategy,
     };
 
     /**
