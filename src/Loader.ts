@@ -68,13 +68,6 @@ export class Loader
     static readonly DefaultMiddlewarePriority = 50;
 
     /**
-     * A function or list of functions that is called when preparing a url for use.
-     * This function can be used to modify the url just prior to `baseUrl` and
-     * `defaultQueryString` being applied.
-     */
-    urlResolver: Loader.UrlResolverFn | Loader.UrlResolverFn[] | null = null;
-
-    /**
      * The progress percent of the loader going through the queue.
      */
     progress = 0;
@@ -140,6 +133,11 @@ export class Loader
      * The base url for all resources loaded by this loader.
      */
     private _baseUrl = '';
+
+    /**
+     * The internal list of URL resolver functions called within `_prepareUrl`.
+     */
+    private _urlResolvers: Loader.UrlResolverFn[] = [];
 
     /**
      * The middleware to run after loading each resource.
@@ -421,24 +419,26 @@ export class Loader
     }
 
     /**
+     * Add a function that can be used to modify the url just prior
+     * to `baseUrl` and `defaultQueryString` being applied.
+     */
+    addUrlResolver(func: Loader.UrlResolverFn): this
+    {
+        this._urlResolvers.push(func);
+        return this;
+    }
+
+    /**
      * Prepares a url for usage based on the configuration of this object
      */
     private _prepareUrl(url: string, baseUrl: string): string
     {
         let parsed = parseUri(url, { strictMode: true });
-        let resolver = this.urlResolver;
 
-        if (resolver)
-        {
-            if (!Array.isArray(resolver))
-                resolver = [resolver];
-            
-            for (let i = 0; i < resolver.length; ++i)
-            {
-                url = resolver[i](url, parsed);
-                parsed = parseUri(url, { strictMode: true });
-            }
-        }
+        this._urlResolvers.forEach(resolver => {
+            url = resolver(url, parsed);
+            parsed = parseUri(url, { strictMode: true });
+        });
 
         // Only add `baseUrl` for urls that are not absolute.
         if (!parsed.protocol && url.indexOf('//') !== 0)
