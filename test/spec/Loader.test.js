@@ -89,6 +89,30 @@ describe('Loader', () => {
 
             expect(s).to.equal('/some/base/url/test/');
         });
+
+        it('calls multiple urlResolver, in order', () => {
+            const spy1 = sinon.spy(s => s + '/foo');
+            const spy2 = sinon.spy(s => s + '/bar');
+
+            loader.urlResolver = [spy1, spy2];
+
+            const s = loader._prepareUrl('init', '');
+
+            expect(spy1).to.have.been.calledOnce;
+            expect(spy2).to.have.been.calledOnce;
+            expect(s).to.equal('init/foo/bar');
+        });
+
+        it('supports multiple functions as urlResolver', () => {
+            loader.urlResolver = [
+                (s) => s.replace('{token}', 'foo'),
+                (s) => s.replace('{token2}', 'bar')
+            ];
+
+            const s = loader._prepareUrl('/{token}/{token2}/', '/some/base/url');
+
+            expect(s).to.equal('/some/base/url/foo/bar/');
+        });
     });
 
     describe('#add', () => {

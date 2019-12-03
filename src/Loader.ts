@@ -68,11 +68,11 @@ export class Loader
     static readonly DefaultMiddlewarePriority = 50;
 
     /**
-     * A function that is called when preparing a url for use. This function
-     * can be used to modify the url just prior to `baseUrl` and `defaultQueryString`
-     * being applied.
+     * A function or list of functions that is called when preparing a url for use.
+     * This function can be used to modify the url just prior to `baseUrl` and
+     * `defaultQueryString` being applied.
      */
-    urlResolver: Loader.UrlResolverFn | null = null;
+    urlResolver: Loader.UrlResolverFn | Loader.UrlResolverFn[] | null = null;
 
     /**
      * The progress percent of the loader going through the queue.
@@ -426,11 +426,18 @@ export class Loader
     private _prepareUrl(url: string, baseUrl: string): string
     {
         let parsed = parseUri(url, { strictMode: true });
+        let resolver = this.urlResolver;
 
-        if (this.urlResolver)
+        if (resolver)
         {
-            url = this.urlResolver(url, parsed);
-            parsed = parseUri(url, { strictMode: true });
+            if (!Array.isArray(resolver))
+                resolver = [resolver];
+            
+            for (let i = 0; i < resolver.length; ++i)
+            {
+                url = resolver[i](url, parsed);
+                parsed = parseUri(url, { strictMode: true });
+            }
         }
 
         // Only add `baseUrl` for urls that are not absolute.
