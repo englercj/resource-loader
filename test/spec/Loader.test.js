@@ -72,22 +72,45 @@ describe('Loader', () => {
         });
     });
 
-    describe('#urlResolver', () => {
-        it('calls urlResolver', () => {
+    describe('#addUrlResolver', () => {
+        it('calls addUrlResolver', () => {
             const spy = sinon.spy();
 
-            loader.urlResolver = () => { spy(); return ''; };
+            loader.addUrlResolver(() => { spy(); return ''; });
             loader._prepareUrl('', '');
 
             expect(spy).to.have.been.calledOnce;
         });
 
-        it('uses the result of urlResolver', () => {
-            loader.urlResolver = (s) => s.replace('{token}', 'test');
+        it('uses the result of addUrlResolver', () => {
+            loader.addUrlResolver((s) => s.replace('{token}', 'test'));
 
             const s = loader._prepareUrl('/{token}/', '/some/base/url');
 
             expect(s).to.equal('/some/base/url/test/');
+        });
+
+        it('calls multiple urlResolver, in order', () => {
+            const spy1 = sinon.spy(s => s + '/foo');
+            const spy2 = sinon.spy(s => s + '/bar');
+
+            loader.addUrlResolver(spy1)
+                .addUrlResolver(spy2);
+
+            const s = loader._prepareUrl('init', '');
+
+            expect(spy1).to.have.been.calledOnce;
+            expect(spy2).to.have.been.calledOnce;
+            expect(s).to.equal('init/foo/bar');
+        });
+
+        it('supports multiple functions as urlResolver', () => {
+            loader.addUrlResolver((s) => s.replace('{token}', 'foo'))
+                .addUrlResolver((s) => s.replace('{token2}', 'bar'));
+
+            const s = loader._prepareUrl('/{token}/{token2}/', '/some/base/url');
+
+            expect(s).to.equal('/some/base/url/foo/bar/');
         });
     });
 
