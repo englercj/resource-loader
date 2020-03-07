@@ -197,6 +197,7 @@ export class Resource
         this._strategy.onProgress.add(this._progress, this);
     }
 
+    get strategy(): AbstractLoadStrategy { return this._strategy; }
     get url(): string { return this._strategy.config.url; }
     get isLoading(): boolean { return this._state === ResourceState.Loading; }
     get isComplete(): boolean { return this._state === ResourceState.Complete; }
