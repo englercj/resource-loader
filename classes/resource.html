@@ -106,6 +106,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#children" class="tsd-kind-icon">children</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#data" class="tsd-kind-icon">data</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#metadata" class="tsd-kind-icon">metadata</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#onaftermiddleware" class="tsd-kind-icon">on<wbr>After<wbr>Middleware</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="resource.html#oncomplete" class="tsd-kind-icon">on<wbr>Complete</a></li>
@@ -120,6 +121,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="resource.html#iscomplete" class="tsd-kind-icon">is<wbr>Complete</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="resource.html#isloading" class="tsd-kind-icon">is<wbr>Loading</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="resource.html#strategy" class="tsd-kind-icon">strategy</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="resource.html#url" class="tsd-kind-icon">url</a></li>
 							</ul>
 						</section>
@@ -140,17 +142,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
 					<a name="oncompletesignal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> On<wbr>Complete<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Complete<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Complete<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L23">Resource.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L27">Resource.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -171,17 +173,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
 					<a name="onerrorsignal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> On<wbr>Error<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Error<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Error<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L22">Resource.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L26">Resource.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -202,17 +204,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
 					<a name="onprogresssignal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> On<wbr>Progress<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Progress<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Progress<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a>, percent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L24">Resource.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L28">Resource.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a>, percent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -236,17 +238,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-is-static">
 					<a name="onstartsignal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> On<wbr>Start<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Start<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Start<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L21">Resource.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L25">Resource.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -277,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L161">Resource.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L170">Resource.ts:170</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -311,10 +313,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="children" class="tsd-anchor"></a>
 					<h3>children</h3>
-					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="resource.html" class="tsd-signature-type">Resource</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L94">Resource.ts:94</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L98">Resource.ts:98</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -326,10 +328,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="data" class="tsd-anchor"></a>
 					<h3>data</h3>
-					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;null</span></div>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L125">Resource.ts:125</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L129">Resource.ts:129</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -342,10 +344,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="error" class="tsd-anchor"></a>
 					<h3>error</h3>
-					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L137">Resource.ts:137</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L146">Resource.ts:146</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -355,12 +357,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="metadata" class="tsd-anchor"></a>
+					<h3>metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L134">Resource.ts:134</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extra info added by the user, usually for middleware.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L89">Resource.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L93">Resource.ts:93</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -372,10 +389,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="onaftermiddleware" class="tsd-anchor"></a>
 					<h3>on<wbr>After<wbr>Middleware</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>After<wbr>Middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#oncompletesignal" class="tsd-signature-type">OnCompleteSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Signal&lt;Resource.OnCompleteSignal&gt;()</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>After<wbr>Middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#oncompletesignal" class="tsd-signature-type">OnCompleteSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Signal&lt;Resource.OnCompleteSignal&gt;()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L119">Resource.ts:119</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L123">Resource.ts:123</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -387,10 +404,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="oncomplete" class="tsd-anchor"></a>
 					<h3>on<wbr>Complete</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Complete<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#oncompletesignal" class="tsd-signature-type">OnCompleteSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Signal&lt;Resource.OnCompleteSignal&gt;()</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Complete<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#oncompletesignal" class="tsd-signature-type">OnCompleteSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Signal&lt;Resource.OnCompleteSignal&gt;()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L114">Resource.ts:114</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L118">Resource.ts:118</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -403,10 +420,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="onprogress" class="tsd-anchor"></a>
 					<h3>on<wbr>Progress</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Progress<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#onprogresssignal" class="tsd-signature-type">OnProgressSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Signal&lt;Resource.OnProgressSignal&gt;()</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Progress<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#onprogresssignal" class="tsd-signature-type">OnProgressSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Signal&lt;Resource.OnProgressSignal&gt;()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L108">Resource.ts:108</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L112">Resource.ts:112</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -422,10 +439,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="onstart" class="tsd-anchor"></a>
 					<h3>on<wbr>Start</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#onstartsignal" class="tsd-signature-type">OnStartSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Signal&lt;Resource.OnStartSignal&gt;()</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Signal</span><span class="tsd-signature-symbol">&lt;</span><a href="resource.html#onstartsignal" class="tsd-signature-type">OnStartSignal</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Signal&lt;Resource.OnStartSignal&gt;()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L99">Resource.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L103">Resource.ts:103</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -437,10 +454,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="progresschunk" class="tsd-anchor"></a>
 					<h3>progress<wbr>Chunk</h3>
-					<div class="tsd-signature tsd-kind-icon">progress<wbr>Chunk<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+					<div class="tsd-signature tsd-kind-icon">progress<wbr>Chunk<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L142">Resource.ts:142</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L151">Resource.ts:151</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -452,10 +469,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="type" class="tsd-anchor"></a>
 					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/resourcetype.html" class="tsd-signature-type">ResourceType</a><span class="tsd-signature-symbol"> =&nbsp;ResourceType.Unknown</span></div>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/resourcetype.html" class="tsd-signature-type">ResourceType</a><span class="tsd-signature-symbol"> = ResourceType.Unknown</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L132">Resource.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L141">Resource.ts:141</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -482,7 +499,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L202">Resource.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L213">Resource.ts:213</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -499,10 +516,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L201">Resource.ts:201</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L212">Resource.ts:212</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="strategy" class="tsd-anchor"></a>
+					<h3>strategy</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> strategy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="abstractloadstrategy.html" class="tsd-signature-type">AbstractLoadStrategy</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L210">Resource.ts:210</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="abstractloadstrategy.html" class="tsd-signature-type">AbstractLoadStrategy</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -516,7 +550,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L200">Resource.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L211">Resource.ts:211</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -536,7 +570,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L207">Resource.ts:207</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L218">Resource.ts:218</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -558,7 +592,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L215">Resource.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L226">Resource.ts:226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -580,7 +614,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L64">Resource.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L68">Resource.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -608,7 +642,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/Resource.ts#L75">Resource.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Resource.ts#L79">Resource.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -698,6 +732,9 @@
 								<a href="resource.html#error" class="tsd-kind-icon">error</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="resource.html#metadata" class="tsd-kind-icon">metadata</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="resource.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -723,6 +760,9 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="resource.html#isloading" class="tsd-kind-icon">is<wbr>Loading</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="resource.html#strategy" class="tsd-kind-icon">strategy</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="resource.html#url" class="tsd-kind-icon">url</a>

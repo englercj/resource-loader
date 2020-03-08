@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>XhrResponseType | resource-loader</title>
+	<title>Middleware | resource-loader</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,132 +52,59 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="xhrresponsetype.html">XhrResponseType</a>
+					<a href="middleware.html">Middleware</a>
 				</li>
 			</ul>
-			<h1>Enumeration XhrResponseType</h1>
+			<h1>Interface Middleware</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>The XHR response types.</p>
-					</div>
-				</div>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Middleware</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumeration members</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#blob" class="tsd-kind-icon">Blob</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#buffer" class="tsd-kind-icon">Buffer</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#default" class="tsd-kind-icon">Default</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#document" class="tsd-kind-icon">Document</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#json" class="tsd-kind-icon">Json</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="xhrresponsetype.html#text" class="tsd-kind-icon">Text</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="middleware.html#fn" class="tsd-kind-icon">fn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="middleware.html#priority" class="tsd-kind-icon">priority</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="blob" class="tsd-anchor"></a>
-					<h3>Blob</h3>
-					<div class="tsd-signature tsd-kind-icon">Blob<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;blob&quot;</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="fn" class="tsd-anchor"></a>
+					<h3>fn</h3>
+					<div class="tsd-signature tsd-kind-icon">fn<span class="tsd-signature-symbol">:</span> <a href="../classes/loader.html#middlewarefn" class="tsd-signature-type">MiddlewareFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L27">load_strategies/XhrLoadStrategy.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Loader.ts#L30">Loader.ts:30</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Blob</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="buffer" class="tsd-anchor"></a>
-					<h3>Buffer</h3>
-					<div class="tsd-signature tsd-kind-icon">Buffer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;arraybuffer&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="priority" class="tsd-anchor"></a>
+					<h3>priority</h3>
+					<div class="tsd-signature tsd-kind-icon">priority<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L25">load_strategies/XhrLoadStrategy.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Loader.ts#L31">Loader.ts:31</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>ArrayBuffer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="default" class="tsd-anchor"></a>
-					<h3>Default</h3>
-					<div class="tsd-signature tsd-kind-icon">Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;text&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L23">load_strategies/XhrLoadStrategy.ts:23</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>string</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="document" class="tsd-anchor"></a>
-					<h3>Document</h3>
-					<div class="tsd-signature tsd-kind-icon">Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;document&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L29">load_strategies/XhrLoadStrategy.ts:29</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Document</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="json" class="tsd-anchor"></a>
-					<h3>Json</h3>
-					<div class="tsd-signature tsd-kind-icon">Json<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;json&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L31">load_strategies/XhrLoadStrategy.ts:31</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Object</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="text" class="tsd-anchor"></a>
-					<h3>Text</h3>
-					<div class="tsd-signature tsd-kind-icon">Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;text&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L33">load_strategies/XhrLoadStrategy.ts:33</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>String</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -192,10 +119,10 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
-						<a href="resourcestate.html" class="tsd-kind-icon">Resource<wbr>State</a>
+						<a href="../enums/resourcestate.html" class="tsd-kind-icon">Resource<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="resourcetype.html" class="tsd-kind-icon">Resource<wbr>Type</a>
+						<a href="../enums/resourcetype.html" class="tsd-kind-icon">Resource<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="../classes/abstractloadstrategy.html" class="tsd-kind-icon">Abstract<wbr>Load<wbr>Strategy</a>

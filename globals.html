@@ -52,7 +52,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> resource-loader</h1>
+			<h1>resource-loader</h1>
 		</div>
 	</div>
 </header>
@@ -66,6 +66,7 @@
 						<section class="tsd-index-section ">
 							<h3>Enumerations</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum"><a href="enums/httpstatus.html" class="tsd-kind-icon">Http<wbr>Status</a></li>
 								<li class="tsd-kind-enum"><a href="enums/resourcestate.html" class="tsd-kind-icon">Resource<wbr>State</a></li>
 								<li class="tsd-kind-enum"><a href="enums/resourcetype.html" class="tsd-kind-icon">Resource<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/xhrresponsetype.html" class="tsd-kind-icon">Xhr<wbr>Response<wbr>Type</a></li>
@@ -96,7 +97,9 @@
 								<li class="tsd-kind-interface"><a href="interfaces/iloadconfig.html" class="tsd-kind-icon">ILoad<wbr>Config</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/imediaelementloadconfig.html" class="tsd-kind-icon">IMedia<wbr>Element<wbr>Load<wbr>Config</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/iresourceoptions.html" class="tsd-kind-icon">IResource<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/itask.html" class="tsd-kind-icon">ITask</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/ixhrloadconfig.html" class="tsd-kind-icon">IXhr<wbr>Load<wbr>Config</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/middleware.html" class="tsd-kind-icon">Middleware</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -116,11 +119,21 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable"><a href="globals.html#empty_gif" class="tsd-kind-icon">EMPTY_<wbr>GIF</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#max_progress" class="tsd-kind-icon">MAX_<wbr>PROGRESS</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#rgxextracturlhash" class="tsd-kind-icon">rgx<wbr>Extract<wbr>Url<wbr>Hash</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#usexdr" class="tsd-kind-icon">use<wbr>Xdr</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function"><a href="globals.html#assertnever" class="tsd-kind-icon">assert<wbr>Never</a></li>
 								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#eachseries" class="tsd-kind-icon">each<wbr>Series</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#getextension" class="tsd-kind-icon">get<wbr>Extension</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#reqtype" class="tsd-kind-icon">req<wbr>Type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -131,10 +144,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="abstractloadstrategyctor" class="tsd-anchor"></a>
 					<h3>Abstract<wbr>Load<wbr>Strategy<wbr>Ctor</h3>
-					<div class="tsd-signature tsd-kind-icon">Abstract<wbr>Load<wbr>Strategy<wbr>Ctor&lt;C&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">Abstract<wbr>Load<wbr>Strategy<wbr>Ctor&lt;C&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/load_strategies/AbstractLoadStrategy.ts#L71">load_strategies/AbstractLoadStrategy.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/AbstractLoadStrategy.ts#L71">load_strategies/AbstractLoadStrategy.ts:71</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -152,17 +165,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="iitemcallback" class="tsd-anchor"></a>
 					<h3>IItem<wbr>Callback</h3>
-					<div class="tsd-signature tsd-kind-icon">IItem<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">IItem<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L28">async/AsyncQueue.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L28">async/AsyncQueue.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -183,17 +196,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="inext" class="tsd-anchor"></a>
 					<h3>INext</h3>
-					<div class="tsd-signature tsd-kind-icon">INext<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">INext<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L26">async/AsyncQueue.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L26">async/AsyncQueue.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -214,10 +227,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="iworker" class="tsd-anchor"></a>
 					<h3>IWorker</h3>
-					<div class="tsd-signature tsd-kind-icon">IWorker&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">IWorker&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><a href="globals.html#inext" class="tsd-signature-type">INext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L27">async/AsyncQueue.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L27">async/AsyncQueue.ts:27</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -229,8 +242,8 @@
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><a href="globals.html#inext" class="tsd-signature-type">INext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -254,17 +267,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="ondonesignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Done<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Done<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Done<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L30">async/AsyncQueue.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L30">async/AsyncQueue.ts:30</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -279,17 +292,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="ondrainsignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Drain<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Drain<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Drain<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L34">async/AsyncQueue.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L34">async/AsyncQueue.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -304,17 +317,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="onemptysignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Empty<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Empty<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Empty<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L33">async/AsyncQueue.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L33">async/AsyncQueue.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -329,10 +342,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="onerrorsignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Error<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Error<wbr>Signal&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Error<wbr>Signal&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L35">async/AsyncQueue.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L35">async/AsyncQueue.ts:35</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -344,8 +357,8 @@
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -369,17 +382,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="onsaturatedsignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Saturated<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Saturated<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Saturated<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L31">async/AsyncQueue.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L31">async/AsyncQueue.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -394,17 +407,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="onunsaturatedsignal" class="tsd-anchor"></a>
 					<h3>On<wbr>Unsaturated<wbr>Signal</h3>
-					<div class="tsd-signature tsd-kind-icon">On<wbr>Unsaturated<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Unsaturated<wbr>Signal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/AsyncQueue.ts#L32">async/AsyncQueue.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/AsyncQueue.ts#L32">async/AsyncQueue.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -419,10 +432,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="overwrite" class="tsd-anchor"></a>
 					<h3>Overwrite</h3>
-					<div class="tsd-signature tsd-kind-icon">Overwrite&lt;T1, T2&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">T2</span></div>
+					<div class="tsd-signature tsd-kind-icon">Overwrite&lt;T1, T2&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">T2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/utilities.ts#L1">utilities.ts:1</a></li>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/utilities.ts#L1">utilities.ts:1</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -437,6 +450,49 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="empty_gif" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> EMPTY_<wbr>GIF</h3>
+					<div class="tsd-signature tsd-kind-icon">EMPTY_<wbr>GIF<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw&#x3D;&#x3D;"</span><span class="tsd-signature-symbol"> = &quot;data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw&#x3D;&#x3D;&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/ImageLoadStrategy.ts#L5">load_strategies/ImageLoadStrategy.ts:5</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="max_progress" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> MAX_<wbr>PROGRESS</h3>
+					<div class="tsd-signature tsd-kind-icon">MAX_<wbr>PROGRESS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">100</span><span class="tsd-signature-symbol"> = 100</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Loader.ts#L8">Loader.ts:8</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="rgxextracturlhash" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> rgx<wbr>Extract<wbr>Url<wbr>Hash</h3>
+					<div class="tsd-signature tsd-kind-icon">rgx<wbr>Extract<wbr>Url<wbr>Hash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /(#[\w-]+)?$/</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/Loader.ts#L9">Loader.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="usexdr" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> use<wbr>Xdr</h3>
+					<div class="tsd-signature tsd-kind-icon">use<wbr>Xdr<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = !!((window as any).XDomainRequest &amp;&amp; !(&#x27;withCredentials&#x27; in (new XMLHttpRequest())))</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L7">load_strategies/XhrLoadStrategy.ts:7</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="assertnever" class="tsd-anchor"></a>
@@ -448,7 +504,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/utilities.ts#L35">utilities.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/utilities.ts#L35">utilities.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -465,13 +521,13 @@
 					<a name="eachseries" class="tsd-anchor"></a>
 					<h3>each<wbr>Series</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">each<wbr>Series&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, iterator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span>, deferNext<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">each<wbr>Series&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, iterator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span>, deferNext<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/async/eachSeries.ts#L10">async/eachSeries.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/async/eachSeries.ts#L10">async/eachSeries.ts:10</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -497,14 +553,14 @@
 									</div>
 								</li>
 								<li>
-									<h5>iterator: <span class="tsd-signature-type">function</span></h5>
+									<h5>iterator: <span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Function to call for each element.</p>
 									</div>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
@@ -514,10 +570,10 @@
 															<h5>item: <span class="tsd-signature-type">T</span></h5>
 														</li>
 														<li>
-															<h5>next: <span class="tsd-signature-type">function</span></h5>
+															<h5>next: <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 															<ul class="tsd-parameters">
-																<li class="tsd-parameter-siganture">
-																	<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+																<li class="tsd-parameter-signature">
+																	<ul class="tsd-signatures tsd-kind-type-literal">
 																		<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 																	</ul>
 																	<ul class="tsd-descriptions">
@@ -542,13 +598,13 @@
 									</ul>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Function to call when done, or on error.</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> deferNext: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> deferNext: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Break synchronous each loop by calling next with a setTimeout of 1.</p>
 									</div>
@@ -568,7 +624,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/bfb58b6/src/utilities.ts#L8">utilities.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/utilities.ts#L8">utilities.ts:8</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -580,6 +636,34 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="reqtype" class="tsd-anchor"></a>
+					<h3>req<wbr>Type</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">req<wbr>Type<span class="tsd-signature-symbol">(</span>xhr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">XMLHttpRequest</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/englercj/resource-loader/blob/5df133f/src/load_strategies/XhrLoadStrategy.ts#L44">load_strategies/XhrLoadStrategy.ts:44</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Quick helper to get string xhr type.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>xhr: <span class="tsd-signature-type">XMLHttpRequest</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
