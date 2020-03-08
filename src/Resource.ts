@@ -10,7 +10,11 @@ import { getExtension } from './utilities';
 
 export interface IResourceOptions extends ILoadConfig
 {
+    // OVerride the load strategy to use for this one resource.
     strategy?: AbstractLoadStrategy | AbstractLoadStrategyCtor;
+
+    // Extra info added by the user, usually for middleware.
+    metadata?: any;
 }
 
 /**
@@ -125,6 +129,11 @@ export class Resource
     data: any = null;
 
     /**
+     * Extra info added by the user, usually for middleware.
+     */
+    metadata: any;
+
+    /**
      * Describes the type of the `data` member for this resource.
      *
      * @see ResourceType
@@ -167,6 +176,7 @@ export class Resource
     constructor(name: string, options: IResourceOptions)
     {
         this.name = name;
+        this.metadata = options.metadata;
 
         if (typeof options.crossOrigin !== 'string')
             options.crossOrigin = this._determineCrossOrigin(options.url);

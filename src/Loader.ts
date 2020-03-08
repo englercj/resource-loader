@@ -1,8 +1,7 @@
 import parseUri from 'parse-uri';
 import { Signal } from 'type-signals';
 import { AsyncQueue } from './async/AsyncQueue';
-import { Resource } from './Resource';
-import { ILoadConfig } from './load_strategies/AbstractLoadStrategy';
+import { Resource, IResourceOptions } from './Resource';
 import { eachSeries } from './async/eachSeries';
 
 // some constants
@@ -35,7 +34,7 @@ interface Middleware
 /**
  * Options for a call to `.add()`.
  */
-export interface IAddOptions extends ILoadConfig
+export interface IAddOptions extends IResourceOptions
 {
     // Extra values to be used by specific load strategies.
     [key: string]: any;
